@@ -1,13 +1,13 @@
 const { validationResult } = require("express-validator");
 const db = require("../utils/database");
+const Fuel = require("../Models/fuel");
 
 exports.getFuels = (req, res, next) => {
-  db.execute(`SELECT * FROM COMBUSTIVEL`)
+  Fuel.findAll()
     .then((resp) => {
-      const resData = resp[0];
-      res.status(200).json(resData);
+      res.status(200).send(resp);
     })
-    .catch((err) => console.log(err));
+    .catch((resp) => resp.status(500).send({ erro: "erro" }));
 };
 
 exports.createFuel = (req, res, next) => {
@@ -20,19 +20,10 @@ exports.createFuel = (req, res, next) => {
   }
 
   const { nome, unidade } = req.body;
-
-  db.execute(
-    `INSERT INTO combustivel (nome, unidade) VALUES (${nome}, ${unidade})`
-  )
-    .then((resp) => {
-      console.log(resp);
-      // res.status(201).json({
-      //   message: "Fuel registered successfully",
-      //   data: {
-      //     nome,
-      //     unidade,
-      //   },
-      // });
-    })
-    .catch((err) => console.log(err));
+  Fuel.create({
+    nome,
+    unidade,
+  })
+    .then((resp) => res.status(201).send(resp))
+    .catch((err) => res.status(500).send(err));
 };

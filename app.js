@@ -1,6 +1,7 @@
 const express = require("express");
 const bodyParser = require("body-parser");
 const fuelsRoutes = require("./routes/fuel");
+const sequelize = require("./utils/database");
 
 const app = express();
 app.use(bodyParser.json()); // set the header for aplication/json
@@ -18,4 +19,9 @@ app.use((req, res, next) => {
 
 app.use("/fuels", fuelsRoutes);
 
-app.listen(8080);
+sequelize
+  .sync()
+  .then((result) => {
+    app.listen(8080);
+  })
+  .catch((error) => console.log(error));
