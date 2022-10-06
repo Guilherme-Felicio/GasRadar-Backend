@@ -43,6 +43,10 @@ const Fuel = sequelize.define(
       type: Sequelize.STRING(11),
       allowNull: false,
     },
+    senha: {
+      type: Sequelize.STRING,
+      required: true,
+    },
   },
   {
     freezeTableName: true,

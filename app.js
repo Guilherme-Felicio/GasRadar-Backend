@@ -1,6 +1,7 @@
 const express = require("express");
 const bodyParser = require("body-parser");
 const fuelsRoutes = require("./routes/fuel");
+const authRoutes = require("./routes/auth");
 const sequelize = require("./utils/database");
 
 const app = express();
@@ -18,6 +19,7 @@ app.use((req, res, next) => {
 });
 
 app.use("/fuels", fuelsRoutes);
+app.use("/auth", authRoutes);
 
 sequelize
   .sync()
