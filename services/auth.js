@@ -1,4 +1,4 @@
-const User = require("../Models/genericUser");
+const User = require("../Models/User");
 const bcryptjs = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const { validationResult } = require("express-validator");
@@ -67,6 +67,7 @@ exports.login = function (req, res, next) {
           {
             email: loadedUser.email,
             userId: loadedUser.idUsuario,
+            role: "estabelecimento",
           },
           "secretsecretsecret",
           {

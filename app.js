@@ -1,7 +1,7 @@
 const express = require("express");
 const bodyParser = require("body-parser");
-const fuelsRoutes = require("./routes/fuel");
-const authRoutes = require("./routes/auth");
+const fuelsRoutes = require("./api/fuel");
+const authRoutes = require("./api/auth");
 const sequelize = require("./utils/database");
 
 const app = express();

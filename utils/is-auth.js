@@ -16,6 +16,8 @@ module.exports = (req, res, next) => {
     return res.status(401).json({ message: "Usuário não autenticado." });
   }
 
+  console.log(decodedToken);
+
   req.userId = decodedToken.userId;
   next();
 };

@@ -1,8 +1,8 @@
 const express = require("express");
 const router = express.Router();
 const { body } = require("express-validator");
-const fuelsController = require("../controllers/fuel");
-const isAuth = require("../middleware/is-auth");
+const fuelsController = require("../services/fuel");
+const isAuth = require("../utils/is-auth");
 
 router.get("/", isAuth, fuelsController.getFuels);
 
