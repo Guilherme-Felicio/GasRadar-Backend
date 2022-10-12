@@ -20,7 +20,7 @@ const User = sequelize.define(
       allowNull: false,
     },
     adm: {
-      type: Sequelize.STRING(10),
+      type: Sequelize.BOOLEAN,
       allowNull: false,
     },
     telefone: {

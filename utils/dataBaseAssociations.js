@@ -9,12 +9,22 @@ const Establishment_Fuel = require("../Models/Establishment_Fuel");
 
 const associations = () => {
   // User - Consumer 1:1
-  User.belongsTo(Consumer);
-  Consumer.hasOne(User);
+  Consumer.belongsTo(User, {
+    foreignKey: {
+      name: "idUsuario",
+      allowNull: false,
+    },
+  });
+  User.hasOne(Consumer);
 
   // User - Establishment 1:1
-  User.belongsTo(Establishment);
-  Establishment.hasOne(User);
+  Establishment.belongsTo(User, {
+    foreignKey: {
+      name: "idEstabelecimento",
+      allowNull: false,
+    },
+  });
+  User.hasOne(Establishment);
 
   // Flag - Establishment 1:N
   Establishment.hasMany(Flag);

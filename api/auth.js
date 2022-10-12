@@ -2,11 +2,14 @@ const express = require("express");
 const { body } = require("express-validator");
 const User = require("../Models/User");
 const authController = require("../services/auth");
+const consumerAuth = require("../services/consumerAuth");
 
 const router = express.Router();
 
+// rotas de criação/login de consumidor
+
 router.put(
-  "/signup",
+  "/consumer/signup",
   [
     body("email")
       .isEmail()
@@ -17,19 +20,22 @@ router.put(
         });
       })
       .normalizeEmail(),
-    body("senha").trim().isLength({ min: 5 }),
-    body("nome").trim().not().isEmpty(),
+    body("senha").isLength({ min: 5 }),
+    body("nome").not().isEmpty().isLength({ max: 30 }),
+    body("cpf").trim().not().isEmpty().isLength({ min: 11, max: 11 }),
+    body("genero").trim().not().isEmpty().isLength({ min: 1, max: 1 }),
+    body("dataNasc").trim().not().isEmpty(),
   ],
-  authController.signup
+  consumerAuth.signup
 );
 
 router.post(
-  "/login",
+  "consumer/login",
   [
     body("email").isEmail().withMessage("Por favor, digite um email válido"),
     body("senha"),
   ],
-  authController.login
+  consumerAuth.login
 );
 
 module.exports = router;

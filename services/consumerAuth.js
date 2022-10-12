@@ -1,6 +1,8 @@
-const User = require("../Models/User");
 const bcryptjs = require("bcryptjs");
 const jwt = require("jsonwebtoken");
+const moment = require("moment");
+const User = require("../Models/User");
+const Consumer = require("../Models/Consumer");
 const { validationResult } = require("express-validator");
 
 exports.signup = (req, res, next) => {
@@ -16,6 +18,10 @@ exports.signup = (req, res, next) => {
   const nome = req.body.nome;
   const telefone = req.body.telefone;
   const senha = req.body.senha;
+  const cpf = req.body.cpf;
+  const genero = req.body.genero;
+  const dataNasc = moment(req.body.dataNasc).format("YYYY-MM-DD HH:mm:ss");
+  let responseData;
 
   bcryptjs
     .hash(senha, 12)
@@ -26,7 +32,32 @@ exports.signup = (req, res, next) => {
         telefone,
         senha: senhaHashed,
         adm: false,
-      }).then((result) => res.status(201).json(result));
+      }).then((user) => {
+        responseData = { usuario: user?.dataValues };
+        Consumer.create({
+          idUsuario: user.dataValues.idUsuario,
+          cpf,
+          genero,
+          dataNasc,
+        })
+          .then((consumer) => {
+            responseData = {
+              ...responseData,
+              consumidor: consumer.dataValues,
+              message: "User created!",
+            };
+            delete responseData.usuario.senha;
+            res.status(201).json(responseData);
+          })
+          .catch((err) => {
+            User.destroy({
+              where: {
+                idUsuario: responseData.usuario.idUsuario,
+              },
+            });
+            res.status(500).json({ message: err });
+          });
+      });
     })
     .catch((err) => {
       res.status(500).json({ message: err });
@@ -53,11 +84,10 @@ exports.login = function (req, res, next) {
         if (!isEqual) {
           return res.status(401).json({ message: "usuário inválido" });
         }
+
         const token = jwt.sign(
           {
-            email: loadedUser.email,
             userId: loadedUser.idUsuario,
-            role: "estabelecimento",
           },
           "secretsecretsecret",
           {
