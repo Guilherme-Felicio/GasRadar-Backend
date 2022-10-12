@@ -1,0 +1,34 @@
+const User = require("../Models/User");
+const sequelize = require("../utils/database");
+
+const Consumer = require("../Models/Consumer");
+const Establishment = require("../Models/Establishment");
+const Flag = require("../Models/Flag");
+const Fuel = require("../Models/Fuel");
+const Establishment_Fuel = require("../Models/Establishment_Fuel");
+
+const associations = () => {
+  // User - Consumer 1:1
+  User.belongsTo(Consumer);
+  Consumer.hasOne(User);
+
+  // User - Establishment 1:1
+  User.belongsTo(Establishment);
+  Establishment.hasOne(User);
+
+  // Flag - Establishment 1:N
+  Establishment.hasMany(Flag);
+  Flag.belongsTo(Establishment);
+
+  // Fuel - Establishment N:N
+  Fuel.belongsToMany(Establishment, {
+    through: Establishment_Fuel,
+    foreignKey: "idCombustivel",
+  });
+  Establishment.belongsToMany(Fuel, {
+    through: Establishment_Fuel,
+    foreignKey: "idEstabelecimento",
+  });
+};
+
+module.exports = associations;

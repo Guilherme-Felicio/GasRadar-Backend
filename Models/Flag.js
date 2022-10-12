@@ -3,9 +3,9 @@ const Sequelize = require("sequelize");
 const sequelize = require("../utils/database");
 
 const User = sequelize.define(
-  "usuario",
+  "bandeira",
   {
-    idUsuario: {
+    idBandeira: {
       type: Sequelize.INTEGER,
       autoIncrement: true,
       allowNull: false,
@@ -15,21 +15,9 @@ const User = sequelize.define(
       type: Sequelize.STRING(30),
       allowNull: false,
     },
-    email: {
-      type: Sequelize.STRING(100),
+    unidade: {
+      type: Sequelize.STRING(20),
       allowNull: false,
-    },
-    adm: {
-      type: Sequelize.STRING(10),
-      allowNull: false,
-    },
-    telefone: {
-      type: Sequelize.STRING(11),
-      allowNull: false,
-    },
-    senha: {
-      type: Sequelize.STRING(255),
-      required: true,
     },
   },
   {

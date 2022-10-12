@@ -3,6 +3,7 @@ const bodyParser = require("body-parser");
 const fuelsRoutes = require("./api/fuel");
 const authRoutes = require("./api/auth");
 const sequelize = require("./utils/database");
+const associations = require("./utils/dataBaseAssociations");
 
 const app = express();
 app.use(bodyParser.json()); // set the header for aplication/json
@@ -20,6 +21,8 @@ app.use((req, res, next) => {
 
 app.use("/fuels", fuelsRoutes);
 app.use("/auth", authRoutes);
+
+associations();
 
 sequelize
   .sync()
