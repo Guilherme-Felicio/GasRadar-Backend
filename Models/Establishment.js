@@ -19,6 +19,10 @@ const User = sequelize.define(
       type: Sequelize.STRING(50),
       required: true,
     },
+    cidade: {
+      type: Sequelize.STRING(50),
+      required: true,
+    },
     bairro: {
       type: Sequelize.STRING(30),
       required: true,

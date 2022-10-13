@@ -15,7 +15,6 @@ const associations = () => {
       allowNull: false,
     },
   });
-  User.hasOne(Consumer);
 
   // User - Establishment 1:1
   Establishment.belongsTo(User, {

@@ -2,9 +2,9 @@ const express = require("express");
 const router = express.Router();
 const { body } = require("express-validator");
 const fuelsController = require("../services/fuel");
-const isAuth = require("../utils/is-auth");
+const checkConsumerAuth = require("../utils/checkConsumerAuth");
 
-router.get("/", isAuth, fuelsController.getFuels);
+router.get("/", checkConsumerAuth, fuelsController.getFuels);
 
 router.post(
   "/",

@@ -1,7 +1,6 @@
 const express = require("express");
 const { body } = require("express-validator");
 const User = require("../Models/User");
-const authController = require("../services/auth");
 const consumerAuth = require("../services/consumerAuth");
 
 const router = express.Router();
@@ -9,7 +8,7 @@ const router = express.Router();
 // rotas de criação/login de consumidor
 
 router.put(
-  "/consumer/signup",
+  "/signup",
   [
     body("email")
       .isEmail()
@@ -30,7 +29,7 @@ router.put(
 );
 
 router.post(
-  "consumer/login",
+  "/login",
   [
     body("email").isEmail().withMessage("Por favor, digite um email válido"),
     body("senha"),

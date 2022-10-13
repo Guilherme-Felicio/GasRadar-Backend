@@ -10,7 +10,7 @@ exports.getFuels = (req, res, next) => {
       }
       res.status(200).json(resp);
     })
-    .catch((resp) => resp.status(500).json({ erro: "erro" }));
+    .catch((err) => res.status(500).json({ erro: err }));
 };
 
 exports.createFuel = (req, res, next) => {

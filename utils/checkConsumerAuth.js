@@ -1,4 +1,5 @@
 const jwt = require("jsonwebtoken");
+const consumer = require("../Models/Consumer");
 
 module.exports = (req, res, next) => {
   if (!req.get("Authorization")) {
@@ -16,8 +17,16 @@ module.exports = (req, res, next) => {
     return res.status(401).json({ message: "Usuário não autenticado." });
   }
 
-  console.log(decodedToken);
-
   req.userId = decodedToken.userId;
-  next();
+
+  consumer
+    .findOne({ where: { idUsuario: req.userId } })
+    .then((consumer) => {
+      if (consumer === null)
+        return res
+          .status(403)
+          .json({ message: "Usuario não tem permissões necessárias" });
+      next();
+    })
+    .catch((err) => res.status(500).json({ message: err }));
 };

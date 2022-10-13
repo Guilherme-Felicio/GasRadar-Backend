@@ -2,7 +2,7 @@ const bcryptjs = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const moment = require("moment");
 const User = require("../Models/User");
-const Consumer = require("../Models/Consumer");
+const Establishment = require("../Models/Establishment");
 const { validationResult } = require("express-validator");
 
 exports.signup = (req, res, next) => {
@@ -18,9 +18,14 @@ exports.signup = (req, res, next) => {
   const nome = req.body.nome;
   const telefone = req.body.telefone;
   const senha = req.body.senha;
-  const cpf = req.body.cpf;
-  const genero = req.body.genero;
-  const dataNasc = moment(req.body.dataNasc).format("YYYY-MM-DD HH:mm:ss");
+  const endereco = req.body.endereco;
+  const bairro = req.body.bairro;
+  const cep = req.body.cep;
+  const cidade = req.body.cidade;
+  const uf = req.body.uf;
+  const coordenadas = req.body.coordenadas;
+  const idBandeira = req.body.idBandeira;
+
   let responseData;
 
   bcryptjs
@@ -34,17 +39,21 @@ exports.signup = (req, res, next) => {
         adm: false,
       }).then((user) => {
         responseData = { usuario: user?.dataValues };
-        Consumer.create({
+        Establishment.create({
           idUsuario: user.dataValues.idUsuario,
-          cpf,
-          genero,
-          dataNasc,
+          endereco,
+          bairro,
+          cep,
+          cidade,
+          uf,
+          coordenadas: coordenadas || null,
+          idBandeira,
         })
-          .then((consumer) => {
+          .then((establishment) => {
             responseData = {
               ...responseData,
-              consumidor: consumer.dataValues,
-              message: "User created!",
+              estabelecimento: establishment.dataValues,
+              message: "Estabelecimento criado!",
             };
             delete responseData.usuario.senha;
             res.status(201).json(responseData);
@@ -88,7 +97,7 @@ exports.login = function (req, res, next) {
         const token = jwt.sign(
           {
             userId: loadedUser.idUsuario,
-            role: "consumidor",
+            role: "estabelecimento",
           },
           "secretsecretsecret",
           {
