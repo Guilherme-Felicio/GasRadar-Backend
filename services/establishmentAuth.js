@@ -86,12 +86,14 @@ exports.login = function (req, res, next) {
   })
     .then((user) => {
       if (!user) {
-        return res.status(401).json({ message: "usuário não encontrado" });
+        return res.status(401).json({ message: "usuário ou senha incorretos" });
       }
       loadedUser = user;
       bcryptjs.compare(senha, user.senha).then((isEqual) => {
         if (!isEqual) {
-          return res.status(401).json({ message: "usuário inválido" });
+          return res
+            .status(401)
+            .json({ message: "usuário ou senha incorretos" });
         }
 
         const token = jwt.sign(

@@ -19,6 +19,8 @@ module.exports = (req, res, next) => {
 
   req.userId = decodedToken.userId;
 
+  console.log(req.userId);
+
   establishment
     .findOne({ where: { idUsuario: req.userId } })
     .then((establishment) => {

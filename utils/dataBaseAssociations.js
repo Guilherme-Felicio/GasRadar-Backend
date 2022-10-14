@@ -19,11 +19,10 @@ const associations = () => {
   // User - Establishment 1:1
   Establishment.belongsTo(User, {
     foreignKey: {
-      name: "idEstabelecimento",
+      name: "idUsuario",
       allowNull: false,
     },
   });
-  User.hasOne(Establishment);
 
   // Flag - Establishment 1:N
   Establishment.hasMany(Flag);
