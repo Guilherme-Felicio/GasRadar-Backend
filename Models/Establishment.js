@@ -35,7 +35,15 @@ const User = sequelize.define(
       type: Sequelize.STRING(2),
       required: true,
     },
-    coordenadas: {
+    latitude: {
+      type: Sequelize.STRING(10),
+      required: true,
+    },
+    longitude: {
+      type: Sequelize.STRING(10),
+      required: true,
+    },
+    urlImagem: {
       type: Sequelize.STRING(255),
       required: true,
     },

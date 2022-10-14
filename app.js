@@ -3,6 +3,7 @@ const bodyParser = require("body-parser");
 const fuelsRoutes = require("./api/fuel");
 const consumerAuthRoutes = require("./api/consumerAuth");
 const establishmentAuthRoutes = require("./api/establishmentAuth");
+const establishmentRotes = require("./api/establishment");
 const sequelize = require("./utils/database");
 const associations = require("./utils/dataBaseAssociations");
 
@@ -23,6 +24,7 @@ app.use((req, res, next) => {
 app.use("/fuels", fuelsRoutes);
 app.use("/auth/consumer", consumerAuthRoutes);
 app.use("/auth/establishment", establishmentAuthRoutes);
+app.use("/establishment", establishmentRotes);
 
 associations();
 

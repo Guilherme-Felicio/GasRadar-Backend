@@ -23,7 +23,8 @@ exports.signup = (req, res, next) => {
   const cep = req.body.cep;
   const cidade = req.body.cidade;
   const uf = req.body.uf;
-  const coordenadas = req.body.coordenadas;
+  const latitude = req.body.latitude;
+  const longitude = req.body.longitude;
   const idBandeira = req.body.idBandeira;
 
   let responseData;
@@ -46,7 +47,8 @@ exports.signup = (req, res, next) => {
           cep,
           cidade,
           uf,
-          coordenadas: coordenadas || null,
+          latitude: latitude || null,
+          longitude: longitude || null,
           idBandeira,
         })
           .then((establishment) => {
