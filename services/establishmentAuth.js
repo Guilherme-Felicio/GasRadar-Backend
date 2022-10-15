@@ -1,9 +1,11 @@
 const bcryptjs = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const moment = require("moment");
+const { validationResult } = require("express-validator");
+const { Op } = require("sequelize");
+
 const User = require("../Models/User");
 const Establishment = require("../Models/Establishment");
-const { validationResult } = require("express-validator");
 
 exports.signup = (req, res, next) => {
   const errors = validationResult(req);
@@ -79,19 +81,27 @@ exports.login = function (req, res, next) {
   const email = req.body.email;
   const senha = req.body.senha;
 
-  let loadedUser;
+  let establishmentUserData;
 
-  User.findOne({
-    where: {
-      email,
+  // validate email and password
+
+  Establishment.findOne({
+    include: {
+      model: User,
+      where: {
+        email: {
+          [Op.eq]: `${email}`,
+        },
+      },
     },
   })
-    .then((user) => {
-      if (!user) {
+    .then((queryResult) => {
+      console.log(queryResult);
+      if (!queryResult) {
         return res.status(401).json({ message: "usuário ou senha incorretos" });
       }
-      loadedUser = user;
-      bcryptjs.compare(senha, user.senha).then((isEqual) => {
+      establishmentUserData = queryResult;
+      bcryptjs.compare(senha, queryResult.usuario.senha).then((isEqual) => {
         if (!isEqual) {
           return res
             .status(401)
@@ -100,7 +110,8 @@ exports.login = function (req, res, next) {
 
         const token = jwt.sign(
           {
-            userId: loadedUser.idUsuario,
+            userId: establishmentUserData.usuario.idUsuario,
+            establishmentId: establishmentUserData.idEstabelecimento,
             role: "estabelecimento",
           },
           "secretsecretsecret",
@@ -108,9 +119,11 @@ exports.login = function (req, res, next) {
             expiresIn: "720h",
           }
         );
-        return res
-          .status(200)
-          .json({ token, userId: loadedUser.idUsuario.toString() });
+        return res.status(200).json({
+          token,
+          userId: establishmentUserData.usuario.idUsuario.toString(),
+          establishmentId: establishmentUserData.idEstabelecimento.toString(),
+        });
       });
     })
     .catch((err) => {

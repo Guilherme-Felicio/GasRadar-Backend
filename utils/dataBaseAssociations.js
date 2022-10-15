@@ -10,6 +10,7 @@ const Establishment_Fuel = require("../Models/Establishment_Fuel");
 const associations = () => {
   // User - Consumer 1:1
   Consumer.belongsTo(User, {
+    onDelete: "CASCADE",
     foreignKey: {
       name: "idUsuario",
       allowNull: false,
@@ -17,10 +18,18 @@ const associations = () => {
   });
 
   // User - Establishment 1:1
-  Establishment.belongsTo(User, {
+
+  User.hasOne(Establishment, {
+    hooks: true,
+    onDelete: "CASCADE",
     foreignKey: {
       name: "idUsuario",
-      allowNull: false,
+    },
+  });
+  Establishment.belongsTo(User, {
+    onDelete: "CASCADE",
+    foreignKey: {
+      name: "idUsuario",
     },
   });
 

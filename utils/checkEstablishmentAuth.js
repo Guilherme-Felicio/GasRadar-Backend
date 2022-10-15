@@ -18,11 +18,18 @@ module.exports = (req, res, next) => {
   }
 
   req.userId = decodedToken.userId;
+  req.establishmentId = decodedToken.establishmentId;
 
-  console.log(req.userId);
+  if (Number(req.params.id) !== Number(req.establishmentId)) {
+    return res
+      .status(403)
+      .json({ message: "Estabelecimento só pode alterar seus proprios dados" });
+  }
 
   establishment
-    .findOne({ where: { idUsuario: req.userId } })
+    .findOne({
+      where: { idUsuario: req.userId, idEstabelecimento: req.establishmentId },
+    })
     .then((establishment) => {
       if (establishment === null)
         return res

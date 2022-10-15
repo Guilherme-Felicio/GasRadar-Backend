@@ -1,4 +1,6 @@
 const Establishment = require("../Models/Establishment");
+const User = require("../Models/User");
+const jwt = require("jsonwebtoken");
 const validationResult = require("express-validator");
 
 exports.getEstablishment = (req, res, next) => {
@@ -71,6 +73,35 @@ exports.updateEstablishment = (req, res, next) => {
       return res
         .status(200)
         .json({ message: "Estabelecimento não encontrado" });
+    })
+    .catch((err) => res.status(500).json({ erro: err }));
+};
+
+exports.deleteEstablishment = (req, res, next) => {
+  if (!Number.isInteger(Number(req.params.id))) {
+    return res.status(404).json({ message: "Estabelecimento não encontrado" });
+  }
+
+  // token ja foi verifacado no establishmentAuth
+
+  const idEstabelecimento = req.params.id;
+  const token = req.get("Authorization").split(" ")[1];
+  decodedToken = jwt.verify(token, "secretsecretsecret");
+  const idUsuario = decodedToken.userId;
+
+  // deleting establishment
+
+  User.destroy({
+    where: {
+      idUsuario,
+    },
+  })
+    .then((user) => {
+      return res.status(200).json({
+        message: "Estabelecimento excluido",
+        user: user,
+        establishment: idEstabelecimento,
+      });
     })
     .catch((err) => res.status(500).json({ erro: err }));
 };

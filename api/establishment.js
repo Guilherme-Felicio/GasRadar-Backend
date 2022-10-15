@@ -1,10 +1,11 @@
 const express = require("express");
 const router = express.Router();
 const establishmentService = require("../services/establishment");
+const checkEstablishmentAuth = require("../utils//checkEstablishmentAuth");
 const { body } = require("express-validator");
 
 router.put(
-  "/:id",
+  "/update/:id",
   [
     body("nome").not().isEmpty().isLength({ max: 30 }),
     body("endereco").not().isEmpty().isLength({ min: 1, max: 50 }),
@@ -17,7 +18,14 @@ router.put(
     body("longitude"),
     body("urlImagem"),
   ],
+
   establishmentService.updateEstablishment
+);
+
+router.delete(
+  "/:id",
+  checkEstablishmentAuth,
+  establishmentService.deleteEstablishment
 );
 
 router.get("/", establishmentService.getEstablishment);
