@@ -84,10 +84,20 @@ exports.deleteEstablishment = (req, res, next) => {
 
   // token ja foi verifacado no establishmentAuth
 
-  const idEstabelecimento = req.params.id;
+  const reqId = req.params.id;
   const token = req.get("Authorization").split(" ")[1];
   decodedToken = jwt.verify(token, "secretsecretsecret");
   const idUsuario = decodedToken.userId;
+  const idEstabelcimento = decodedToken.establishmentId;
+
+  if (idEstabelecimento !== reqId) {
+    return res
+      .status(403)
+      .json({
+        message:
+          "usuário não possui autorização para excluir esse estabelecimento",
+      });
+  }
 
   // deleting establishment
 
