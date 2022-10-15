@@ -68,26 +68,35 @@ exports.login = function (req, res, next) {
   const email = req.body.email;
   const senha = req.body.senha;
 
-  let loadedUser;
+  let consumerUserData;
 
-  User.findOne({
-    where: {
-      email,
+  Consumer.findOne({
+    include: {
+      model: User,
+      where: {
+        email: {
+          [Op.eq]: `${email}`,
+        },
+      },
     },
   })
-    .then((user) => {
-      if (!user) {
-        return res.status(401).json({ message: "usuário não encontrado" });
+    .then((queryResult) => {
+      console.log(queryResult);
+      if (!queryResult) {
+        return res.status(401).json({ message: "usuário ou senha incorretos" });
       }
-      loadedUser = user;
-      bcryptjs.compare(senha, user.senha).then((isEqual) => {
+      consumerUserData = queryResult;
+      bcryptjs.compare(senha, queryResult.usuario.senha).then((isEqual) => {
         if (!isEqual) {
-          return res.status(401).json({ message: "usuário inválido" });
+          return res
+            .status(401)
+            .json({ message: "usuário ou senha incorretos" });
         }
 
         const token = jwt.sign(
           {
-            userId: loadedUser.idUsuario,
+            userId: consumerUserData.usuario.idUsuario,
+            establishmentId: consumerUserData.idEstabelecimento,
             role: "consumidor",
           },
           "secretsecretsecret",
@@ -95,9 +104,11 @@ exports.login = function (req, res, next) {
             expiresIn: "720h",
           }
         );
-        return res
-          .status(200)
-          .json({ token, userId: loadedUser.idUsuario.toString() });
+        return res.status(200).json({
+          token,
+          userId: consumerUserData.usuario.idUsuario.toString(),
+          establishmentId: consumerUserData.idEstabelecimento.toString(),
+        });
       });
     })
     .catch((err) => {
