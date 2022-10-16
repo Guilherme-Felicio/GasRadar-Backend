@@ -2,7 +2,7 @@ const express = require("express");
 const router = express.Router();
 const establishmentService = require("../services/establishment");
 const checkEstablishmentAuth = require("../utils/checkEstablishmentAuth");
-const { body } = require("express-validator");
+const { body, query } = require("express-validator");
 
 router.put(
   "/update/:id",
@@ -28,6 +28,18 @@ router.delete(
   establishmentService.deleteEstablishment
 );
 
-router.get("/", establishmentService.getEstablishment);
+router.get(
+  "/",
+  [
+    query("latitude")
+      .isLength({ min: 1, max: 11 })
+      .matches(/([0-9.-]+).+?([0-9.-]+)/),
+    query("longitude")
+      .isLength({ min: 1, max: 11 })
+      .matches(/([0-9.-]+).+?([0-9.-]+)/),
+    query("distancia").isLength({ min: 1, max: 6 }),
+  ],
+  establishmentService.getEstablishment
+);
 
 module.exports = router;

@@ -78,6 +78,13 @@ exports.signup = (req, res, next) => {
 };
 
 exports.login = function (req, res, next) {
+  const errors = validationResult(req);
+  if (!errors.isEmpty()) {
+    return res.status(422).json({
+      message: "Parameters validation failed",
+      errors: errors.array(),
+    });
+  }
   const email = req.body.email;
   const senha = req.body.senha;
 

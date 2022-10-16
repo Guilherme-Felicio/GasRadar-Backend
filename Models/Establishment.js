@@ -36,11 +36,11 @@ const User = sequelize.define(
       required: true,
     },
     latitude: {
-      type: Sequelize.STRING(10),
+      type: Sequelize.STRING(11),
       required: true,
     },
     longitude: {
-      type: Sequelize.STRING(10),
+      type: Sequelize.STRING(11),
       required: true,
     },
     urlImagem: {

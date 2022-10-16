@@ -1,39 +1,51 @@
+const sequelize = require("../utils/database");
+const { QueryTypes } = require("sequelize");
 const Establishment = require("../Models/Establishment");
 const User = require("../Models/User");
 const jwt = require("jsonwebtoken");
-const validationResult = require("express-validator");
+const { validationResult } = require("express-validator");
 
 exports.getEstablishment = (req, res, next) => {
-  Establishment.findAll({
-    attributes: [
-      "idEstabelecimento",
-      "status",
-      "endereco",
-      "cidade",
-      "bairro",
-      "cep",
-      "uf",
-      "latitude",
-      "longitude",
-      "urlImagem",
-      "nota",
-    ],
-  })
-    .then((establishment) => {
-      if (establishment.length === 0) {
-        return res
-          .status(404)
-          .json({ message: "Estabelecimento não encontrado." });
-      }
+  const errors = validationResult(req);
+  if (!errors.isEmpty()) {
+    return res.status(400).json({
+      message: "Parameters validation failed",
+      errors: errors.array(),
+    });
+  }
 
-      res.status(200).json(establishment);
+  const distancia = Number(req.query.distancia);
+  const latitude = req.query.latitude;
+  const longitude = req.query.longitude;
+  const bandeira = Number(req.query.bandeira);
+
+  sequelize
+    .query(
+      `SELECT *, (6371 *
+      acos(
+          cos(radians(:latitude)) *
+          cos(radians(latitude)) *
+          cos(radians(:longitude) - radians(longitude)) +
+          sin(radians(:latitude)) *
+          sin(radians(latitude))
+      )) AS distancia
+FROM estabelecimento HAVING distancia <= :distancia`,
+      {
+        replacements: { distancia, latitude, longitude },
+        type: QueryTypes.SELECT,
+      }
+    )
+    .then((establishment) => {
+      return res.status(200).json({ estabelecimentos: establishment });
     })
-    .catch((err) => res.status(500).json({ erro: err }));
+    .catch((err) => res.status(500).json({ message: err }));
 };
 
 exports.updateEstablishment = (req, res, next) => {
   if (!Number.isInteger(Number(req.params.id))) {
-    return res.status(404).json({ message: "Estabelecimento não encontrado" });
+    return res
+      .status(500)
+      .json({ message: "Id do estabelecimento deve ser um valor inteiro." });
   }
 
   const idEstabelecimento = req.params.id;
@@ -79,7 +91,9 @@ exports.updateEstablishment = (req, res, next) => {
 
 exports.deleteEstablishment = (req, res, next) => {
   if (!Number.isInteger(Number(req.params.id))) {
-    return res.status(404).json({ message: "Estabelecimento não encontrado" });
+    return res
+      .status(500)
+      .json({ message: "Id do estabelecimento deve ser um valor inteiro." });
   }
 
   // token ja foi verifacado no establishmentAuth
@@ -91,12 +105,10 @@ exports.deleteEstablishment = (req, res, next) => {
   const idEstabelcimento = decodedToken.establishmentId;
 
   if (idEstabelecimento !== reqId) {
-    return res
-      .status(403)
-      .json({
-        message:
-          "usuário não possui autorização para excluir esse estabelecimento",
-      });
+    return res.status(403).json({
+      message:
+        "usuário não possui autorização para excluir esse estabelecimento",
+    });
   }
 
   // deleting establishment

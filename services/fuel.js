@@ -5,9 +5,6 @@ const Fuel = require("../Models/fuel");
 exports.getFuels = (req, res, next) => {
   Fuel.findAll()
     .then((resp) => {
-      if (resp.length === 0) {
-        return res.status(404).json({ message: "No fuel found" });
-      }
       res.status(200).json(resp);
     })
     .catch((err) => res.status(500).json({ erro: err }));
