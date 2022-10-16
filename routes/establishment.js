@@ -1,7 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const establishmentService = require("../services/establishment");
-const checkEstablishmentAuth = require("../utils//checkEstablishmentAuth");
+const checkEstablishmentAuth = require("../utils/checkEstablishmentAuth");
 const { body } = require("express-validator");
 
 router.put(

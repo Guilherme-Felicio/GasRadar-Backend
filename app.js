@@ -1,11 +1,13 @@
 const express = require("express");
 const bodyParser = require("body-parser");
-const fuelsRoutes = require("./api/fuel");
-const consumerAuthRoutes = require("./api/consumerAuth");
-const establishmentAuthRoutes = require("./api/establishmentAuth");
-const establishmentRotes = require("./api/establishment");
+const swaggerUi = require("swagger-ui-express");
+const swaggerFile = require("./swagger_output.json");
 const sequelize = require("./utils/database");
 const associations = require("./utils/dataBaseAssociations");
+const fuelsRoutes = require("./routes/fuel");
+const consumerAuthRoutes = require("./routes/consumerAuth");
+const establishmentAuthRoutes = require("./routes/establishmentAuth");
+const establishmentRotes = require("./routes/establishment");
 
 const app = express();
 app.use(bodyParser.json()); // set the header for aplication/json
@@ -20,6 +22,7 @@ app.use((req, res, next) => {
   res.setHeader("Access-Control-Allow-Headers", "Content-Type, Authorization");
   next();
 });
+app.use("/doc", swaggerUi.serve, swaggerUi.setup(swaggerFile));
 
 app.use("/fuels", fuelsRoutes);
 app.use("/auth/consumer", consumerAuthRoutes);
