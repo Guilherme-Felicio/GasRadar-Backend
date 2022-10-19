@@ -17,7 +17,17 @@ exports.getEstablishment = (req, res, next) => {
   const distancia = Number(req.query.distancia);
   const latitude = req.query.latitude;
   const longitude = req.query.longitude;
-  const bandeira = Number(req.query.bandeira);
+  const idBandeira = Number(req.query.idBandeira);
+  const nota = Number(req.query.nota);
+
+  let queryParams = "";
+  if (idBandeira && nota) {
+    queryParams = `where idBandeira = ${idBandeira} and nota >= ${nota}`;
+  } else {
+    queryParams = `where ${
+      idBandeira ? "idBandeira = " + idBandeira : "nota >= " + nota
+    }`;
+  }
 
   sequelize
     .query(
@@ -29,7 +39,9 @@ exports.getEstablishment = (req, res, next) => {
           sin(radians(:latitude)) *
           sin(radians(latitude))
       )) AS distancia
-FROM estabelecimento HAVING distancia <= :distancia`,
+FROM estabelecimento ${
+        idBandeira || nota ? queryParams : ""
+      } HAVING distancia <= :distancia`,
       {
         replacements: { distancia, latitude, longitude },
         type: QueryTypes.SELECT,

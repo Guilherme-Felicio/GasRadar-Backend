@@ -37,7 +37,9 @@ router.get(
     query("longitude")
       .isLength({ min: 1, max: 11 })
       .matches(/([0-9.-]+).+?([0-9.-]+)/),
-    query("distancia").isLength({ min: 1, max: 6 }),
+    query("distancia").isFloat({ min: 1 }),
+    query("nota").optional({ checkFalsy: true }).isFloat({ max: 10 }),
+    query("idBandeira").optional({ checkFalsy: true }).isInt(),
   ],
   establishmentService.getEstablishment
 );

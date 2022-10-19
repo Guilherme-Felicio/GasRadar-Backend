@@ -59,7 +59,7 @@ FOREIGN KEY (idEstabelecimento) REFERENCES estabelecimento(idEstabelecimento)
 
 
 
-INSERT INTO combustivel (nome, unidade) VALUES ("Etanol", "estabelecimentoLitrão");
+INSERT INTO combustivel (nome, unidade) VALUES ("Etanol", "Litrão");
 
 
 
