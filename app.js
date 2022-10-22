@@ -8,6 +8,7 @@ const fuelsRoutes = require("./routes/fuel");
 const consumerAuthRoutes = require("./routes/consumerAuth");
 const establishmentAuthRoutes = require("./routes/establishmentAuth");
 const establishmentRotes = require("./routes/establishment");
+const ratingRoutes = require("./routes/rating");
 
 const app = express();
 app.use(bodyParser.json()); // set the header for aplication/json
@@ -28,6 +29,7 @@ app.use("/fuels", fuelsRoutes);
 app.use("/auth/consumer", consumerAuthRoutes);
 app.use("/auth/establishment", establishmentAuthRoutes);
 app.use("/establishment", establishmentRotes);
+app.use("/rating", ratingRoutes);
 
 associations();
 

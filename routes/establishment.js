@@ -28,6 +28,8 @@ router.delete(
   establishmentService.deleteEstablishment
 );
 
+router.get("/:id", establishmentService.getEstablishment);
+
 router.get(
   "/",
   [
@@ -41,7 +43,7 @@ router.get(
     query("nota").optional({ checkFalsy: true }).isFloat({ max: 10 }),
     query("idBandeira").optional({ checkFalsy: true }).isInt(),
   ],
-  establishmentService.getEstablishment
+  establishmentService.getEstablishments
 );
 
 module.exports = router;

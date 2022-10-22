@@ -1,11 +1,12 @@
 const sequelize = require("../utils/database");
 const { QueryTypes } = require("sequelize");
-const Establishment = require("../Models/Establishment");
+const Rating = require("../Models/Rating");
 const User = require("../Models/User");
 const jwt = require("jsonwebtoken");
+const moment = require("moment");
 const { validationResult } = require("express-validator");
 
-exports.getEstablishments = (req, res, next) => {
+exports.getRating = (req, res, next) => {
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
     return res.status(422).json({
@@ -14,10 +15,7 @@ exports.getEstablishments = (req, res, next) => {
     });
   }
 
-  const distancia = Number(req.query.distancia);
-  const latitude = req.query.latitude;
-  const longitude = req.query.longitude;
-  const idBandeira = Number(req.query.idBandeira);
+  const distancia = req.query.distancia;
   const nota = Number(req.query.nota);
 
   let queryParams = "";
@@ -53,7 +51,7 @@ FROM estabelecimento ${
     .catch((err) => res.status(500).json({ message: err }));
 };
 
-exports.getEstablishment = (req, res, next) => {
+exports.getRating = (req, res, next) => {
   if (!Number.isInteger(Number(req.params.id))) {
     return res
       .status(422)
@@ -64,7 +62,7 @@ exports.getEstablishment = (req, res, next) => {
 
   // finding establishment
 
-  Establishment.findOne({
+  Rating.findOne({
     include: {
       model: User,
     },
@@ -85,7 +83,7 @@ exports.getEstablishment = (req, res, next) => {
   });
 };
 
-exports.updateEstablishment = (req, res, next) => {
+exports.createRating = (req, res, next) => {
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
     return res.status(422).json({
@@ -94,52 +92,25 @@ exports.updateEstablishment = (req, res, next) => {
     });
   }
 
-  if (!Number.isInteger(Number(req.params.id))) {
-    return res
-      .status(500)
-      .json({ message: "Id do estabelecimento deve ser um valor inteiro." });
-  }
+  const descricao = req.body.descricao;
+  const nota = req.body.nota;
+  const idConsumidor = req.body.idConsumidor;
+  const idEstabelecimento = req.body.idEstabelecimento;
 
-  const idEstabelecimento = req.params.id;
-  const nome = req.body.nome;
-  const telefone = req.body.telefone;
-  const endereco = req.body.endereco;
-  const bairro = req.body.bairro;
-  const cep = req.body.cep;
-  const cidade = req.body.cidade;
-  const uf = req.body.uf;
-  const latitude = req.body.latitude;
-  const longitude = req.body.longitude;
-  const idBandeira = req.body.idBandeira;
-  const urlImagem = req.body.urlImagem;
-
-  Establishment.update(
-    {
-      nome,
-      telefone,
-      endereco,
-      bairro,
-      cep,
-      cidade,
-      uf,
-      latitude,
-      longitude,
-      idBandeira,
-      urlImagem,
-    },
-    {
-      where: {
-        idEstabelecimento,
-      },
-    }
-  )
-    .then((establishment) => {
-      return res.status(200).json(establishment);
+  Rating.create({
+    descricao,
+    nota,
+    idConsumidor,
+    idEstabelecimento,
+    dataAvaliacao: moment(),
+  })
+    .then((rating) => {
+      return res.status(200).json(rating);
     })
     .catch((err) => res.status(500).json({ erro: err }));
 };
 
-exports.deleteEstablishment = (req, res, next) => {
+exports.deleteRating = (req, res, next) => {
   if (!Number.isInteger(Number(req.params.id))) {
     return res
       .status(500)

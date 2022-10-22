@@ -5,6 +5,7 @@ const Consumer = require("../Models/Consumer");
 const Establishment = require("../Models/Establishment");
 const Flag = require("../Models/Flag");
 const Fuel = require("../Models/Fuel");
+const Rating = require("../Models/Rating");
 const Establishment_Fuel = require("../Models/Establishment_Fuel");
 
 const associations = () => {
@@ -47,5 +48,15 @@ const associations = () => {
     foreignKey: "idEstabelecimento",
   });
 };
+
+// Rating - Establishment 1:N
+Establishment.hasMany(Rating, {
+  foreignKey: "idEstabelecimento",
+});
+
+// Rating - Consumer 1:N
+Consumer.hasMany(Rating, {
+  foreignKey: "idConsumidor",
+});
 
 module.exports = associations;

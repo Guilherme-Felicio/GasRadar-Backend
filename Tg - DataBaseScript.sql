@@ -48,14 +48,27 @@ unidade varchar(20) Not NULL
 
 CREATE TABLE estabelecimentoCombustivel (
 idEstabelecimentoCombustivel int AUTO_INCREMENT PRIMARY KEY,
-idCombustivel int,
-idEstabelecimento int,
+idCombustivel int NOT NULL,
+idEstabelecimento int NOT NULL,
 dataAtualizacao DATETIME NOT NULL,
 quantidade DOUBLE NOT NULL,
 preco DOUBLE NOT NULL,
 FOREIGN KEY (idCombustivel) REFERENCES combustivel(idCombustivel),
 FOREIGN KEY (idEstabelecimento) REFERENCES estabelecimento(idEstabelecimento)
 );
+
+CREATE TABLE avaliacao (
+idAvaliacao int AUTO_INCREMENT PRIMARY KEY,
+idConsumidor int NOT NULL,
+idEstabelecimento int NOT NULL,
+descricao varchar(200) NOT NULL,
+nota DOUBLE NOT NULL,
+dataAvaliacao DATETIME NOT NULL,
+FOREIGN KEY (idConsumidor) REFERENCES consumidor(idConsumidor),
+FOREIGN KEY (idEstabelecimento) REFERENCES estabelecimento(idEstabelecimento)
+);
+
+
 
 
 
