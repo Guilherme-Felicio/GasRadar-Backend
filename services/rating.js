@@ -6,7 +6,7 @@ const jwt = require("jsonwebtoken");
 const moment = require("moment");
 const { validationResult } = require("express-validator");
 
-exports.getRating = (req, res, next) => {
+exports.getAllRatings = (req, res, next) => {
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
     return res.status(422).json({
@@ -15,38 +15,29 @@ exports.getRating = (req, res, next) => {
     });
   }
 
-  const distancia = req.query.distancia;
-  const nota = Number(req.query.nota);
-
-  let queryParams = "";
-  if (idBandeira && nota) {
-    queryParams = `where idBandeira = ${idBandeira} and nota >= ${nota}`;
-  } else {
-    queryParams = `where ${
-      idBandeira ? "idBandeira = " + idBandeira : "nota >= " + nota
-    }`;
-  }
+  const idEstabelecimento = Number(req.query.idEstabelecimento);
+  const pagina = Number(req.query.pagina);
+  const quantidade = Number(req.query.quantidade);
 
   sequelize
     .query(
-      `SELECT *, (6371 *
-      acos(
-          cos(radians(:latitude)) *
-          cos(radians(latitude)) *
-          cos(radians(:longitude) - radians(longitude)) +
-          sin(radians(:latitude)) *
-          sin(radians(latitude))
-      )) AS distancia
-FROM estabelecimento ${
-        idBandeira || nota ? queryParams : ""
-      } HAVING distancia <= :distancia`,
+      `SELECT *
+      FROM   avaliacao
+      WHERE  (idConsumidor, idEstabelecimento, dataAvaliacao) IN (
+                SELECT idConsumidor, idEstabelecimento, MAX(dataAvaliacao) as dataAvaliacao
+                FROM avaliacao
+                WHERE idEstabelecimento = :idEstabelecimento
+                GROUP BY idConsumidor, idEstabelecimento) limit :pagina, :quantidade`,
       {
-        replacements: { distancia, latitude, longitude },
-        type: QueryTypes.SELECT,
+        replacements: {
+          idEstabelecimento,
+          pagina: (pagina - 1) * quantidade,
+          quantidade,
+        },
       }
     )
-    .then((establishment) => {
-      return res.status(200).json({ estabelecimentos: establishment });
+    .then((rating) => {
+      return res.status(200).json(rating[0]);
     })
     .catch((err) => res.status(500).json({ message: err }));
 };

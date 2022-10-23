@@ -21,17 +21,11 @@ router.get("/:id", establishmentService.getEstablishment);
 router.get(
   "/",
   [
-    query("latitude")
-      .isLength({ min: 1, max: 11 })
-      .matches(/([0-9.-]+).+?([0-9.-]+)/),
-    query("longitude")
-      .isLength({ min: 1, max: 11 })
-      .matches(/([0-9.-]+).+?([0-9.-]+)/),
-    query("distancia").isFloat({ min: 1 }),
-    query("nota").optional({ checkFalsy: true }).isFloat({ max: 10 }),
-    query("idBandeira").optional({ checkFalsy: true }).isInt(),
+    query("idEstabelecimento").isInt({ min: 1 }),
+    query("pagina").isInt({ min: 1 }),
+    query("quantidade").isInt({ min: 1 }),
   ],
-  establishmentService.getEstablishments
+  ratingService.getAllRatings
 );
 
 module.exports = router;
