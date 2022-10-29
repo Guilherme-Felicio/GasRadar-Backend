@@ -16,23 +16,23 @@ exports.getAllRatings = (req, res, next) => {
   }
 
   const idEstabelecimento = Number(req.query.idEstabelecimento);
+  const idConsumidor = Number(req.query.idConsumidor);
   const pagina = Number(req.query.pagina);
   const quantidade = Number(req.query.quantidade);
 
   sequelize
     .query(
-      `SELECT *
-      FROM   avaliacao
-      WHERE  (idConsumidor, idEstabelecimento, dataAvaliacao) IN (
-                SELECT idConsumidor, idEstabelecimento, MAX(dataAvaliacao) as dataAvaliacao
-                FROM avaliacao
-                WHERE idEstabelecimento = :idEstabelecimento
-                GROUP BY idConsumidor, idEstabelecimento) limit :pagina, :quantidade`,
+      `
+      SELECT idAvaliacao, descricao, nota, dataAvaliacao, idEstabelecimento, idConsumidor 
+      FROM avaliacao AS avaliacao 
+      WHERE avaliacao.idEstabelecimento = :idEstabelecimento 
+      ORDER BY idConsumidor = :idConsumidor DESC, dataAvaliacao LIMIT :pagina, :quantidade `,
       {
         replacements: {
+          idConsumidor,
           idEstabelecimento,
-          pagina: (pagina - 1) * quantidade,
           quantidade,
+          pagina: (pagina - 1) * quantidade,
         },
       }
     )
@@ -42,38 +42,7 @@ exports.getAllRatings = (req, res, next) => {
     .catch((err) => res.status(500).json({ message: err }));
 };
 
-exports.getRating = (req, res, next) => {
-  if (!Number.isInteger(Number(req.params.id))) {
-    return res
-      .status(422)
-      .json({ message: "Id do estabelecimento deve ser um valor inteiro." });
-  }
-
-  const reqId = req.params.id;
-
-  // finding establishment
-
-  Rating.findOne({
-    include: {
-      model: User,
-    },
-    where: {
-      idEstabelecimento: reqId,
-    },
-  }).then((establishmentData) => {
-    const data = {
-      ...establishmentData.usuario.dataValues,
-      ...establishmentData.dataValues,
-    };
-    delete data.usuario;
-    delete data.idUsuario;
-    delete data.senha;
-    delete data.adm;
-
-    res.status(200).json(data);
-  });
-};
-
+// criar avalição
 exports.createRating = (req, res, next) => {
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
@@ -88,11 +57,21 @@ exports.createRating = (req, res, next) => {
   const idConsumidor = req.body.idConsumidor;
   const idEstabelecimento = req.body.idEstabelecimento;
 
+  Rating.findOne({
+    where: {
+      idConsumidor,
+    },
+  }).then(() =>
+    res
+      .status(409)
+      .json({ message: "Ja existe uma avaliação desse consumidor" })
+  );
+
   Rating.create({
-    descricao,
-    nota,
     idConsumidor,
     idEstabelecimento,
+    descricao,
+    nota,
     dataAvaliacao: moment(),
   })
     .then((rating) => {
@@ -101,41 +80,28 @@ exports.createRating = (req, res, next) => {
     .catch((err) => res.status(500).json({ erro: err }));
 };
 
-exports.deleteRating = (req, res, next) => {
-  if (!Number.isInteger(Number(req.params.id))) {
-    return res
-      .status(500)
-      .json({ message: "Id do estabelecimento deve ser um valor inteiro." });
-  }
-
-  // token ja foi verifacado no establishmentAuth
-
-  const reqId = req.params.id;
-  const token = req.get("Authorization").split(" ")[1];
-  decodedToken = jwt.verify(token, "secretsecretsecret");
-  const idUsuario = decodedToken.userId;
-  const idEstabelcimento = decodedToken.establishmentId;
-
-  if (idEstabelecimento !== reqId) {
-    return res.status(403).json({
-      message:
-        "usuário não possui autorização para excluir esse estabelecimento",
+// atualizar avalição
+exports.updateRating = (req, res, next) => {
+  const errors = validationResult(req);
+  if (!errors.isEmpty()) {
+    return res.status(422).json({
+      message: "Parameters validation failed",
+      errors: errors.array(),
     });
   }
 
-  // deleting establishment
+  const descricao = req.body.descricao;
+  const nota = req.body.nota;
+  const idAvaliacao = req.params.idAvaliacao;
 
-  User.destroy({
-    where: {
-      idUsuario,
-    },
+  Rating.upsert({
+    idAvaliacao,
+    descricao,
+    nota,
+    dataAvaliacao: moment(),
   })
-    .then((user) => {
-      return res.status(200).json({
-        message: "Estabelecimento excluido",
-        user: user,
-        establishment: idEstabelecimento,
-      });
+    .then((rating) => {
+      return res.status(200).json(rating);
     })
     .catch((err) => res.status(500).json({ erro: err }));
 };
