@@ -5,6 +5,7 @@ const swaggerFile = require("./swagger_output.json");
 const sequelize = require("./utils/database");
 const associations = require("./utils/dataBaseAssociations");
 const fuelsRoutes = require("./routes/fuel");
+const establishmentFuel = require("./routes/establishmentFuel");
 const consumerAuthRoutes = require("./routes/consumerAuth");
 const establishmentAuthRoutes = require("./routes/establishmentAuth");
 const establishmentRotes = require("./routes/establishment");
@@ -29,6 +30,7 @@ app.use("/fuels", fuelsRoutes);
 app.use("/auth/consumer", consumerAuthRoutes);
 app.use("/auth/establishment", establishmentAuthRoutes);
 app.use("/establishment", establishmentRotes);
+app.use("/establishmentFuel", establishmentFuel);
 app.use("/rating", ratingRoutes);
 
 associations();

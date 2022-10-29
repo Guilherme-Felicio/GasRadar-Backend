@@ -20,11 +20,11 @@ module.exports = (req, res, next) => {
   req.userId = decodedToken.userId;
   req.establishmentId = decodedToken.establishmentId;
 
-  if (Number(req.params.id) !== Number(req.establishmentId)) {
-    return res
-      .status(403)
-      .json({ message: "Estabelecimento só pode alterar seus proprios dados" });
-  }
+  // if (Number(req.params.id) !== Number(req.establishmentId)) {
+  //   return res
+  //     .status(403)
+  //     .json({ message: "Estabelecimento só pode alterar seus proprios dados" });
+  // }
 
   establishment
     .findOne({

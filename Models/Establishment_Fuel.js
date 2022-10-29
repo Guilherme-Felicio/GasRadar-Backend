@@ -2,7 +2,7 @@ const Sequelize = require("sequelize");
 
 const sequelize = require("../utils/database");
 
-const User = sequelize.define(
+const EstablishmentFuel = sequelize.define(
   "estabelecimentocombustivel",
   {
     idEstabelecimentoCombustivel: {
@@ -46,4 +46,4 @@ const User = sequelize.define(
   }
 );
 
-module.exports = User;
+module.exports = EstablishmentFuel;

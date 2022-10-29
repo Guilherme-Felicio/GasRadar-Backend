@@ -5,6 +5,17 @@ const checkEstablishmentAuth = require("../utils/checkEstablishmentAuth");
 const { body, query } = require("express-validator");
 
 router.patch(
+  "/fuels",
+  [
+    body("idEstabelecimentoCombustivel").isInt({ min: 1 }),
+    body("quantidade").isInt({ min: 1 }),
+    body("preco").isFloat({ min: 0 }),
+  ],
+  checkEstablishmentAuth,
+  establishmentService.updateEstablishment
+);
+
+router.patch(
   "/:id",
   [
     // body("cnpj").not().isEmpty().isLength({ min: 1, max: 14 }),
@@ -19,7 +30,7 @@ router.patch(
     body("longitude"),
     body("urlImagem"),
   ],
-
+  checkEstablishmentAuth,
   establishmentService.updateEstablishment
 );
 
