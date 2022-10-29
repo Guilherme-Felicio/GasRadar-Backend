@@ -4,6 +4,7 @@ const moment = require("moment");
 const User = require("../Models/User");
 const Consumer = require("../Models/Consumer");
 const { validationResult } = require("express-validator");
+const { validateCPF } = require("../utils/validators");
 
 exports.signup = (req, res, next) => {
   const errors = validationResult(req);
@@ -19,9 +20,13 @@ exports.signup = (req, res, next) => {
   const telefone = req.body.telefone;
   const senha = req.body.senha;
   const cpf = req.body.cpf;
-  const genero = req.body.genero;
+  const sexo = req.body.sexo;
   const dataNasc = moment(req.body.dataNasc).format("YYYY-MM-DD HH:mm:ss");
   let responseData;
+
+  if (!validateCPF(cpf)) {
+    return res.status(422).json({ message: "CPF Inválido" });
+  }
 
   bcryptjs
     .hash(senha, 12)
@@ -37,7 +42,7 @@ exports.signup = (req, res, next) => {
         Consumer.create({
           idUsuario: user.dataValues.idUsuario,
           cpf,
-          genero,
+          sexo,
           dataNasc,
         })
           .then((consumer) => {

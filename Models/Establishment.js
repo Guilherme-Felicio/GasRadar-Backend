@@ -11,6 +11,10 @@ const User = sequelize.define(
       allowNull: false,
       primaryKey: true,
     },
+    cnpj: {
+      type: Sequelize.STRING(14),
+      required: true,
+    },
     status: {
       type: Sequelize.STRING(20),
       required: true,

@@ -19,7 +19,8 @@ router.put(
         });
       })
       .normalizeEmail(),
-    body("senha").isLength({ min: 5 }),
+    body("senha").isLength({ min: 8 }),
+    body("cnpj").isLength({ min: 14, max: 14 }),
     body("nome").not().isEmpty().isLength({ max: 30 }),
     body("endereco").not().isEmpty().isLength({ min: 1, max: 50 }),
     body("bairro").not().isEmpty().isLength({ min: 1, max: 30 }),

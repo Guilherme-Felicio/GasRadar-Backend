@@ -2,9 +2,9 @@
 CREATE TABLE usuario (
 idUsuario int AUTO_INCREMENT PRIMARY KEY ,
 nome varchar(30) NOT NULL,
+email varchar(100) NOT NULL,
 adm boolean NOT NULL,
 telefone varchar(11) NOT NULL,
-email varchar(100) NOT NULL,
 senha varchar(255) NOT NULL
 );
 
@@ -12,7 +12,7 @@ CREATE TABLE consumidor (
 idConsumidor int AUTO_INCREMENT PRIMARY KEY,
 idUsuario int,
 cpf varchar(11) NOT NULL,
-genero char(1) NOT NULL,
+sexo char(1) NOT NULL,
 dataNasc DATETIME NOT NULL,
 FOREIGN KEY (idUsuario) REFERENCES usuario(idUsuario) ON DELETE CASCADE
 );
@@ -26,6 +26,7 @@ CREATE TABLE estabelecimento (
 idEstabelecimento int AUTO_INCREMENT PRIMARY KEY,
 idUsuario int,
 idBandeira int,
+cnpj varchar(14),
 status varchar(10),
 endereco varchar(50) NOT NULL,
 bairro varchar(30) NOT NULL,

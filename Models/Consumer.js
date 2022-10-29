@@ -16,8 +16,8 @@ const Consumer = sequelize.define(
       type: Sequelize.STRING(11),
       required: true,
     },
-    genero: {
-      type: Sequelize.CHAR(1),
+    sexo: {
+      type: Sequelize.STRING(15),
       required: true,
     },
     dataNasc: {

@@ -21,8 +21,8 @@ router.put(
       .normalizeEmail(),
     body("senha").isLength({ min: 5 }),
     body("nome").not().isEmpty().isLength({ max: 30 }),
-    body("cpf").trim().not().isEmpty().isLength({ min: 11, max: 11 }),
-    body("genero").trim().not().isEmpty().isLength({ min: 1, max: 1 }),
+    // body("cpf").trim().not().isEmpty().isLength({ min: 11, max: 11 }),
+    body("sexo").trim().not().isEmpty().isLength({ min: 1, max: 15 }),
     body("dataNasc").trim().not().isEmpty(),
   ],
   consumerAuth.signup

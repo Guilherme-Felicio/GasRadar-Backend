@@ -96,7 +96,7 @@ exports.updateEstablishment = (req, res, next) => {
 
   if (!Number.isInteger(Number(req.params.id))) {
     return res
-      .status(500)
+      .status(422)
       .json({ message: "Id do estabelecimento deve ser um valor inteiro." });
   }
 
@@ -134,7 +134,9 @@ exports.updateEstablishment = (req, res, next) => {
     }
   )
     .then((establishment) => {
-      return res.status(200).json(establishment);
+      return res
+        .status(200)
+        .json({ message: "Estabelecimento atualizado com sucesso" });
     })
     .catch((err) => res.status(500).json({ erro: err }));
 };

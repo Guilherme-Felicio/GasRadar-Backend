@@ -6,6 +6,7 @@ const { Op } = require("sequelize");
 
 const User = require("../Models/User");
 const Establishment = require("../Models/Establishment");
+const { validateCNPJ } = require("../utils/validators");
 
 exports.signup = (req, res, next) => {
   const errors = validationResult(req);
@@ -18,6 +19,7 @@ exports.signup = (req, res, next) => {
 
   const email = req.body.email;
   const nome = req.body.nome;
+  const cnpj = req.body.cnpj;
   const telefone = req.body.telefone;
   const senha = req.body.senha;
   const endereco = req.body.endereco;
@@ -28,6 +30,10 @@ exports.signup = (req, res, next) => {
   const latitude = req.body.latitude;
   const longitude = req.body.longitude;
   const idBandeira = req.body.idBandeira;
+
+  if (!validateCNPJ(cnpj)) {
+    return res.status(422).json({ message: "CNPJ Inválido" });
+  }
 
   let responseData;
 
@@ -44,6 +50,7 @@ exports.signup = (req, res, next) => {
         responseData = { usuario: user?.dataValues };
         Establishment.create({
           idUsuario: user.dataValues.idUsuario,
+          cnpj,
           endereco,
           bairro,
           cep,

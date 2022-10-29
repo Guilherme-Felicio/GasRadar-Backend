@@ -4,9 +4,10 @@ const establishmentService = require("../services/establishment");
 const checkEstablishmentAuth = require("../utils/checkEstablishmentAuth");
 const { body, query } = require("express-validator");
 
-router.put(
-  "/update/:id",
+router.patch(
+  "/:id",
   [
+    // body("cnpj").not().isEmpty().isLength({ min: 1, max: 14 }),
     body("nome").not().isEmpty().isLength({ max: 30 }),
     body("endereco").not().isEmpty().isLength({ min: 1, max: 50 }),
     body("bairro").not().isEmpty().isLength({ min: 1, max: 30 }),
