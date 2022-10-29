@@ -15,26 +15,10 @@ router.post(
   establishmentFuelService.addFuelToEstablishment
 );
 
-// router.patch(
-//   "/",
-//   [
-//     body("descricao").not().isEmpty().isLength({ max: 200 }),
-//     body("nota").not().isEmpty().isFloat({ max: 10 }),
-//     body("idAvaliacao").isInt({ min: 1 }),
-//   ],
-
-//   establishmentFuelService.updateRating
-// );
-
-// router.get(
-//   "/",
-//   [
-//     query("idEstabelecimento").isInt({ min: 1 }),
-//     body("idConsumidor").isInt({ min: 1 }),
-//     query("pagina").isInt({ min: 1 }),
-//     query("quantidade").isInt({ min: 1 }),
-//   ],
-//   establishmentFuelService.getAllRatings
-// );
+router.get(
+  "/:id",
+  [body("idEstabelecimento").isInt({ min: 1 })],
+  establishmentFuelService.getEstablishmentFuel
+);
 
 module.exports = router;
