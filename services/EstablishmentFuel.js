@@ -28,7 +28,7 @@ exports.addFuelToEstablishment = (req, res, next) => {
     idCombustivel,
     quantidade,
     preco: Number(preco).toFixed(2),
-    dataAtualizacao: moment(),
+    dataAtualizacao: moment().tz("America/Sao_Paulo"),
   })
     .then((fuelData) => {
       return res.status(200).json(fuelData);

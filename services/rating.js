@@ -3,7 +3,7 @@ const { QueryTypes } = require("sequelize");
 const Rating = require("../Models/Rating");
 const User = require("../Models/User");
 const jwt = require("jsonwebtoken");
-const moment = require("moment");
+const moment = require("moment-timezone");
 const { validationResult } = require("express-validator");
 
 exports.getAllRatings = (req, res, next) => {
@@ -76,7 +76,7 @@ exports.createRating = (req, res, next) => {
     idEstabelecimento,
     descricao,
     nota,
-    dataAvaliacao: moment(),
+    dataAvaliacao: moment().tz("America/Sao_Paulo"),
   })
     .then((rating) => {
       return res.status(200).json(rating);
@@ -103,7 +103,7 @@ exports.updateRating = (req, res, next) => {
     idAvaliacao,
     descricao,
     nota,
-    dataAvaliacao: moment(),
+    dataAvaliacao: moment().tz("America/Sao_Paulo"),
   })
     .then((rating) => {
       return res.status(200).json(rating);

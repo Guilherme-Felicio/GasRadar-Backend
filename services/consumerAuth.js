@@ -1,6 +1,6 @@
 const bcryptjs = require("bcryptjs");
 const jwt = require("jsonwebtoken");
-const moment = require("moment");
+const moment = require("moment-timezone");
 const User = require("../Models/User");
 const Consumer = require("../Models/Consumer");
 const { validationResult } = require("express-validator");
@@ -23,7 +23,7 @@ exports.signup = (req, res, next) => {
   const senha = req.body.senha;
   const cpf = req.body.cpf;
   const sexo = req.body.sexo;
-  const dataNasc = moment(req.body.dataNasc).format("YYYY-MM-DD HH:mm:ss");
+  const dataNasc = moment(req.body.dataNasc).tz("America/Sao_Paulo");
   let responseData;
 
   if (!validateCPF(cpf)) {
@@ -33,6 +33,7 @@ exports.signup = (req, res, next) => {
   bcryptjs
     .hash(senha, 12)
     .then((senhaHashed) => {
+      // criação dos dados na tabela usuario
       User.create({
         nome,
         email,
@@ -40,6 +41,7 @@ exports.signup = (req, res, next) => {
         senha: senhaHashed,
         adm: false,
       }).then((user) => {
+        // criação dos dados na tabela consumidor
         responseData = { usuario: user?.dataValues };
         Consumer.create({
           idUsuario: user.dataValues.idUsuario,
@@ -48,12 +50,14 @@ exports.signup = (req, res, next) => {
           dataNasc,
         })
           .then((consumer) => {
+            console.log(responseData.usuario);
             responseData = {
-              ...responseData,
-              consumidor: consumer.dataValues,
+              ...responseData.usuario,
+              ...consumer.dataValues,
+              dataNasc: moment(dataNasc).format("DD/MM/YYYY"),
               message: "User created!",
             };
-            delete responseData.usuario.senha;
+            delete responseData.senha;
             res.status(201).json(responseData);
           })
           .catch((err) => {

@@ -17,6 +17,7 @@
     "express-validator": "^6.14.2",
     "jsonwebtoken": "^8.5.1",
     "moment": "^2.29.4",
+    "moment-timezone": "^0.5.38",
     "mysql2": "^2.3.3",
     "sequelize": "^6.23.2",
     "swagger-autogen": "^2.22.0",

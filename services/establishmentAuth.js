@@ -1,6 +1,5 @@
 const bcryptjs = require("bcryptjs");
 const jwt = require("jsonwebtoken");
-const moment = require("moment");
 const { validationResult } = require("express-validator");
 const { Op } = require("sequelize");
 
