@@ -9,6 +9,8 @@ const Establishment = require("../Models/Establishment");
 const { validateCNPJ } = require("../utils/validators");
 
 exports.signup = (req, res, next) => {
+  // #swagger.tags = ['Estabelecimento']
+  // #swagger.description = 'Cria uma conta de estabelecimento.'
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
     return res.status(422).json({
@@ -85,6 +87,8 @@ exports.signup = (req, res, next) => {
 };
 
 exports.login = function (req, res, next) {
+  // #swagger.tags = ['Estabelecimento']
+  // #swagger.description = 'Login Estabelecimento.'
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
     return res.status(422).json({

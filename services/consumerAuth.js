@@ -7,6 +7,8 @@ const { validationResult } = require("express-validator");
 const { validateCPF } = require("../utils/validators");
 
 exports.signup = (req, res, next) => {
+  // #swagger.tags = ['Consumidor']
+  // #swagger.description = 'Cria conta de consumidor.'
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
     return res.status(422).json({
@@ -70,6 +72,8 @@ exports.signup = (req, res, next) => {
 };
 
 exports.login = function (req, res, next) {
+  // #swagger.tags = ['Consumidor']
+  // #swagger.description = 'Login consumidor.'
   const email = req.body.email;
   const senha = req.body.senha;
 

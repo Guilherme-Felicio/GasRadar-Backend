@@ -6,6 +6,9 @@ const jwt = require("jsonwebtoken");
 const { validationResult } = require("express-validator");
 
 exports.getEstablishments = (req, res, next) => {
+  // #swagger.tags = ['Estabelecimento']
+  // #swagger.description = 'Busca estabelecimentos com base nos parametros.'
+
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
     return res.status(422).json({
@@ -54,6 +57,8 @@ FROM estabelecimento ${
 };
 
 exports.getEstablishment = (req, res, next) => {
+  // #swagger.tags = ['Estabelecimento']
+  // #swagger.description = 'Busca todas informações de um estabelecimento.'
   if (!Number.isInteger(Number(req.params.id))) {
     return res
       .status(422)
@@ -86,6 +91,8 @@ exports.getEstablishment = (req, res, next) => {
 };
 
 exports.updateEstablishment = (req, res, next) => {
+  // #swagger.tags = ['Estabelecimento']
+  // #swagger.description = 'atualiza os dados de um estabelecimento.  Precisa de autorização de estabelecimento'
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
     return res.status(422).json({
@@ -142,6 +149,8 @@ exports.updateEstablishment = (req, res, next) => {
 };
 
 exports.deleteEstablishment = (req, res, next) => {
+  // #swagger.tags = ['Estabelecimento']
+  // #swagger.description = 'deleta um estabelecimento pelo id.  Precisa de autorização'
   if (!Number.isInteger(Number(req.params.id))) {
     return res
       .status(500)

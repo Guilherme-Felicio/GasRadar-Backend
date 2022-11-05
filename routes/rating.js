@@ -1,6 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const establishmentService = require("../services/establishment");
+const checkConsumerAuth = require("../utils/checkConsumerAuth");
 const ratingService = require("../services/rating");
 const { body, query } = require("express-validator");
 
@@ -12,7 +13,7 @@ router.post(
     body("idConsumidor").isInt({ min: 1 }),
     body("idEstabelecimento").isInt({ min: 1 }),
   ],
-
+  checkConsumerAuth,
   ratingService.createRating
 );
 
@@ -23,7 +24,7 @@ router.patch(
     body("nota").not().isEmpty().isFloat({ max: 10 }),
     body("idAvaliacao").isInt({ min: 1 }),
   ],
-
+  checkConsumerAuth,
   ratingService.updateRating
 );
 

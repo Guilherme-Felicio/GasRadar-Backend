@@ -5,7 +5,7 @@
     "title": "REST API",
     "description": ""
   },
-  "host": "localhost:3000",
+  "host": "localhost:8080",
   "basePath": "/",
   "schemes": [
     "http"
@@ -13,7 +13,10 @@
   "paths": {
     "/fuels/": {
       "get": {
-        "description": "",
+        "tags": [
+          "Combustivel"
+        ],
+        "description": "Endpoint para obter um combustivel. Precisa de autorização",
         "parameters": [],
         "responses": {
           "200": {
@@ -31,7 +34,10 @@
         }
       },
       "post": {
-        "description": "",
+        "tags": [
+          "Combustivel"
+        ],
+        "description": "Endpoint para Criar um combustivel.",
         "parameters": [
           {
             "name": "body",
@@ -63,8 +69,11 @@
       }
     },
     "/auth/consumer/signup": {
-      "put": {
-        "description": "",
+      "post": {
+        "tags": [
+          "Consumidor"
+        ],
+        "description": "Cria conta de consumidor.",
         "parameters": [
           {
             "name": "body",
@@ -87,7 +96,7 @@
                 "cpf": {
                   "example": "any"
                 },
-                "genero": {
+                "sexo": {
                   "example": "any"
                 },
                 "dataNasc": {
@@ -112,7 +121,10 @@
     },
     "/auth/consumer/login": {
       "post": {
-        "description": "",
+        "tags": [
+          "Consumidor"
+        ],
+        "description": "Login consumidor.",
         "parameters": [
           {
             "name": "body",
@@ -144,8 +156,11 @@
       }
     },
     "/auth/establishment/signup": {
-      "put": {
-        "description": "",
+      "post": {
+        "tags": [
+          "Estabelecimento"
+        ],
+        "description": "Cria uma conta de estabelecimento.",
         "parameters": [
           {
             "name": "body",
@@ -157,6 +172,9 @@
                   "example": "any"
                 },
                 "nome": {
+                  "example": "any"
+                },
+                "cnpj": {
                   "example": "any"
                 },
                 "telefone": {
@@ -208,7 +226,10 @@
     },
     "/auth/establishment/login": {
       "post": {
-        "description": "",
+        "tags": [
+          "Estabelecimento"
+        ],
+        "description": "Login Estabelecimento.",
         "parameters": [
           {
             "name": "body",
@@ -242,9 +263,12 @@
         }
       }
     },
-    "/establishment/update/{id}": {
-      "put": {
-        "description": "",
+    "/establishment/{id}": {
+      "patch": {
+        "tags": [
+          "Estabelecimento"
+        ],
+        "description": "atualiza os dados de um estabelecimento. Precisa de autorização de estabelecimento",
         "parameters": [
           {
             "name": "id",
@@ -299,6 +323,12 @@
           "200": {
             "description": "OK"
           },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
           "422": {
             "description": "Unprocessable Entity"
           },
@@ -306,11 +336,12 @@
             "description": "Internal Server Error"
           }
         }
-      }
-    },
-    "/establishment/{id}": {
+      },
       "delete": {
-        "description": "",
+        "tags": [
+          "Estabelecimento"
+        ],
+        "description": "deleta um estabelecimento pelo id. Precisa de autorização",
         "parameters": [
           {
             "name": "id",
@@ -335,7 +366,10 @@
         }
       },
       "get": {
-        "description": "",
+        "tags": [
+          "Estabelecimento"
+        ],
+        "description": "Busca todas informações de um estabelecimento.",
         "parameters": [
           {
             "name": "id",
@@ -356,7 +390,10 @@
     },
     "/establishment/": {
       "get": {
-        "description": "",
+        "tags": [
+          "Estabelecimento"
+        ],
+        "description": "Busca estabelecimentos com base nos parametros.",
         "parameters": [
           {
             "name": "distancia",
@@ -397,9 +434,84 @@
         }
       }
     },
+    "/establishmentFuel/": {
+      "post": {
+        "tags": [
+          "EstabelecimentoCombustivel"
+        ],
+        "description": "Endpoint para adicionar um combustivel a um estabelecimento. Precisa de autorização",
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "quantidade": {
+                  "example": "any"
+                },
+                "preco": {
+                  "example": "any"
+                },
+                "idCombustivel": {
+                  "example": "any"
+                },
+                "idEstabelecimento": {
+                  "example": "any"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "422": {
+            "description": "Unprocessable Entity"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      }
+    },
+    "/establishmentFuel/{id}": {
+      "get": {
+        "tags": [
+          "EstabelecimentoCombustivel"
+        ],
+        "description": "Busca as informações dos combustiveis de um estabelecimento.",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      }
+    },
     "/rating/": {
       "post": {
-        "description": "",
+        "tags": [
+          "Avaliação"
+        ],
+        "description": "Cria uma avaliação. Precisa de autorização",
         "parameters": [
           {
             "name": "body",
@@ -427,6 +539,12 @@
           "200": {
             "description": "OK"
           },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
           "409": {
             "description": "Conflict"
           },
@@ -439,7 +557,10 @@
         }
       },
       "patch": {
-        "description": "",
+        "tags": [
+          "Avaliação"
+        ],
+        "description": "Endpoint para Atualizar um combustivel. Precisa de autorização",
         "parameters": [
           {
             "name": "body",
@@ -461,6 +582,12 @@
           "200": {
             "description": "OK"
           },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
           "422": {
             "description": "Unprocessable Entity"
           },
@@ -470,7 +597,10 @@
         }
       },
       "get": {
-        "description": "",
+        "tags": [
+          "Avaliação"
+        ],
+        "description": "Endpoint para Buscar todas avaliações. A primeira avaliação retornada na paguina sempre será a do usuario solicitante",
         "parameters": [
           {
             "name": "idEstabelecimento",

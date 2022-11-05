@@ -1,6 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const establishmentFuelService = require("../services/EstablishmentFuel");
+const checkEstablishmentAuth = require("../utils/checkEstablishmentAuth");
 const { body, query } = require("express-validator");
 
 router.post(
@@ -11,7 +12,7 @@ router.post(
     body("idCombustivel").isInt({ min: 1 }),
     body("idEstabelecimento").isInt({ min: 1 }),
   ],
-
+  checkEstablishmentAuth,
   establishmentFuelService.addFuelToEstablishment
 );
 

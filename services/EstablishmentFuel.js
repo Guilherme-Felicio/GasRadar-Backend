@@ -8,6 +8,8 @@ const { validationResult } = require("express-validator");
 
 // Adicionar um combustivel ao estabelecimento
 exports.addFuelToEstablishment = (req, res, next) => {
+  // #swagger.tags = ['EstabelecimentoCombustivel']
+  // #swagger.description = 'Endpoint para adicionar um combustivel a um estabelecimento. Precisa de autorização'
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
     return res.status(422).json({
@@ -35,6 +37,8 @@ exports.addFuelToEstablishment = (req, res, next) => {
 };
 
 exports.getEstablishmentFuel = (req, res, next) => {
+  // #swagger.tags = ['EstabelecimentoCombustivel']
+  // #swagger.description = 'Busca as informações dos combustiveis de um estabelecimento.'
   const idEstabelecimento = req.params.id;
 
   sequelize

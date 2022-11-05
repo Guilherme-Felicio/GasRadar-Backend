@@ -7,7 +7,7 @@ const router = express.Router();
 
 // rotas de criação/login de consumidor
 
-router.put(
+router.post(
   "/signup",
   [
     body("email")

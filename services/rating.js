@@ -7,6 +7,8 @@ const moment = require("moment");
 const { validationResult } = require("express-validator");
 
 exports.getAllRatings = (req, res, next) => {
+  // #swagger.tags = ['Avaliação']
+  // #swagger.description = 'Endpoint para Buscar todas avaliações. A primeira avaliação retornada na paguina sempre será a do usuario solicitante'
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
     return res.status(422).json({
@@ -44,6 +46,8 @@ exports.getAllRatings = (req, res, next) => {
 
 // criar avalição
 exports.createRating = (req, res, next) => {
+  // #swagger.tags = ['Avaliação']
+  // #swagger.description = 'Cria uma avaliação. Precisa de autorização'
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
     return res.status(422).json({
@@ -80,8 +84,9 @@ exports.createRating = (req, res, next) => {
     .catch((err) => res.status(500).json({ erro: err }));
 };
 
-// atualizar avalição
 exports.updateRating = (req, res, next) => {
+  // #swagger.tags = ['Avaliação']
+  // #swagger.description = 'Endpoint para Atualizar um combustivel. Precisa de autorização'
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
     return res.status(422).json({
