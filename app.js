@@ -9,6 +9,7 @@ const establishmentFuel = require("./routes/establishmentFuel");
 const consumerAuthRoutes = require("./routes/consumerAuth");
 const establishmentAuthRoutes = require("./routes/establishmentAuth");
 const establishmentRotes = require("./routes/establishment");
+const consumerRoutes = require("./routes/consumer");
 const ratingRoutes = require("./routes/rating");
 
 const app = express();
@@ -28,6 +29,7 @@ app.use("/doc", swaggerUi.serve, swaggerUi.setup(swaggerFile));
 
 app.use("/fuels", fuelsRoutes);
 app.use("/auth/consumer", consumerAuthRoutes);
+app.use("/consumer", consumerRoutes);
 app.use("/auth/establishment", establishmentAuthRoutes);
 app.use("/establishment", establishmentRotes);
 app.use("/establishmentFuel", establishmentFuel);
