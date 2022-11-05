@@ -5,6 +5,7 @@ const User = require("../Models/User");
 const Consumer = require("../Models/Consumer");
 const { validationResult } = require("express-validator");
 const { validateCPF } = require("../utils/validators");
+const { Op } = require("sequelize");
 
 exports.signup = (req, res, next) => {
   // #swagger.tags = ['Consumidor']
@@ -50,7 +51,6 @@ exports.signup = (req, res, next) => {
           dataNasc,
         })
           .then((consumer) => {
-            console.log(responseData.usuario);
             responseData = {
               ...responseData.usuario,
               ...consumer.dataValues,
@@ -77,11 +77,20 @@ exports.signup = (req, res, next) => {
 
 exports.login = function (req, res, next) {
   // #swagger.tags = ['Consumidor']
-  // #swagger.description = 'Login consumidor.'
+  // #swagger.description = 'Login Consumidor.'
+  const errors = validationResult(req);
+  if (!errors.isEmpty()) {
+    return res.status(422).json({
+      message: "Parameters validation failed",
+      errors: errors.array(),
+    });
+  }
   const email = req.body.email;
   const senha = req.body.senha;
 
   let consumerUserData;
+
+  // validate email and password
 
   Consumer.findOne({
     include: {
@@ -94,7 +103,6 @@ exports.login = function (req, res, next) {
     },
   })
     .then((queryResult) => {
-      console.log(queryResult);
       if (!queryResult) {
         return res.status(401).json({ message: "usuário ou senha incorretos" });
       }
@@ -109,8 +117,8 @@ exports.login = function (req, res, next) {
         const token = jwt.sign(
           {
             userId: consumerUserData.usuario.idUsuario,
-            establishmentId: consumerUserData.idEstabelecimento,
-            role: "consumidor",
+            consumerId: consumerUserData.idConsumidor,
+            role: "estabelecimento",
           },
           "secretsecretsecret",
           {
@@ -120,7 +128,7 @@ exports.login = function (req, res, next) {
         return res.status(200).json({
           token,
           userId: consumerUserData.usuario.idUsuario.toString(),
-          establishmentId: consumerUserData.idEstabelecimento.toString(),
+          consumerId: consumerUserData.idConsumidor.toString(),
         });
       });
     })

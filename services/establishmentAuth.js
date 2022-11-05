@@ -113,7 +113,6 @@ exports.login = function (req, res, next) {
     },
   })
     .then((queryResult) => {
-      console.log(queryResult);
       if (!queryResult) {
         return res.status(401).json({ message: "usuário ou senha incorretos" });
       }

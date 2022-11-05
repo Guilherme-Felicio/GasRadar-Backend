@@ -44,7 +44,6 @@ exports.getAllRatings = (req, res, next) => {
     .catch((err) => res.status(500).json({ message: err }));
 };
 
-// criar avalição
 exports.createRating = (req, res, next) => {
   // #swagger.tags = ['Avaliação']
   // #swagger.description = 'Cria uma avaliação. Precisa de autorização'
@@ -60,28 +59,34 @@ exports.createRating = (req, res, next) => {
   const nota = req.body.nota;
   const idConsumidor = req.body.idConsumidor;
   const idEstabelecimento = req.body.idEstabelecimento;
+  let userRating = false;
 
-  Rating.findOne({
+  Rating.findAll({
     where: {
       idConsumidor,
+      idEstabelecimento,
     },
-  }).then(() =>
-    res
-      .status(409)
-      .json({ message: "Ja existe uma avaliação desse consumidor" })
-  );
-
-  Rating.create({
-    idConsumidor,
-    idEstabelecimento,
-    descricao,
-    nota,
-    dataAvaliacao: moment().tz("America/Sao_Paulo"),
   })
     .then((rating) => {
-      return res.status(200).json(rating);
+      if (rating.length > 0) {
+        return res
+          .status(409)
+          .json({ message: "Já existe um comentario desse usuario" });
+      }
+
+      Rating.create({
+        idConsumidor,
+        idEstabelecimento,
+        descricao,
+        nota,
+        dataAvaliacao: moment().tz("America/Sao_Paulo"),
+      })
+        .then((rating) => {
+          return res.status(200).json({ message: "hmmm", avaliacao: rating });
+        })
+        .catch((err) => res.status(500).json({ erro: err }));
     })
-    .catch((err) => res.status(500).json({ erro: err }));
+    .catch((err) => res.stats(500).json({ message: err }));
 };
 
 exports.updateRating = (req, res, next) => {

@@ -28,6 +28,6 @@ exports.createFuel = (req, res, next) => {
     nome,
     unidade,
   })
-    .then((resp) => res.status(201).send(resp))
+    .then((resp) => res.status(200).send(resp))
     .catch((err) => res.status(500).send(err));
 };
