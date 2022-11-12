@@ -11,7 +11,6 @@ const Consumer = sequelize.define(
       allowNull: false,
       primaryKey: true,
     },
-
     cpf: {
       type: Sequelize.STRING(11),
       required: true,
@@ -22,6 +21,38 @@ const Consumer = sequelize.define(
     },
     dataNasc: {
       type: Sequelize.DATE,
+      required: true,
+    },
+    nome: {
+      type: Sequelize.STRING(30),
+      allowNull: false,
+    },
+    telefone: {
+      type: Sequelize.STRING(11),
+      allowNull: false,
+    },
+    cep: {
+      type: Sequelize.STRING(8),
+      required: true,
+    },
+    endereco: {
+      type: Sequelize.STRING(50),
+      required: true,
+    },
+    numero: {
+      type: Sequelize.STRING(20),
+      required: true,
+    },
+    bairro: {
+      type: Sequelize.STRING(30),
+      required: true,
+    },
+    cidade: {
+      type: Sequelize.STRING(50),
+      required: true,
+    },
+    uf: {
+      type: Sequelize.STRING(2),
       required: true,
     },
   },

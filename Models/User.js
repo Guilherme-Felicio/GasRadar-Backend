@@ -11,23 +11,19 @@ const User = sequelize.define(
       allowNull: false,
       primaryKey: true,
     },
-    nome: {
-      type: Sequelize.STRING(30),
-      allowNull: false,
-    },
     email: {
       type: Sequelize.STRING(100),
       allowNull: false,
     },
-    adm: {
-      type: Sequelize.BOOLEAN,
-      allowNull: false,
-    },
-    telefone: {
-      type: Sequelize.STRING(11),
-      allowNull: false,
-    },
     senha: {
+      type: Sequelize.STRING(255),
+      required: true,
+    },
+    isAtivo: {
+      type: Sequelize.BOOLEAN,
+      required: true,
+    },
+    codigoVerificacao: {
       type: Sequelize.STRING(255),
       required: true,
     },

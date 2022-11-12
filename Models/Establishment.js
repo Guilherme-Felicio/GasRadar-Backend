@@ -11,19 +11,7 @@ const User = sequelize.define(
       allowNull: false,
       primaryKey: true,
     },
-    cnpj: {
-      type: Sequelize.STRING(14),
-      required: true,
-    },
-    status: {
-      type: Sequelize.STRING(20),
-      required: true,
-    },
     endereco: {
-      type: Sequelize.STRING(50),
-      required: true,
-    },
-    cidade: {
       type: Sequelize.STRING(50),
       required: true,
     },
@@ -31,13 +19,20 @@ const User = sequelize.define(
       type: Sequelize.STRING(30),
       required: true,
     },
+    numero: {
+      type: Sequelize.STRING(20),
+      required: true,
+    },
+    cidade: {
+      type: Sequelize.STRING(50),
+      required: true,
+    },
     cep: {
       type: Sequelize.STRING(8),
       required: true,
     },
-    uf: {
-      type: Sequelize.STRING(2),
-      required: true,
+    nota: {
+      type: Sequelize.FLOAT(255),
     },
     latitude: {
       type: Sequelize.STRING(11),
@@ -48,8 +43,25 @@ const User = sequelize.define(
     urlImagem: {
       type: Sequelize.STRING(255),
     },
-    nota: {
-      type: Sequelize.FLOAT(255),
+    nome: {
+      type: Sequelize.STRING(30),
+      allowNull: false,
+    },
+    telefone: {
+      type: Sequelize.STRING(11),
+      allowNull: false,
+    },
+    cnpj: {
+      type: Sequelize.STRING(14),
+      required: true,
+    },
+    uf: {
+      type: Sequelize.STRING(2),
+      required: true,
+    },
+    status: {
+      type: Sequelize.STRING(20),
+      required: true,
     },
   },
   {
