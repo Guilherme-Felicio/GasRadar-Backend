@@ -3,7 +3,7 @@ CREATE TABLE usuario (
 idUsuario int AUTO_INCREMENT PRIMARY KEY ,
 email varchar(100) NOT NULL,
 senha varchar(255) NOT NULL,
-isAtivo boolean NOT NULL,
+isEmailVerificado boolean NOT NULL,
 codigoVerificao varchar(255),
 CONSTRAINT UC_USUARIO_EMAIL UNIQUE (email)
 );
@@ -54,9 +54,10 @@ longitude varchar(15),
 urlImagem varchar(255),
 nome varchar(30) NOT NULL,
 telefone varchar(11) NOT NULL,
+numero int NOT NULL,
 cnpj varchar(14),
 uf varchar(2) NOT NULL,
-status varchar(10),
+status varchar(20),
 FOREIGN KEY (idUsuario) REFERENCES usuario(idUsuario) ON DELETE CASCADE,
 FOREIGN KEY (idBandeira) REFERENCES bandeira(idBandeira)
 );
@@ -93,14 +94,16 @@ CREATE TABLE denuncia (
 idDenuncia int AUTO_INCREMENT PRIMARY KEY,
 idConsumidor int NOT NULL,
 idEstabelecimento int NOT NULL,
-idAdministrador int,
+idAdministrador int  NOT NULL,
 descricao varchar(200) NOT NULL,
 dataDenuncia DATETIME NOT NULL,
+dataInicioPenalidade DATETIME,
+dataTerminoPenalidade DATETIME,
+status varchar(20),
 FOREIGN KEY (idConsumidor) REFERENCES consumidor(idConsumidor),
-FOREIGN KEY (idEstabelecimento) REFERENCES estabelecimento(idEstabelecimento)
+FOREIGN KEY (idEstabelecimento) REFERENCES estabelecimento(idEstabelecimento),
+FOREIGN KEY (idAdministrador) REFERENCES administrador(idAdministrador)
 );
-
-
 
 
 

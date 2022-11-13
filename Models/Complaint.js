@@ -19,6 +19,18 @@ const Complaint = sequelize.define(
       type: Sequelize.DATE,
       allowNull: false,
     },
+    dataInicioPenalidade: {
+      type: Sequelize.DATE,
+      allowNull: false,
+    },
+    dataTerminoPenalidade: {
+      type: Sequelize.DATE,
+      allowNull: false,
+    },
+    status: {
+      type: Sequelize.STRING(20),
+      allowNull: false,
+    },
   },
   {
     freezeTableName: true,
