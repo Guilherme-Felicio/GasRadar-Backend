@@ -111,6 +111,7 @@ exports.updateEstablishment = (req, res, next) => {
   const nome = req.body.nome;
   const telefone = req.body.telefone;
   const endereco = req.body.endereco;
+  const numero = req.body.numero;
   const bairro = req.body.bairro;
   const cep = req.body.cep;
   const cidade = req.body.cidade;
@@ -133,6 +134,7 @@ exports.updateEstablishment = (req, res, next) => {
       longitude,
       idBandeira,
       urlImagem,
+      numero,
     },
     {
       where: {
@@ -140,7 +142,7 @@ exports.updateEstablishment = (req, res, next) => {
       },
     }
   )
-    .then((establishment) => {
+    .then(() => {
       return res
         .status(200)
         .json({ message: "Estabelecimento atualizado com sucesso" });
@@ -163,9 +165,9 @@ exports.deleteEstablishment = (req, res, next) => {
   const token = req.get("Authorization").split(" ")[1];
   decodedToken = jwt.verify(token, "secretsecretsecret");
   const idUsuario = decodedToken.userId;
-  const idEstabelcimento = decodedToken.establishmentId;
+  const idEstabelecimento = decodedToken.establishmentId;
 
-  if (idEstabelecimento !== reqId) {
+  if (Number(idEstabelecimento) !== Number(reqId)) {
     return res.status(403).json({
       message:
         "usuário não possui autorização para excluir esse estabelecimento",
@@ -182,8 +184,8 @@ exports.deleteEstablishment = (req, res, next) => {
     .then((user) => {
       return res.status(200).json({
         message: "Estabelecimento excluido",
-        user: user,
-        establishment: idEstabelecimento,
+        usuario: user,
+        estabelecimento: idEstabelecimento,
       });
     })
     .catch((err) => res.status(500).json({ erro: err }));

@@ -11,20 +11,6 @@ const EstablishmentFuel = sequelize.define(
       allowNull: false,
       primaryKey: true,
     },
-    idEstabelecimento: {
-      type: Sequelize.INTEGER,
-      references: {
-        model: "estabelecimento",
-        key: "id",
-      },
-    },
-    idCombustivel: {
-      type: Sequelize.INTEGER,
-      references: {
-        model: "combustivel",
-        key: "id",
-      },
-    },
     dataAtualizacao: {
       type: Sequelize.DATE,
       allowNull: false,

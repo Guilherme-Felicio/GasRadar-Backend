@@ -11,7 +11,7 @@ const Admin = require("../Models/Admin");
 const Complaint = require("../Models/Complaint");
 
 const associations = () => {
-  // User - Consumer 1:1
+  // User - Consumer 1:N
   Consumer.belongsTo(User, {
     onDelete: "CASCADE",
     foreignKey: {
@@ -20,7 +20,7 @@ const associations = () => {
     },
   });
 
-  // User - Establishment 1:1
+  // User - Establishment 1:N
 
   User.hasOne(Establishment, {
     hooks: true,

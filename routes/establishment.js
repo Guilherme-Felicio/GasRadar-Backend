@@ -4,7 +4,7 @@ const establishmentService = require("../services/establishment");
 const checkEstablishmentAuth = require("../utils/checkEstablishmentAuth");
 const { body, query } = require("express-validator");
 
-router.patch(
+router.put(
   "/:id",
   [
     // body("cnpj").not().isEmpty().isLength({ min: 1, max: 14 }),
