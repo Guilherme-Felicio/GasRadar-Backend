@@ -4,7 +4,7 @@ idUsuario int AUTO_INCREMENT PRIMARY KEY ,
 email varchar(100) NOT NULL,
 senha varchar(255) NOT NULL,
 isEmailVerificado boolean NOT NULL,
-codigoVerificao varchar(255),
+codigoVerificacao varchar(255),
 CONSTRAINT UC_USUARIO_EMAIL UNIQUE (email)
 );
 
