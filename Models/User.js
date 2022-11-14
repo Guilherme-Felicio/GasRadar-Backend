@@ -19,7 +19,7 @@ const User = sequelize.define(
       type: Sequelize.STRING(255),
       required: true,
     },
-    isAtivo: {
+    isEmailVerificado: {
       type: Sequelize.BOOLEAN,
       required: true,
     },
