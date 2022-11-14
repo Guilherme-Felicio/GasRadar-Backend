@@ -36,7 +36,8 @@ exports.getConsumer = (req, res, next) => {
     delete data.usuario;
     delete data.idUsuario;
     delete data.senha;
-    delete data.adm;
+    delete data.isEmailVerificado;
+    delete data.codigoVerificacao;
 
     res.status(200).json(data);
   });
@@ -63,7 +64,7 @@ exports.updateConsumer = (req, res, next) => {
   const nome = req.body.nome;
   const sexo = req.body.sexo;
   const telefone = req.body.telefone;
-  const dataNasc = req.body.dataNasc;
+  const dataNasc = moment(req.body.dataNasc);
   const endereco = req.body.endereco;
   const bairro = req.body.bairro;
   const cep = req.body.cep;
@@ -92,7 +93,7 @@ exports.updateConsumer = (req, res, next) => {
     .then((consumidor) => {
       return res
         .status(200)
-        .json({ message: "consumidor atualizado com sucesso" });
+        .json({ message: "consumidor atualizado com sucesso", consumidor });
     })
     .catch((err) => res.status(500).json({ erro: err }));
 };

@@ -4,10 +4,11 @@ const consumerController = require("../services/consumer");
 const { body } = require("express-validator");
 const checkConsumerAuth = require("../utils/checkConsumerAuth");
 
-router.patch(
+router.put(
   "/:id",
   [
     body("nome").not().isEmpty().isLength({ max: 30 }),
+    body("telefone").not().isEmpty().isInt({ min: 1, max: 9999999999999 }),
     body("sexo").trim().not().isEmpty().isLength({ min: 1, max: 15 }),
     body("dataNasc").trim().not().isEmpty(),
     body("endereco").not().isEmpty().isLength({ min: 1, max: 50 }),
