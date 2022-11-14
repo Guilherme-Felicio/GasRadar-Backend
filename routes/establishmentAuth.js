@@ -23,6 +23,7 @@ router.post(
     body("cnpj").isLength({ min: 14, max: 14 }),
     body("nome").not().isEmpty().isLength({ max: 30 }),
     body("endereco").not().isEmpty().isLength({ min: 1, max: 50 }),
+    body("numero").isInt({ min: 1 }),
     body("bairro").not().isEmpty().isLength({ min: 1, max: 30 }),
     body("cep").trim().not().isEmpty().isLength({ min: 1, max: 8 }),
     body("cidade").not().isEmpty().isLength({ min: 1, max: 50 }),
