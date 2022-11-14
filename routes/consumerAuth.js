@@ -21,9 +21,14 @@ router.post(
       .normalizeEmail(),
     body("senha").isLength({ min: 5 }),
     body("nome").not().isEmpty().isLength({ max: 30 }),
-    // body("cpf").trim().not().isEmpty().isLength({ min: 11, max: 11 }),
     body("sexo").trim().not().isEmpty().isLength({ min: 1, max: 15 }),
     body("dataNasc").trim().not().isEmpty(),
+    body("endereco").not().isEmpty().isLength({ min: 1, max: 50 }),
+    body("bairro").not().isEmpty().isLength({ min: 1, max: 30 }),
+    body("cep").trim().not().isEmpty().isLength({ min: 1, max: 8 }),
+    body("cidade").not().isEmpty().isLength({ min: 1, max: 50 }),
+    body("uf").trim().not().isEmpty().isLength({ min: 2, max: 2 }),
+    body("numero").isInt(),
   ],
   consumerAuth.signup
 );

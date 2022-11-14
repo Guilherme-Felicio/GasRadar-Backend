@@ -24,6 +24,7 @@ exports.signup = (req, res, next) => {
   const telefone = req.body.telefone;
   const senha = req.body.senha;
   const endereco = req.body.endereco;
+  const numero = req.body.numero;
   const bairro = req.body.bairro;
   const cep = req.body.cep;
   const cidade = req.body.cidade;
@@ -42,17 +43,19 @@ exports.signup = (req, res, next) => {
     .hash(senha, 12)
     .then((senhaHashed) => {
       User.create({
-        nome,
         email,
-        telefone,
         senha: senhaHashed,
-        adm: false,
+        isEmailVerificado: false,
+        codigoVerificacao: Math.floor(Math.random() * 1000) + 1,
       }).then((user) => {
-        responseData = { usuario: user?.dataValues };
+        responseData = { email: user?.dataValues.email };
         Establishment.create({
           idUsuario: user.dataValues.idUsuario,
           cnpj,
+          nome,
+          telefone,
           endereco,
+          numero,
           bairro,
           cep,
           cidade,
@@ -66,11 +69,10 @@ exports.signup = (req, res, next) => {
           .then((establishment) => {
             responseData = {
               ...responseData,
-              estabelecimento: establishment.dataValues,
+              ...establishment.dataValues,
               message: "Estabelecimento criado!",
             };
-            delete responseData.usuario.senha;
-            res.status(201).json(responseData);
+            return res.status(200).json(responseData);
           })
           .catch((err) => {
             User.destroy({
@@ -139,8 +141,8 @@ exports.login = function (req, res, next) {
         );
         return res.status(200).json({
           token,
-          userId: establishmentUserData.usuario.idUsuario.toString(),
-          establishmentId: establishmentUserData.idEstabelecimento.toString(),
+          idUsuario: establishmentUserData.usuario.idUsuario.toString(),
+          idEstabelecimento: establishmentUserData.idEstabelecimento.toString(),
         });
       });
     })
