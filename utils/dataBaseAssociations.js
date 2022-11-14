@@ -61,17 +61,17 @@ Consumer.hasMany(Rating, {
   foreignKey: "idConsumidor",
 });
 
-// Complaint - Consumer 1:N
+//  Consumer - Complaint 1:N
 Consumer.hasMany(Complaint, {
   foreignKey: "idConsumidor",
 });
 
-// Complaint - Establishment 1:N
+//  Establishment - Complaint 1:N
 Establishment.hasMany(Complaint, {
   foreignKey: "idEstabelecimento",
 });
 
-// Complaint - Admin 1:N
+//  Admin - Complaint 1:N
 Admin.hasMany(Complaint, {
   foreignKey: "idAdministrador",
 });
