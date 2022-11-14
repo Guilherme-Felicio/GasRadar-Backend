@@ -1,9 +1,6 @@
 const sequelize = require("../utils/database");
-const { QueryTypes } = require("sequelize");
 const EstablishmentFuel = require("../Models/Establishment_Fuel");
-const User = require("../Models/User");
-const jwt = require("jsonwebtoken");
-const moment = require("moment");
+const moment = require("moment-timezone");
 const { validationResult } = require("express-validator");
 
 // Adicionar um combustivel ao estabelecimento
@@ -28,10 +25,15 @@ exports.addFuelToEstablishment = (req, res, next) => {
     idCombustivel,
     quantidade,
     preco: Number(preco).toFixed(2),
-    dataAtualizacao: moment().tz("America/Sao_Paulo"),
+    dataAtualizacao: moment(),
   })
     .then((fuelData) => {
-      return res.status(200).json(fuelData);
+      return res.status(200).json({
+        ...fuelData.dataValues,
+        dataAtualizacao: moment()
+          .tz("America/Sao_Paulo")
+          .format("DD/MM/YYYY HH:mm"),
+      });
     })
     .catch((err) => res.status(500).json({ erro: err }));
 };
@@ -57,7 +59,14 @@ exports.getEstablishmentFuel = (req, res, next) => {
       }
     )
     .then((resp) => {
-      res.status(200).json(resp[0]);
+      resp[0].forEach((establishmentFuel) => {
+        establishmentFuel.dataAtualizacao = moment(
+          establishmentFuel.dataAtualizacao
+        )
+          .tz("America/Sao_Paulo")
+          .format("DD/MM/YYYY HH:mm");
+      });
+      res.status(200).json([...resp[0]]);
     })
     .catch((err) => res.status(500).json({ erro: err }));
 };
