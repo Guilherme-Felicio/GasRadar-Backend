@@ -62,6 +62,7 @@ exports.updateConsumer = (req, res, next) => {
   const idConsumidor = req.params.id;
   const nome = req.body.nome;
   const sexo = req.body.sexo;
+  const telefone = req.body.telefone;
   const dataNasc = req.body.dataNasc;
   const endereco = req.body.endereco;
   const bairro = req.body.bairro;
@@ -80,6 +81,7 @@ exports.updateConsumer = (req, res, next) => {
       cep,
       cidade,
       uf,
+      telefone,
     },
     {
       where: {
