@@ -24,7 +24,13 @@ exports.signup = (req, res, next) => {
   const senha = req.body.senha;
   const cpf = req.body.cpf;
   const sexo = req.body.sexo;
-  const dataNasc = moment(req.body.dataNasc).tz("America/Sao_Paulo");
+  const dataNasc = moment(req.body.dataNasc);
+  const endereco = req.body.endereco;
+  const bairro = req.body.bairro;
+  const cep = req.body.cep;
+  const numero = req.body.numero;
+  const cidade = req.body.cidade;
+  const uf = req.body.uf;
   let responseData;
 
   if (!validateCPF(cpf)) {
@@ -36,11 +42,10 @@ exports.signup = (req, res, next) => {
     .then((senhaHashed) => {
       // criação dos dados na tabela usuario
       User.create({
-        nome,
         email,
-        telefone,
         senha: senhaHashed,
-        adm: false,
+        isEmailVerificado: false,
+        codigoVerificacao: Math.floor(Math.random() * 1000) + 1,
       }).then((user) => {
         // criação dos dados na tabela consumidor
         responseData = { usuario: user?.dataValues };
@@ -49,6 +54,14 @@ exports.signup = (req, res, next) => {
           cpf,
           sexo,
           dataNasc,
+          endereco,
+          nome,
+          telefone,
+          bairro,
+          cep,
+          numero,
+          cidade,
+          uf,
         })
           .then((consumer) => {
             responseData = {
