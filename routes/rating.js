@@ -32,7 +32,7 @@ router.get(
   "/",
   [
     query("idEstabelecimento").isInt({ min: 1 }),
-    body("idConsumidor").isInt({ min: 1 }),
+    query("idConsumidor").isInt({ min: 1 }),
     query("pagina").isInt({ min: 1 }),
     query("quantidade").isInt({ min: 1 }),
   ],

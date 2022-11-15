@@ -8,7 +8,7 @@ const { validationResult } = require("express-validator");
 
 exports.getAllRatings = (req, res, next) => {
   // #swagger.tags = ['Avaliação']
-  // #swagger.description = 'Endpoint para Buscar todas avaliações. A primeira avaliação retornada na paguina sempre será a do usuario solicitante'
+  // #swagger.description = 'Endpoint para Buscar todas avaliações. Caso o consumidor tenha uma avaliaão, ela vira por primeiro na primeira pagina'
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
     return res.status(422).json({
@@ -38,8 +38,13 @@ exports.getAllRatings = (req, res, next) => {
         },
       }
     )
-    .then((rating) => {
-      return res.status(200).json(rating[0]);
+    .then((ratings) => {
+      ratings[0].forEach((rating) => {
+        rating.dataAvaliacao = moment(rating.dataAvaliacao)
+          .tz("America/Sao_Paulo")
+          .format("DD/MM/YYYY HH:mm");
+      });
+      return res.status(200).json([...ratings[0]]);
     })
     .catch((err) => res.status(500).json({ message: err }));
 };
@@ -79,10 +84,18 @@ exports.createRating = (req, res, next) => {
         idEstabelecimento,
         descricao,
         nota,
-        dataAvaliacao: moment().tz("America/Sao_Paulo"),
+        dataAvaliacao: moment(),
       })
         .then((rating) => {
-          return res.status(200).json({ message: "hmmm", avaliacao: rating });
+          return res.status(200).json({
+            message: "Avaliação criada com sucesso",
+            avaliacao: {
+              ...rating.dataValues,
+              dataAvaliacao: moment(rating.dataValues.dataAvaliacao)
+                .tz("America/Sao_Paulo")
+                .format("DD/MM/YYYY HH:mm"),
+            },
+          });
         })
         .catch((err) => res.status(500).json({ erro: err }));
     })
@@ -108,7 +121,7 @@ exports.updateRating = (req, res, next) => {
     idAvaliacao,
     descricao,
     nota,
-    dataAvaliacao: moment().tz("America/Sao_Paulo"),
+    dataAvaliacao: moment(),
   })
     .then((rating) => {
       return res.status(200).json(rating);
