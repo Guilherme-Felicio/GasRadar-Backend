@@ -11,6 +11,7 @@ CONSTRAINT UC_USUARIO_EMAIL UNIQUE (email)
 CREATE TABLE administrador (
 idAdministrador int AUTO_INCREMENT PRIMARY KEY,
 idUsuario int NOT NULL,
+cpf varchar(11) NOT NULL,
 nome varchar(30) NOT NULL,
 telefone varchar(11) NOT NULL,
 dataNasc DATETIME NOT NULL,
@@ -59,7 +60,7 @@ cnpj varchar(14),
 uf varchar(2) NOT NULL,
 status varchar(20),
 FOREIGN KEY (idUsuario) REFERENCES usuario(idUsuario) ON DELETE CASCADE,
-FOREIGN KEY (idBandeira) REFERENCES bandeira(idBandeira)
+FOREIGN KEY (idBandeira) REFERENCES bandeira(idBandeira) 
 );
 
 CREATE TABLE combustivel (
@@ -76,7 +77,7 @@ dataAtualizacao DATETIME NOT NULL,
 quantidade DOUBLE NOT NULL,
 preco DOUBLE NOT NULL,
 FOREIGN KEY (idCombustivel) REFERENCES combustivel(idCombustivel),
-FOREIGN KEY (idEstabelecimento) REFERENCES estabelecimento(idEstabelecimento)
+FOREIGN KEY (idEstabelecimento) REFERENCES estabelecimento(idEstabelecimento) ON DELETE CASCADE
 );
 
 CREATE TABLE avaliacao (
@@ -86,30 +87,22 @@ idEstabelecimento int NOT NULL,
 descricao varchar(200) NOT NULL,
 nota DOUBLE NOT NULL,
 dataAvaliacao DATETIME NOT NULL,
-FOREIGN KEY (idConsumidor) REFERENCES consumidor(idConsumidor),
-FOREIGN KEY (idEstabelecimento) REFERENCES estabelecimento(idEstabelecimento)
+FOREIGN KEY (idConsumidor) REFERENCES consumidor(idConsumidor) ON DELETE CASCADE,
+FOREIGN KEY (idEstabelecimento) REFERENCES estabelecimento(idEstabelecimento) ON DELETE CASCADE
 );
 
 CREATE TABLE denuncia (
 idDenuncia int AUTO_INCREMENT PRIMARY KEY,
 idConsumidor int NOT NULL,
 idEstabelecimento int NOT NULL,
-idAdministrador int  NOT NULL,
+idAdministrador int ,
 descricao varchar(200) NOT NULL,
 dataDenuncia DATETIME NOT NULL,
-dataInicioPenalidade DATETIME,
+dataInicioPenalidadeadministrador DATETIME,
 dataTerminoPenalidade DATETIME,
 status varchar(20),
-FOREIGN KEY (idConsumidor) REFERENCES consumidor(idConsumidor),
-FOREIGN KEY (idEstabelecimento) REFERENCES estabelecimento(idEstabelecimento),
-FOREIGN KEY (idAdministrador) REFERENCES administrador(idAdministrador)
+FOREIGN KEY (idConsumidor) REFERENCES consumidor(idConsumidor) ON DELETE CASCADE,
+FOREIGN KEY (idEstabelecimento) REFERENCES estabelecimento(idEstabelecimento) ON DELETE CASCADE,
+FOREIGN KEY (idAdministrador) REFERENCES administrador(idAdministrador) ON DELETE CASCADE
 );
-
-
-
-
-
-INSERT INTO combustivel (nome, unidade) VALUES ("Etanol", "Litrão");
-
-
 

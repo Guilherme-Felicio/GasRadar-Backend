@@ -7,10 +7,13 @@ const associations = require("./utils/dataBaseAssociations");
 const fuelsRoutes = require("./routes/fuel");
 const establishmentFuel = require("./routes/establishmentFuel");
 const consumerAuthRoutes = require("./routes/consumerAuth");
+const adminAuthRoutes = require("./routes/adminAuth");
 const establishmentAuthRoutes = require("./routes/establishmentAuth");
 const establishmentRotes = require("./routes/establishment");
 const consumerRoutes = require("./routes/consumer");
 const ratingRoutes = require("./routes/rating");
+const complaintRoutes = require("./routes/complaint");
+const uploadImagesRoute = require("./routes/upload-images");
 
 const app = express();
 app.use(bodyParser.json()); // set the header for aplication/json
@@ -25,15 +28,19 @@ app.use((req, res, next) => {
   res.setHeader("Access-Control-Allow-Headers", "Content-Type, Authorization");
   next();
 });
+
 app.use("/doc", swaggerUi.serve, swaggerUi.setup(swaggerFile));
 
 app.use("/fuels", fuelsRoutes);
 app.use("/auth/consumer", consumerAuthRoutes);
+app.use("/auth/admin", adminAuthRoutes);
 app.use("/consumer", consumerRoutes);
 app.use("/auth/establishment", establishmentAuthRoutes);
 app.use("/establishment", establishmentRotes);
 app.use("/establishmentFuel", establishmentFuel);
 app.use("/rating", ratingRoutes);
+app.use("/complaint", complaintRoutes);
+// app.use("/upload-images", uploadImagesRoute);
 
 associations();
 

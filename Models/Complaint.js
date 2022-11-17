@@ -21,11 +21,11 @@ const Complaint = sequelize.define(
     },
     dataInicioPenalidade: {
       type: Sequelize.DATE,
-      allowNull: false,
+      allowNull: true,
     },
     dataTerminoPenalidade: {
       type: Sequelize.DATE,
-      allowNull: false,
+      allowNull: true,
     },
     status: {
       type: Sequelize.STRING(20),

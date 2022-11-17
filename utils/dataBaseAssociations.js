@@ -20,6 +20,15 @@ const associations = () => {
     },
   });
 
+  // User - Admin 1:N
+  Admin.belongsTo(User, {
+    onDelete: "CASCADE",
+    foreignKey: {
+      name: "idUsuario",
+      allowNull: false,
+    },
+  });
+
   // User - Establishment 1:N
 
   User.hasOne(Establishment, {
