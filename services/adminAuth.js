@@ -41,7 +41,7 @@ exports.signup = (req, res, next) => {
         codigoVerificacao: Math.floor(Math.random() * 1000) + 1,
       }).then((user) => {
         // criação dos dados na tabela administrador
-        responseData = { usuario: user?.dataValues };
+        responseData = { idUsuario: user?.dataValues.idUsuario };
         Admin.create({
           idUsuario: user.dataValues.idUsuario,
           cpf,
@@ -49,14 +49,11 @@ exports.signup = (req, res, next) => {
           nome,
           telefone,
         })
-          .then((consumer) => {
+          .then((admin) => {
             responseData = {
-              ...responseData.usuario,
-              ...consumer.dataValues,
-              dataNasc: moment(dataNasc).format("DD/MM/YYYY"),
-              message: "User created!",
+              ...responseData,
+              message: "Usuario admin criado!",
             };
-            delete responseData.senha;
             res.status(201).json(responseData);
           })
           .catch((err) => {

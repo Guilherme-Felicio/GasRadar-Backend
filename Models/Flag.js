@@ -15,10 +15,6 @@ const User = sequelize.define(
       type: Sequelize.STRING(30),
       allowNull: false,
     },
-    unidade: {
-      type: Sequelize.STRING(20),
-      allowNull: false,
-    },
   },
   {
     freezeTableName: true,

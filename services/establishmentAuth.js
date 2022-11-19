@@ -2,7 +2,7 @@ const bcryptjs = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const { validationResult } = require("express-validator");
 const { Op } = require("sequelize");
-
+const moment = require("moment");
 const User = require("../Models/User");
 const Establishment = require("../Models/Establishment");
 const { validateCNPJ } = require("../utils/validators");
@@ -32,6 +32,7 @@ exports.signup = (req, res, next) => {
   const latitude = req.body.latitude;
   const longitude = req.body.longitude;
   const idBandeira = req.body.idBandeira;
+  const dataFundacao = req.body.dataFundacao;
 
   if (!validateCNPJ(cnpj)) {
     return res.status(422).json({ message: "CNPJ Inválido" });
@@ -48,7 +49,9 @@ exports.signup = (req, res, next) => {
         isEmailVerificado: false,
         codigoVerificacao: Math.floor(Math.random() * 1000) + 1,
       }).then((user) => {
-        responseData = { email: user?.dataValues.email };
+        responseData = {
+          idUsuario: user?.dataValues.idUsuario,
+        };
         Establishment.create({
           idUsuario: user.dataValues.idUsuario,
           cnpj,
@@ -60,16 +63,19 @@ exports.signup = (req, res, next) => {
           cep,
           cidade,
           uf,
+          dataFundacao: moment(dataFundacao),
           latitude: latitude || null,
           longitude: longitude || null,
           idBandeira,
+          horarioAbertura: "08:00",
+          horarioEncerramento: "22:00",
           urlImagem:
             "https://www.brasilpostos.com.br/wp-content/uploads/2013/09/PostoPremium.jpg",
+          dataTerminoPenalidade: moment().subtract(1, "day"),
         })
           .then((establishment) => {
             responseData = {
-              ...responseData,
-              ...establishment.dataValues,
+              idUsuario: responseData.idUsuario,
               message: "Estabelecimento criado!",
             };
             return res.status(200).json(responseData);
@@ -77,7 +83,7 @@ exports.signup = (req, res, next) => {
           .catch((err) => {
             User.destroy({
               where: {
-                idUsuario: responseData.usuario.idUsuario,
+                idUsuario: responseData.idUsuario,
               },
             });
             res.status(500).json({ message: err });

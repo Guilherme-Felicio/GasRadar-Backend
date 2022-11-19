@@ -63,6 +63,15 @@ const User = sequelize.define(
       type: Sequelize.STRING(20),
       required: true,
     },
+    horarioAbertura: {
+      type: Sequelize.STRING(50),
+      required: true,
+    },
+    horarioEncerramento: {
+      type: Sequelize.STRING(50),
+      required: true,
+    },
+
     dataTerminoPenalidade: {
       type: Sequelize.DATE,
       allowNull: false,
