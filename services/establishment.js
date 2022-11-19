@@ -74,11 +74,10 @@ exports.getEstablishment = (req, res, next) => {
       model: User,
     },
     where: {
-      idEstabelecimento: reqId,
+      idUsuario: reqId,
     },
   })
     .then((establishmentData) => {
-      console.log(establishmentData);
       if (!establishmentData)
         return res
           .status(500)
@@ -89,7 +88,7 @@ exports.getEstablishment = (req, res, next) => {
         ...establishmentData.dataValues,
       };
       delete data.usuario;
-      delete data.idUsuario;
+      delete data.idEstabelecimento;
       delete data.senha;
       delete data.adm;
 
