@@ -101,13 +101,8 @@ exports.updateEstablishment = (req, res, next) => {
     });
   }
 
-  if (!Number.isInteger(Number(req.params.id))) {
-    return res
-      .status(422)
-      .json({ message: "Id do estabelecimento deve ser um valor inteiro." });
-  }
-
-  const idEstabelecimento = req.params.id;
+  const { userData } = res.locals;
+  const idEstabelecimento = userData.idEstabelecimento;
   const nome = req.body.nome;
   const telefone = req.body.telefone;
   const endereco = req.body.endereco;
