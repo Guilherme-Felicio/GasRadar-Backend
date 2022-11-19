@@ -1,4 +1,5 @@
 const Complaint = require("../Models/Complaint");
+const Establishment = require("../Models/Establishment");
 const moment = require("moment-timezone");
 const { validationResult } = require("express-validator");
 
@@ -45,8 +46,10 @@ exports.createComplaint = (req, res, next) => {
   }
 
   const descricao = req.body.descricao;
-  const idConsumidor = req.body.idConsumidor;
+  const motivo = req.body.motivo;
   const idEstabelecimento = req.body.idEstabelecimento;
+  const { userData } = res.locals;
+  const idConsumidor = userData.idConsumidor;
 
   Complaint.findAll({
     where: {
@@ -67,6 +70,7 @@ exports.createComplaint = (req, res, next) => {
         idEstabelecimento,
         idAdministrador: null,
         descricao,
+        motivo,
         status: "PENDENTE",
         dataInicioPenalidade: null,
         dataTerminoPenalidade: null,
@@ -75,7 +79,7 @@ exports.createComplaint = (req, res, next) => {
         .then((complaint) => {
           return res.status(200).json({
             message: "Denuncia criada com sucesso",
-            avaliacao: {
+            denuncia: {
               ...complaint.dataValues,
               dataDenuncia: moment(complaint.dataValues.dataDenuncia)
                 .tz("America/Sao_Paulo")
@@ -85,12 +89,12 @@ exports.createComplaint = (req, res, next) => {
         })
         .catch((err) => res.status(500).json({ erro: err }));
     })
-    .catch((err) => res.stats(500).json({ message: err }));
+    .catch((err) => res.status(500).json({ message: err }));
 };
 
-exports.approveComplaint = (req, res, next) => {
-  // #swagger.tags = ['Avaliação']
-  // #swagger.description = 'Endpoint para Atualizar um combustivel. Precisa de autorização'
+exports.manageComplaint = (req, res, next) => {
+  // #swagger.tags = ['Denuncia']
+  // #swagger.description = 'Endpoint para Aprovar/Rejeitar denuncia. Precisa de autorização'
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
     return res.status(422).json({
@@ -99,27 +103,58 @@ exports.approveComplaint = (req, res, next) => {
     });
   }
 
-  const dataTerminoPenalidade = req.body.dataTerminoPenalidade;
-  const idDenuncia = req.params.idDenuncia;
+  const status = req.body.status;
+  const descricao = req.body.descricao;
+  const idDenuncia = req.body.idDenuncia;
   const idAdministrador = req.params.idAdministrador;
+  let idEstabelecimento;
 
   Complaint.update(
     {
-      dataInicioPenalidade: moment(),
-      dataTerminoPenalidade: moment(dataTerminoPenalidade),
+      dataDenuncia: moment(),
       idAdministrador,
-      status: "Aprovada",
+      status,
+      descricao,
     },
     {
       where: {
         idDenuncia,
       },
+      returning: true,
+      plain: true,
     }
   )
-    .then((complaint) => {
-      return res
-        .status(200)
-        .json({ message: "Denuncia aprovada com sucesso", complaint });
+    .then(() => {
+      Complaint.findOne({ where: idDenuncia })
+        .then((complaint) => {
+          if (status === "REJEITADA")
+            return res.status(200).json({
+              message: `Denuncia Rejeitada com sucesso`,
+            });
+
+          idEstabelecimento = complaint.dataValues.idEstabelecimento;
+
+          const dataTerminoPenalidade =
+            complaint.dataValues.motivo === 1
+              ? moment().add(99, "years")
+              : moment(2, "days");
+
+          Establishment.update(
+            { dataTerminoPenalidade },
+            {
+              where: {
+                idEstabelecimento,
+              },
+            }
+          )
+            .then(() => {
+              return res.status(200).json({
+                message: `Denuncia Aprovada com sucesso`,
+              });
+            })
+            .catch((err) => res.status(500).json({ erro: err }));
+        })
+        .catch((err) => res.status(500).json({ erro: err }));
     })
     .catch((err) => res.status(500).json({ erro: err }));
 };

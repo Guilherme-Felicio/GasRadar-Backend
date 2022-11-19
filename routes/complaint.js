@@ -9,7 +9,7 @@ router.post(
   "/",
   [
     body("descricao").not().isEmpty().isLength({ max: 200 }),
-    body("idConsumidor").isInt({ min: 1 }),
+    body("motivo").isInt({ min: 1 }),
     body("idEstabelecimento").isInt({ min: 1 }),
   ],
   checkConsumerAuth,
@@ -23,23 +23,13 @@ router.get(
 );
 
 router.patch(
-  "/approve",
+  "/manageComplaint",
   [
     body("idDenuncia").isInt({ min: 1 }),
-    body("dataTerminoPenalidade").isInt({ min: 1 }),
+    body("descricao").isLength({ min: 1 }),
+    body("status").isLength({ min: 1 }),
   ],
-  complaintService.approveComplaint
-);
-
-router.put(
-  "/reject",
-  [
-    body("descricao").not().isEmpty().isLength({ max: 200 }),
-    body("idConsumidor").isInt({ min: 1 }),
-    body("idEstabelecimento").isInt({ min: 1 }),
-  ],
-  checkConsumerAuth,
-  ratingService.createRating
+  complaintService.manageComplaint
 );
 
 module.exports = router;

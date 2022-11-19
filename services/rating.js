@@ -8,7 +8,7 @@ const { validationResult } = require("express-validator");
 
 exports.getAllRatings = (req, res, next) => {
   // #swagger.tags = ['Avaliação']
-  // #swagger.description = 'Endpoint para Buscar todas avaliações. Caso o consumidor tenha uma avaliaão, ela vira por primeiro na primeira pagina'
+  // #swagger.description = 'Endpoint para Buscar todas avaliações de um estabelecimento. Caso o consumidor tenha uma avaliaão, ela vira por primeiro na primeira pagina'
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
     return res.status(422).json({
@@ -62,9 +62,9 @@ exports.createRating = (req, res, next) => {
 
   const descricao = req.body.descricao;
   const nota = req.body.nota;
-  const idConsumidor = req.body.idConsumidor;
   const idEstabelecimento = req.body.idEstabelecimento;
-  let userRating = false;
+  const { userData } = res.locals;
+  const idConsumidor = userData.idConsumidor;
 
   Rating.findAll({
     where: {

@@ -26,6 +26,7 @@ module.exports = (req, res, next) => {
         return res
           .status(403)
           .json({ message: "Usuario não tem permissões necessárias" });
+      res.locals.userData = { ...consumer.dataValues };
       next();
     })
     .catch((err) => res.status(500).json({ message: err }));

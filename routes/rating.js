@@ -10,7 +10,6 @@ router.post(
   [
     body("descricao").not().isEmpty().isLength({ max: 200 }),
     body("nota").not().isEmpty().isFloat({ max: 10 }),
-    body("idConsumidor").isInt({ min: 1 }),
     body("idEstabelecimento").isInt({ min: 1 }),
   ],
   checkConsumerAuth,
