@@ -11,6 +11,50 @@
     "http"
   ],
   "paths": {
+    "/flag/": {
+      "get": {
+        "tags": [
+          "Bandeira"
+        ],
+        "description": "Endpoint para obter um Bandeira.",
+        "parameters": [],
+        "responses": {}
+      },
+      "post": {
+        "tags": [
+          "Bandeira"
+        ],
+        "description": "Endpoint para Criar um Bandeira.",
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "nome": {
+                  "example": "any"
+                },
+                "unidade": {
+                  "example": "any"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "422": {
+            "description": "Unprocessable Entity"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      }
+    },
     "/fuels/": {
       "get": {
         "tags": [
@@ -227,9 +271,9 @@
     "/auth/admin/login": {
       "post": {
         "tags": [
-          "Consumidor"
+          "Administrador"
         ],
-        "description": "Login Consumidor.",
+        "description": "Login Administrador.",
         "parameters": [
           {
             "name": "body",
@@ -436,6 +480,9 @@
                 },
                 "idBandeira": {
                   "example": "any"
+                },
+                "dataFundacao": {
+                  "example": "any"
                 }
               }
             }
@@ -493,19 +540,13 @@
         }
       }
     },
-    "/establishment/{id}": {
+    "/establishment/": {
       "put": {
         "tags": [
           "Estabelecimento"
         ],
         "description": "atualiza os dados de um estabelecimento. Precisa de autorização de estabelecimento",
         "parameters": [
-          {
-            "name": "id",
-            "in": "path",
-            "required": true,
-            "type": "string"
-          },
           {
             "name": "body",
             "in": "body",
@@ -570,6 +611,52 @@
           }
         }
       },
+      "get": {
+        "tags": [
+          "Estabelecimento"
+        ],
+        "description": "Busca estabelecimentos com base nos parametros.",
+        "parameters": [
+          {
+            "name": "distancia",
+            "in": "query",
+            "type": "string"
+          },
+          {
+            "name": "latitude",
+            "in": "query",
+            "type": "string"
+          },
+          {
+            "name": "longitude",
+            "in": "query",
+            "type": "string"
+          },
+          {
+            "name": "idBandeira",
+            "in": "query",
+            "type": "string"
+          },
+          {
+            "name": "nota",
+            "in": "query",
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "422": {
+            "description": "Unprocessable Entity"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      }
+    },
+    "/establishment/{id}": {
       "delete": {
         "tags": [
           "Estabelecimento"
@@ -621,52 +708,6 @@
         }
       }
     },
-    "/establishment/": {
-      "get": {
-        "tags": [
-          "Estabelecimento"
-        ],
-        "description": "Busca estabelecimentos com base nos parametros.",
-        "parameters": [
-          {
-            "name": "distancia",
-            "in": "query",
-            "type": "string"
-          },
-          {
-            "name": "latitude",
-            "in": "query",
-            "type": "string"
-          },
-          {
-            "name": "longitude",
-            "in": "query",
-            "type": "string"
-          },
-          {
-            "name": "idBandeira",
-            "in": "query",
-            "type": "string"
-          },
-          {
-            "name": "nota",
-            "in": "query",
-            "type": "string"
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "OK"
-          },
-          "422": {
-            "description": "Unprocessable Entity"
-          },
-          "500": {
-            "description": "Internal Server Error"
-          }
-        }
-      }
-    },
     "/establishmentFuel/": {
       "post": {
         "tags": [
@@ -687,9 +728,6 @@
                   "example": "any"
                 },
                 "idCombustivel": {
-                  "example": "any"
-                },
-                "idEstabelecimento": {
                   "example": "any"
                 }
               }
@@ -758,9 +796,6 @@
                 "nota": {
                   "example": "any"
                 },
-                "idConsumidor": {
-                  "example": "any"
-                },
                 "idEstabelecimento": {
                   "example": "any"
                 }
@@ -833,7 +868,7 @@
         "tags": [
           "Avaliação"
         ],
-        "description": "Endpoint para Buscar todas avaliações. Caso o consumidor tenha uma avaliaão, ela vira por primeiro na primeira pagina",
+        "description": "Endpoint para Buscar todas avaliações de um estabelecimento. Caso o consumidor tenha uma avaliaão, ela vira por primeiro na primeira pagina",
         "parameters": [
           {
             "name": "idEstabelecimento",
@@ -885,7 +920,7 @@
                 "descricao": {
                   "example": "any"
                 },
-                "idConsumidor": {
+                "motivo": {
                   "example": "any"
                 },
                 "idEstabelecimento": {
@@ -946,12 +981,12 @@
         }
       }
     },
-    "/complaint/approve": {
+    "/complaint/manageComplaint": {
       "patch": {
         "tags": [
-          "Avaliação"
+          "Denuncia"
         ],
-        "description": "Endpoint para Atualizar um combustivel. Precisa de autorização",
+        "description": "Endpoint para Aprovar/Rejeitar denuncia. Precisa de autorização",
         "parameters": [
           {
             "name": "body",
@@ -959,7 +994,13 @@
             "schema": {
               "type": "object",
               "properties": {
-                "dataTerminoPenalidade": {
+                "status": {
+                  "example": "any"
+                },
+                "descricao": {
+                  "example": "any"
+                },
+                "idDenuncia": {
                   "example": "any"
                 }
               }
@@ -979,35 +1020,13 @@
         }
       }
     },
-    "/complaint/reject": {
-      "put": {
+    "/uploadImage/consumer": {
+      "post": {
         "tags": [
-          "Avaliação"
+          "Upload de Imagens"
         ],
-        "description": "Cria uma avaliação. Precisa de autorização",
-        "parameters": [
-          {
-            "name": "body",
-            "in": "body",
-            "schema": {
-              "type": "object",
-              "properties": {
-                "descricao": {
-                  "example": "any"
-                },
-                "nota": {
-                  "example": "any"
-                },
-                "idConsumidor": {
-                  "example": "any"
-                },
-                "idEstabelecimento": {
-                  "example": "any"
-                }
-              }
-            }
-          }
-        ],
+        "description": "Endpoint para Subir uma imagem.",
+        "parameters": [],
         "responses": {
           "200": {
             "description": "OK"
@@ -1017,12 +1036,6 @@
           },
           "403": {
             "description": "Forbidden"
-          },
-          "409": {
-            "description": "Conflict"
-          },
-          "422": {
-            "description": "Unprocessable Entity"
           },
           "500": {
             "description": "Internal Server Error"
