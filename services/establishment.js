@@ -76,18 +76,26 @@ exports.getEstablishment = (req, res, next) => {
     where: {
       idEstabelecimento: reqId,
     },
-  }).then((establishmentData) => {
-    const data = {
-      ...establishmentData.usuario.dataValues,
-      ...establishmentData.dataValues,
-    };
-    delete data.usuario;
-    delete data.idUsuario;
-    delete data.senha;
-    delete data.adm;
+  })
+    .then((establishmentData) => {
+      console.log(establishmentData);
+      if (!establishmentData)
+        return res
+          .status(500)
+          .json({ message: "estabelecimento não encontrado" });
 
-    res.status(200).json(data);
-  });
+      const data = {
+        ...establishmentData.usuario.dataValues,
+        ...establishmentData.dataValues,
+      };
+      delete data.usuario;
+      delete data.idUsuario;
+      delete data.senha;
+      delete data.adm;
+
+      res.status(200).json(data);
+    })
+    .catch((err) => res.status(500).json({ erro: err }));
 };
 
 exports.updateEstablishment = (req, res, next) => {

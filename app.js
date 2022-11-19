@@ -49,6 +49,6 @@ associations();
 sequelize
   .sync()
   .then((result) => {
-    app.listen(8080);
+    app.listen(3000);
   })
   .catch((error) => console.log(error));
