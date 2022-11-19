@@ -56,17 +56,14 @@ exports.login = function (req, res, next) {
         const token = jwt.sign(
           {
             email: loadedUser.email,
-            userId: loadedUser.idUsuario,
+            idUsuario: loadedUser.idUsuario,
             role: "estabelecimento",
           },
-          "secretsecretsecret",
-          {
-            expiresIn: "720h",
-          }
+          "secretsecretsecret"
         );
         return res
           .status(200)
-          .json({ token, userId: loadedUser.idUsuario.toString() });
+          .json({ token, idUsuario: loadedUser.idUsuario.toString() });
       });
     })
     .catch((err) => {

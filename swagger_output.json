@@ -96,7 +96,7 @@
                 "cpf": {
                   "example": "any"
                 },
-                "sexo": {
+                "genero": {
                   "example": "any"
                 },
                 "dataNasc": {
@@ -285,7 +285,7 @@
                 "nome": {
                   "example": "any"
                 },
-                "sexo": {
+                "genero": {
                   "example": "any"
                 },
                 "telefone": {

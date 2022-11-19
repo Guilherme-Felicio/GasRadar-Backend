@@ -22,7 +22,7 @@ router.post(
     body("senha").isLength({ min: 5 }),
     body("nome").not().isEmpty().isLength({ max: 30 }),
     body("telefone").not().isEmpty().isInt({ min: 1, max: 9999999999999 }),
-    body("sexo").trim().not().isEmpty().isLength({ min: 1, max: 15 }),
+    body("genero").trim().not().isEmpty().isLength({ min: 1, max: 15 }),
     body("dataNasc").trim().not().isEmpty(),
     body("endereco").not().isEmpty().isLength({ min: 1, max: 50 }),
     body("bairro").not().isEmpty().isLength({ min: 1, max: 30 }),

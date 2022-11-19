@@ -62,7 +62,7 @@ exports.updateConsumer = (req, res, next) => {
 
   const idConsumidor = req.params.id;
   const nome = req.body.nome;
-  const sexo = req.body.sexo;
+  const genero = req.body.genero;
   const telefone = req.body.telefone;
   const dataNasc = moment(req.body.dataNasc);
   const endereco = req.body.endereco;
@@ -76,7 +76,7 @@ exports.updateConsumer = (req, res, next) => {
       idConsumidor,
       nome,
       endereco,
-      sexo,
+      genero,
       dataNasc,
       bairro,
       cep,
@@ -112,8 +112,8 @@ exports.deleteConsumer = (req, res, next) => {
   const reqId = req.params.id;
   const token = req.get("Authorization").split(" ")[1];
   decodedToken = jwt.verify(token, "secretsecretsecret");
-  const idUsuario = decodedToken.userId;
-  const idConsumidor = decodedToken.consumerId;
+  const idUsuario = decodedToken.idUsuario;
+  const idConsumidor = decodedToken.idConsumidor;
 
   if (idConsumidor !== Number(reqId)) {
     return res.status(403).json({

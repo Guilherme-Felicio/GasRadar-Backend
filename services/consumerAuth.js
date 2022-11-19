@@ -23,7 +23,7 @@ exports.signup = (req, res, next) => {
   const telefone = req.body.telefone;
   const senha = req.body.senha;
   const cpf = req.body.cpf;
-  const sexo = req.body.sexo;
+  const genero = req.body.genero;
   const dataNasc = moment(req.body.dataNasc);
   const endereco = req.body.endereco;
   const bairro = req.body.bairro;
@@ -52,7 +52,7 @@ exports.signup = (req, res, next) => {
         Consumer.create({
           idUsuario: user.dataValues.idUsuario,
           cpf,
-          sexo,
+          genero,
           dataNasc,
           endereco,
           nome,
@@ -129,14 +129,11 @@ exports.login = function (req, res, next) {
 
         const token = jwt.sign(
           {
-            userId: consumerUserData.usuario.idUsuario,
-            consumerId: consumerUserData.idConsumidor,
+            idUsuario: consumerUserData.usuario.idUsuario,
+            idConsumidor: consumerUserData.idConsumidor,
             role: "estabelecimento",
           },
-          "secretsecretsecret",
-          {
-            expiresIn: "720h",
-          }
+          "secretsecretsecret"
         );
         return res.status(200).json({
           token,

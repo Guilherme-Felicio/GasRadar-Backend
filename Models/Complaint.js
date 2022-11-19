@@ -11,6 +11,10 @@ const Complaint = sequelize.define(
       allowNull: false,
       primaryKey: true,
     },
+    motivo: {
+      type: Sequelize.INTEGER,
+      allowNull: false,
+    },
     descricao: {
       type: Sequelize.STRING(200),
       allowNull: false,
@@ -18,14 +22,6 @@ const Complaint = sequelize.define(
     dataDenuncia: {
       type: Sequelize.DATE,
       allowNull: false,
-    },
-    dataInicioPenalidade: {
-      type: Sequelize.DATE,
-      allowNull: true,
-    },
-    dataTerminoPenalidade: {
-      type: Sequelize.DATE,
-      allowNull: true,
     },
     status: {
       type: Sequelize.STRING(20),

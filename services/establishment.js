@@ -164,8 +164,8 @@ exports.deleteEstablishment = (req, res, next) => {
   const reqId = req.params.id;
   const token = req.get("Authorization").split(" ")[1];
   decodedToken = jwt.verify(token, "secretsecretsecret");
-  const idUsuario = decodedToken.userId;
-  const idEstabelecimento = decodedToken.establishmentId;
+  const idUsuario = decodedToken.idUsuario;
+  const idEstabelecimento = decodedToken.idEstabelecimento;
 
   if (Number(idEstabelecimento) !== Number(reqId)) {
     return res.status(403).json({

@@ -23,9 +23,8 @@ const Admin = sequelize.define(
       type: Sequelize.STRING(11),
       allowNull: false,
     },
-    cpf: {
-      type: Sequelize.STRING(11),
-      allowNull: false,
+    urlImagem: {
+      type: Sequelize.STRING(255),
     },
   },
   {

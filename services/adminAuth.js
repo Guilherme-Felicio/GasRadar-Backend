@@ -87,7 +87,7 @@ exports.login = function (req, res, next) {
   const email = req.body.email;
   const senha = req.body.senha;
 
-  let consumerUserData;
+  let adminUserData;
 
   // validate email and password
 
@@ -105,7 +105,7 @@ exports.login = function (req, res, next) {
       if (!queryResult) {
         return res.status(401).json({ message: "usuário ou senha incorretos" });
       }
-      consumerUserData = queryResult;
+      adminUserData = queryResult;
       bcryptjs.compare(senha, queryResult.usuario.senha).then((isEqual) => {
         if (!isEqual) {
           return res
@@ -115,19 +115,16 @@ exports.login = function (req, res, next) {
 
         const token = jwt.sign(
           {
-            userId: consumerUserData.usuario.idUsuario,
-            consumerId: consumerUserData.idAdministrador,
-            role: "estabelecimento",
+            idUsuario: adminUserData.usuario.idUsuario,
+            idAdmin: adminUserData.idAdministrador,
+            role: "administrador",
           },
-          "secretsecretsecret",
-          {
-            expiresIn: "720h",
-          }
+          "secretsecretsecret"
         );
         return res.status(200).json({
           token,
-          idUsuario: consumerUserData.usuario.idUsuario.toString(),
-          idAdministrador: consumerUserData.idAdministrador.toString(),
+          idUsuario: adminUserData.usuario.idUsuario.toString(),
+          idAdministrador: adminUserData.idAdministrador.toString(),
         });
       });
     })

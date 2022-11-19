@@ -17,10 +17,10 @@ module.exports = (req, res, next) => {
     return res.status(401).json({ message: "Usuário não autenticado." });
   }
 
-  req.userId = decodedToken.userId;
+  req.idUsuario = decodedToken.idUsuario;
 
   consumer
-    .findOne({ where: { idUsuario: req.userId } })
+    .findOne({ where: { idUsuario: req.idUsuario } })
     .then((consumer) => {
       if (consumer === null)
         return res

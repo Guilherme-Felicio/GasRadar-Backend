@@ -15,7 +15,7 @@ const Consumer = sequelize.define(
       type: Sequelize.STRING(11),
       required: true,
     },
-    sexo: {
+    genero: {
       type: Sequelize.STRING(15),
       required: true,
     },
@@ -54,6 +54,9 @@ const Consumer = sequelize.define(
     uf: {
       type: Sequelize.STRING(2),
       required: true,
+    },
+    urlImagem: {
+      type: Sequelize.STRING(255),
     },
   },
   {

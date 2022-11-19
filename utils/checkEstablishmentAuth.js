@@ -17,10 +17,10 @@ module.exports = (req, res, next) => {
     return res.status(401).json({ message: "Usuário não autenticado." });
   }
 
-  req.userId = decodedToken.userId;
-  req.establishmentId = decodedToken.establishmentId;
+  req.idUsuario = decodedToken.idUsuario;
+  req.idEstabelecimento = decodedToken.idEstabelecimento;
 
-  // if (Number(req.params.id) !== Number(req.establishmentId)) {
+  // if (Number(req.params.id) !== Number(req.idEstabelecimento)) {
   //   return res
   //     .status(403)
   //     .json({ message: "Estabelecimento só pode alterar seus proprios dados" });
@@ -28,7 +28,10 @@ module.exports = (req, res, next) => {
 
   establishment
     .findOne({
-      where: { idUsuario: req.userId, idEstabelecimento: req.establishmentId },
+      where: {
+        idUsuario: req.idUsuario,
+        idEstabelecimento: req.idEstabelecimento,
+      },
     })
     .then((establishment) => {
       if (establishment === null)
