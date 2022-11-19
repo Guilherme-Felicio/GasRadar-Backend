@@ -18,7 +18,6 @@ module.exports = (req, res, next) => {
   }
 
   req.idUsuario = decodedToken.idUsuario;
-  req.idEstabelecimento = decodedToken.idEstabelecimento;
 
   // if (Number(req.params.id) !== Number(req.idEstabelecimento)) {
   //   return res
@@ -30,7 +29,6 @@ module.exports = (req, res, next) => {
     .findOne({
       where: {
         idUsuario: req.idUsuario,
-        idEstabelecimento: req.idEstabelecimento,
       },
     })
     .then((establishment) => {
