@@ -10,7 +10,6 @@ router.post(
     body("quantidade").isFloat({ min: 0.1 }),
     body("preco").isFloat({ min: 0.1 }),
     body("idCombustivel").isInt({ min: 1 }),
-    body("idEstabelecimento").isInt({ min: 1 }),
   ],
   checkEstablishmentAuth,
   establishmentFuelService.addFuelToEstablishment

@@ -137,6 +137,7 @@ exports.login = function (req, res, next) {
         const token = jwt.sign(
           {
             idUsuario: establishmentUserData.usuario.idUsuario,
+            idConsumidor: establishmentUserData.usuario.idConsumidor,
             role: "estabelecimento",
           },
           "secretsecretsecret"

@@ -1,5 +1,6 @@
 const sequelize = require("../utils/database");
 const EstablishmentFuel = require("../Models/Establishment_Fuel");
+const Establishment = require("../Models/Establishment");
 const moment = require("moment-timezone");
 const { validationResult } = require("express-validator");
 
@@ -18,13 +19,14 @@ exports.addFuelToEstablishment = (req, res, next) => {
   const quantidade = req.body.quantidade;
   const preco = req.body.preco;
   const idCombustivel = req.body.idCombustivel;
-  const idEstabelecimento = req.body.idEstabelecimento;
+  const { userData } = res.locals;
+  const idEstabelecimento = userData.idEstabelecimento;
 
   EstablishmentFuel.create({
     idEstabelecimento,
     idCombustivel,
     quantidade,
-    preco: Number(preco).toFixed(2),
+    preco: Number(preco).toFixed(3),
     dataAtualizacao: moment(),
   })
     .then((fuelData) => {

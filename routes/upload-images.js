@@ -5,6 +5,7 @@ const { body } = require("express-validator");
 const imageUploadController = require("../services/image-upload");
 const { diskStorage } = require("multer");
 const moment = require("moment");
+const checkConsumerAuth = require("../utils/checkConsumerAuth");
 
 const upload = multer({
   limits: {
@@ -31,6 +32,11 @@ const upload = multer({
   },
 });
 
-router.post("/", upload.single("image"), imageUploadController.uploadImage);
+router.post(
+  "/consumer",
+  checkConsumerAuth,
+  upload.single("image"),
+  imageUploadController.uploadImage
+);
 
 module.exports = router;

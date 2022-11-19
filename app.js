@@ -14,7 +14,7 @@ const establishmentRotes = require("./routes/establishment");
 const consumerRoutes = require("./routes/consumer");
 const ratingRoutes = require("./routes/rating");
 const complaintRoutes = require("./routes/complaint");
-const uploadImagesRoute = require("./routes/upload-images");
+const uploadImages = require("./routes/upload-images");
 
 const app = express();
 app.use(bodyParser.json()); // set the header for aplication/json
@@ -42,7 +42,7 @@ app.use("/establishment", establishmentRotes);
 app.use("/establishmentFuel", establishmentFuel);
 app.use("/rating", ratingRoutes);
 app.use("/complaint", complaintRoutes);
-// app.use("/upload-images", uploadImagesRoute);
+app.use("/uploadImage", uploadImages);
 
 associations();
 
