@@ -116,7 +116,6 @@ exports.login = function (req, res, next) {
         const token = jwt.sign(
           {
             idUsuario: adminUserData.usuario.idUsuario,
-            idAdmin: adminUserData.idAdministrador,
             role: "administrador",
           },
           "secretsecretsecret"
@@ -124,7 +123,6 @@ exports.login = function (req, res, next) {
         return res.status(200).json({
           token,
           idUsuario: adminUserData.usuario.idUsuario.toString(),
-          idAdministrador: adminUserData.idAdministrador.toString(),
         });
       });
     })

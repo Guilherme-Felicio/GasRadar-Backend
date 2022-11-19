@@ -1,7 +1,6 @@
 const express = require("express");
 const { body } = require("express-validator");
 const User = require("../Models/User");
-const consumerAuth = require("../services/consumerAuth");
 const adminAuth = require("../services/adminAuth");
 
 const router = express.Router();
@@ -34,7 +33,7 @@ router.post(
     body("email").isEmail().withMessage("Por favor, digite um email válido"),
     body("senha"),
   ],
-  consumerAuth.login
+  adminAuth.login
 );
 
 module.exports = router;
