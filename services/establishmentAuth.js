@@ -77,7 +77,11 @@ exports.signup = (req, res, next) => {
           dataTerminoPenalidade: moment().subtract(1, "day"),
         })
           .then(() => {
-            res.locals.codigoVerificacao = codigoVerificacao;
+            res.locals.userData = {
+              codigoVerificacao,
+              idUsuario: responseData.idUsuario,
+              email,
+            };
             next();
           })
           .catch((err) => {

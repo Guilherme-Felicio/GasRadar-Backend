@@ -6,11 +6,13 @@ exports.sendVerificationEmail = (req, res, next) => {
   // #swagger.tags = ['Email']
   // #swagger.description = '<Manda email'
 
-  const codigoVerificacao = res.locals.codigoVerificacao.split("");
+  const codigoVerificacao = res.locals.userData.codigoVerificacao.split("");
+  const idUsuario = res.locals.userData.idUsuario;
+  const email = res.locals.userData.email;
 
   sgMail.setApiKey(process.env.SENDGRID_API_KEY);
   const msg = {
-    to: "gfelicio199@gmail.com", // Change to your recipient
+    to: email, // Change to your recipient
     from: "gasradaroficial@gmail.com", // Change to your verified sender
     subject: "Codigo de verificação de email",
     text: "Verifique o codigo abaixo no seu smartphone",
@@ -51,7 +53,7 @@ exports.sendVerificationEmail = (req, res, next) => {
   sgMail
     .send(msg)
     .then(() => {
-      res.status(200).json({ message: "Email enviado" });
+      res.status(200).json({ message: "Email enviado", idUsuario, email });
     })
     .catch((error) => {
       console.error(error);
