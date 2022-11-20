@@ -62,6 +62,8 @@ exports.signup = (req, res, next) => {
           numero,
           cidade,
           uf,
+          urlImagem:
+            "https://www.brasilpostos.com.br/wp-content/uploads/2013/09/PostoPremium.jpg",
         })
           .then((consumer) => {
             responseData = {

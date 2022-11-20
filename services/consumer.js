@@ -23,24 +23,28 @@ exports.getConsumer = (req, res, next) => {
       model: User,
     },
     where: {
-      idConsumidor: reqId,
+      idUsuario: reqId,
     },
-  }).then((consumerData) => {
-    const data = {
-      ...consumerData.usuario.dataValues,
-      ...consumerData.dataValues,
-      dataNasc: moment(consumerData.dataNasc)
-        .tz("America/Sao_Paulo")
-        .format("DD/MM/YYYY"),
-    };
-    delete data.usuario;
-    delete data.idUsuario;
-    delete data.senha;
-    delete data.isEmailVerificado;
-    delete data.codigoVerificacao;
+  })
+    .then((consumerData) => {
+      if (!consumerData)
+        return res.status(200).json({ message: "Consumidor não encontrado" });
+      const data = {
+        ...consumerData.usuario.dataValues,
+        ...consumerData.dataValues,
+        dataNasc: moment(consumerData.dataNasc)
+          .tz("America/Sao_Paulo")
+          .format("DD/MM/YYYY"),
+      };
+      delete data.usuario;
+      delete data.idConsumidor;
+      delete data.senha;
+      delete data.isEmailVerificado;
+      delete data.codigoVerificacao;
 
-    res.status(200).json(data);
-  });
+      res.status(200).json(data);
+    })
+    .catch((err) => res.status(500).json({ erro: err }));
 };
 
 exports.updateConsumer = (req, res, next) => {

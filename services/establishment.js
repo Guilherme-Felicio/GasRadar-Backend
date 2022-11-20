@@ -80,7 +80,7 @@ exports.getEstablishment = (req, res, next) => {
     .then((establishmentData) => {
       if (!establishmentData)
         return res
-          .status(500)
+          .status(200)
           .json({ message: "estabelecimento não encontrado" });
 
       const data = {

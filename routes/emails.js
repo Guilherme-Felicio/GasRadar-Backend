@@ -8,7 +8,7 @@ const checkEstablishmentAuth = require("../utils/checkEstablishmentAuth");
 
 router.post("/email", emails.sendEmail);
 
-router.get("/", fuelsController.getFuels);
+router.get("/", checkEstablishmentAuth, fuelsController.getFuels);
 
 router.post(
   "/",
