@@ -33,6 +33,9 @@ exports.signup = (req, res, next) => {
   const longitude = req.body.longitude;
   const idBandeira = req.body.idBandeira;
   const dataFundacao = req.body.dataFundacao;
+  const codigoVerificacao = (
+    Math.floor(Math.random() * 9000) + 1000
+  ).toString();
 
   if (!validateCNPJ(cnpj)) {
     return res.status(422).json({ message: "CNPJ Inválido" });
@@ -47,7 +50,7 @@ exports.signup = (req, res, next) => {
         email,
         senha: senhaHashed,
         isEmailVerificado: false,
-        codigoVerificacao: Math.floor(Math.random() * 1000) + 1,
+        codigoVerificacao,
       }).then((user) => {
         responseData = {
           idUsuario: user?.dataValues.idUsuario,
@@ -73,12 +76,9 @@ exports.signup = (req, res, next) => {
             "https://www.brasilpostos.com.br/wp-content/uploads/2013/09/PostoPremium.jpg",
           dataTerminoPenalidade: moment().subtract(1, "day"),
         })
-          .then((establishment) => {
-            responseData = {
-              idUsuario: responseData.idUsuario,
-              message: "Estabelecimento criado!",
-            };
-            return res.status(200).json(responseData);
+          .then(() => {
+            res.locals.codigoVerificacao = codigoVerificacao;
+            next();
           })
           .catch((err) => {
             User.destroy({

@@ -2,6 +2,7 @@ const express = require("express");
 const { body } = require("express-validator");
 const User = require("../Models/User");
 const establishmentAuth = require("../services/establishmentAuth");
+const emailController = require("../services/sendEmails");
 
 const router = express.Router();
 
@@ -32,7 +33,8 @@ router.post(
     body("latitude"),
     body("longitude"),
   ],
-  establishmentAuth.signup
+  establishmentAuth.signup,
+  emailController.sendVerificationEmail
 );
 
 router.post(
