@@ -156,3 +156,55 @@ exports.login = function (req, res, next) {
       res.status(500).json({ message: err.message });
     });
 };
+
+exports.verifycode = function (req, res, next) {
+  // #swagger.tags = ['Estabelecimento']
+  // #swagger.description = 'Valida codigo verificação.'
+  const errors = validationResult(req);
+  if (!errors.isEmpty()) {
+    return res.status(422).json({
+      message: "Parameters validation failed",
+      errors: errors.array(),
+    });
+  }
+  const email = req.body.email;
+  const codigoVerificacao = req.body.codigoVerificacao;
+
+  // validate email and password
+
+  User.findOne({
+    where: {
+      email: {
+        [Op.eq]: `${email}`,
+      },
+    },
+  })
+    .then((queryResult) => {
+      if (!queryResult) {
+        return res.status(401).json({ message: "Email não cadastrado" });
+      }
+
+      if (codigoVerificacao !== queryResult.dataValues.codigoVerificacao)
+        return res.status(403).json({ message: "Codigo Invalido" });
+
+      User.update(
+        {
+          isEmailVerificado: true,
+        },
+        {
+          where: {
+            email,
+          },
+        }
+      )
+        .then((resp) => {
+          return res.status(200).json({ message: resp });
+        })
+        .catch((err) => {
+          return res.status(500).json({ message: err.message });
+        });
+    })
+    .catch((err) => {
+      res.status(500).json({ message: err.message });
+    });
+};

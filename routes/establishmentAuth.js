@@ -38,6 +38,15 @@ router.post(
 );
 
 router.post(
+  "/verifyCode",
+  [
+    body("email").isEmail().normalizeEmail(),
+    body("codigoVerificacao").isLength({ min: 4 }),
+  ],
+  establishmentAuth.verifycode
+);
+
+router.post(
   "/login",
   [
     body("email").isEmail().withMessage("Por favor, digite um email válido"),
