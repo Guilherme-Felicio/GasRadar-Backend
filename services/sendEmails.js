@@ -1,6 +1,8 @@
 const { validationResult } = require("express-validator");
 const Flag = require("../Models/Flag");
 const sgMail = require("@sendgrid/mail");
+const dotenv = require("dotenv");
+dotenv.config();
 
 exports.sendVerificationEmail = (req, res, next) => {
   // #swagger.tags = ['Email']
