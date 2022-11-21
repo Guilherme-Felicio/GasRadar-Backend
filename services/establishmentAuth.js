@@ -53,7 +53,7 @@ exports.signup = (req, res, next) => {
         codigoVerificacao,
       }).then((user) => {
         responseData = {
-          idUsuario: user?.dataValues.idUsuario,
+          ...user?.dataValues,
         };
         Establishment.create({
           idUsuario: user.dataValues.idUsuario,
@@ -72,14 +72,16 @@ exports.signup = (req, res, next) => {
           idBandeira,
           horarioAbertura: "08:00",
           horarioEncerramento: "22:00",
+          status: "PENDENTE",
           urlImagem:
             "https://www.brasilpostos.com.br/wp-content/uploads/2013/09/PostoPremium.jpg",
           dataTerminoPenalidade: moment().subtract(1, "day"),
         })
-          .then(() => {
+          .then((resp) => {
             res.locals.userData = {
               codigoVerificacao,
-              idUsuario: responseData.idUsuario,
+              ...resp.dataValues,
+              ...responseData,
               email,
             };
             next();
@@ -198,7 +200,9 @@ exports.verifycode = function (req, res, next) {
         }
       )
         .then((resp) => {
-          return res.status(200).json({ message: resp });
+          return res
+            .status(200)
+            .json({ message: "dados atualizados com sucesso" });
         })
         .catch((err) => {
           return res.status(500).json({ message: err.message });

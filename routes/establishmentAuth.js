@@ -29,7 +29,7 @@ router.post(
     body("cep").trim().not().isEmpty().isLength({ min: 1, max: 8 }),
     body("cidade").not().isEmpty().isLength({ min: 1, max: 50 }),
     body("uf").trim().not().isEmpty().isLength({ min: 2, max: 2 }),
-    body("idBandeira").trim().not().isEmpty().isLength({ min: 1 }),
+    body("idBandeira").isInt({ min: 1 }),
     body("latitude"),
     body("longitude"),
   ],
