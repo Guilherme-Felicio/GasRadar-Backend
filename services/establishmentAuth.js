@@ -1,9 +1,10 @@
 const bcryptjs = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const { validationResult } = require("express-validator");
-const { Op } = require("sequelize");
+const { Op, where } = require("sequelize");
 const moment = require("moment");
 const User = require("../Models/User");
+const Flag = require("../Models/Flag");
 const Establishment = require("../Models/Establishment");
 const { validateCNPJ } = require("../utils/validators");
 
@@ -43,42 +44,46 @@ exports.signup = (req, res, next) => {
 
   let responseData;
 
-  bcryptjs
-    .hash(senha, 12)
-    .then((senhaHashed) => {
-      User.create({
-        email,
-        senha: senhaHashed,
-        isEmailVerificado: false,
-        codigoVerificacao,
-      }).then((user) => {
-        responseData = {
-          ...user?.dataValues,
-        };
-        Establishment.create({
-          idUsuario: user.dataValues.idUsuario,
-          cnpj,
-          nome,
-          telefone,
-          endereco,
-          numero,
-          bairro,
-          cep,
-          cidade,
-          uf,
-          dataFundacao: moment(dataFundacao),
-          latitude: latitude || null,
-          longitude: longitude || null,
-          idBandeira,
-          horarioAbertura: "08:00",
-          horarioEncerramento: "22:00",
-          status: "PENDENTE",
-          urlImagem:
-            "https://www.brasilpostos.com.br/wp-content/uploads/2013/09/PostoPremium.jpg",
-          dataTerminoPenalidade: moment().subtract(1, "day"),
-        })
-          .then((resp) => {
-            delete resp.dataValues.dataTerminoPenalidade;
+  bcryptjs.hash(senha, 12).then((senhaHashed) => {
+    User.create({
+      email,
+      senha: senhaHashed,
+      isEmailVerificado: false,
+      codigoVerificacao,
+    }).then((user) => {
+      responseData = {
+        ...user?.dataValues,
+      };
+      Establishment.create({
+        idUsuario: user.dataValues.idUsuario,
+        cnpj,
+        nome,
+        telefone,
+        endereco,
+        numero,
+        bairro,
+        cep,
+        cidade,
+        uf,
+        dataFundacao: moment(dataFundacao),
+        latitude: latitude || null,
+        longitude: longitude || null,
+        idBandeira,
+        horarioAbertura: "08:00",
+        horarioEncerramento: "22:00",
+        status: "PENDENTE",
+        urlImagem:
+          "https://www.brasilpostos.com.br/wp-content/uploads/2013/09/PostoPremium.jpg",
+        dataTerminoPenalidade: moment().subtract(1, "day"),
+      })
+        .then((resp) => {
+          delete resp.dataValues.dataTerminoPenalidade;
+
+          Flag.findOne({ where: { idBandeira } }).then((data) => {
+            responseData = {
+              ...responseData,
+              bandeira: { ...data.dataValues },
+            };
             res.locals.userData = {
               ...resp.dataValues,
               ...responseData,
@@ -89,20 +94,18 @@ exports.signup = (req, res, next) => {
                 .format("DD/MM/YYYY"),
             };
             next();
-          })
-          .catch((err) => {
-            User.destroy({
-              where: {
-                idUsuario: responseData.idUsuario,
-              },
-            });
-            res.status(500).json({ message: err });
           });
-      });
-    })
-    .catch((err) => {
-      res.status(500).json({ message: err });
+        })
+        .catch((err) => {
+          User.destroy({
+            where: {
+              idUsuario: responseData.idUsuario,
+            },
+          });
+          res.status(500).json({ message: err });
+        });
     });
+  });
 };
 
 exports.login = function (req, res, next) {
