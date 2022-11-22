@@ -12,12 +12,12 @@ exports.checkIfCnpjExistsAndIsValid = (req, res, next) => {
   Establishment.findOne({ where: { cnpj } })
     .then((establishment) => {
       if (establishment) {
-        return res.status(200).json(true);
+        return res.status(200).json(false);
       }
 
       const isCnpjValid = validateCNPJ(cnpj);
 
-      if (isCnpjValid) return res.status(200).json(false);
+      if (isCnpjValid) return res.status(200).json(true);
       return res.status(422).json({ message: "Cpnj Invalido" });
     })
     .catch((err) => {
