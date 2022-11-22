@@ -1,5 +1,5 @@
 const { validationResult } = require("express-validator");
-const Flag = require("../Models/Flag");
+const User = require("../Models/User");
 const sgMail = require("@sendgrid/mail");
 const dotenv = require("dotenv");
 dotenv.config();
@@ -61,7 +61,14 @@ exports.sendVerificationEmail = (req, res, next) => {
         .status(200)
         .json({ message: "Email enviado", ...res.locals.userData });
     })
-    .catch((error) => {
-      console.error(error);
+    .catch((err) => {
+      User.destroy({
+        where: {
+          idUsuario: res.locals.userData.idUsuario,
+        },
+      });
+      res
+        .status(500)
+        .json({ message: "Não foi possivel enviar o email. Usuario excluido" });
     });
 };
