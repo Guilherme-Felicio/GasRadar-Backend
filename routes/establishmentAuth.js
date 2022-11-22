@@ -1,8 +1,10 @@
 const express = require("express");
-const { body } = require("express-validator");
+const { body, query } = require("express-validator");
 const User = require("../Models/User");
 const establishmentAuth = require("../services/establishmentAuth");
 const emailController = require("../services/sendEmails");
+const Establishment = require("../Models/Establishment");
+const cpfCnpjValidation = require("../services/cpfCnpjValidation");
 
 const router = express.Router();
 
@@ -53,6 +55,12 @@ router.post(
     body("senha"),
   ],
   establishmentAuth.login
+);
+
+router.get(
+  "/validation",
+  [query("cnpj").isLength({ min: 14, max: 14 })],
+  cpfCnpjValidation.checkIfCnpjExistsAndIsValid
 );
 
 module.exports = router;
