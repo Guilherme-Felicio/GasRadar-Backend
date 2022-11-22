@@ -78,11 +78,15 @@ exports.signup = (req, res, next) => {
           dataTerminoPenalidade: moment().subtract(1, "day"),
         })
           .then((resp) => {
+            delete resp.dataValues.dataTerminoPenalidade;
             res.locals.userData = {
-              codigoVerificacao,
               ...resp.dataValues,
               ...responseData,
+              codigoVerificacao,
               email,
+              dataFundacao: moment(resp.dataValues.dataFundacao)
+                .tz("America/Sao_Paulo")
+                .format("DD/MM/YYYY"),
             };
             next();
           })
