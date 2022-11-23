@@ -46,7 +46,7 @@ const associations = () => {
   });
 
   // Flag - Establishment 1:N
-  Flag.hasMany(Establishment, {
+  Establishment.belongsTo(Flag, {
     foreignKey: "idBandeira",
   });
 

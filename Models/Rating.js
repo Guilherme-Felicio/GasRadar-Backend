@@ -16,7 +16,7 @@ const Rating = sequelize.define(
       allowNull: false,
     },
     nota: {
-      type: Sequelize.DOUBLE(20),
+      type: Sequelize.FLOAT(20),
       allowNull: false,
     },
     dataAvaliacao: {

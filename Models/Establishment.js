@@ -32,7 +32,7 @@ const User = sequelize.define(
       required: true,
     },
     nota: {
-      type: Sequelize.FLOAT(255),
+      type: Sequelize.FLOAT(12),
     },
     latitude: {
       type: Sequelize.STRING(11),

@@ -76,25 +76,13 @@ exports.signup = (req, res, next) => {
           "https://www.brasilpostos.com.br/wp-content/uploads/2013/09/PostoPremium.jpg",
         dataTerminoPenalidade: moment().subtract(1, "day"),
       })
-        .then((resp) => {
-          delete resp.dataValues.dataTerminoPenalidade;
-
-          Flag.findOne({ where: { idBandeira } }).then((data) => {
-            responseData = {
-              ...responseData,
-              bandeira: { ...data.dataValues },
-            };
-            res.locals.userData = {
-              ...resp.dataValues,
-              ...responseData,
-              codigoVerificacao,
-              email,
-              dataFundacao: moment(resp.dataValues.dataFundacao)
-                .tz("America/Sao_Paulo")
-                .format("DD/MM/YYYY"),
-            };
-            next();
-          });
+        .then(() => {
+          res.locals.userData = {
+            codigoVerificacao,
+            email,
+            idUsuario: responseData.idUsuario,
+          };
+          next();
         })
         .catch((err) => {
           User.destroy({
@@ -181,19 +169,29 @@ exports.verifycode = function (req, res, next) {
 
   // validate email and password
 
-  User.findOne({
-    where: {
-      email: {
-        [Op.eq]: `${email}`,
+  Establishment.findOne({
+    include: [
+      {
+        model: User,
+        where: {
+          email: {
+            [Op.eq]: `${email}`,
+          },
+        },
       },
-    },
+      {
+        model: Flag,
+      },
+    ],
   })
     .then((queryResult) => {
       if (!queryResult) {
         return res.status(401).json({ message: "Email não cadastrado" });
       }
-
-      if (codigoVerificacao !== queryResult.dataValues.codigoVerificacao)
+      if (
+        codigoVerificacao !==
+        queryResult.dataValues.usuario.dataValues.codigoVerificacao
+      )
         return res.status(403).json({ message: "Codigo Invalido" });
 
       User.update(
@@ -207,9 +205,26 @@ exports.verifycode = function (req, res, next) {
         }
       )
         .then((resp) => {
-          return res
-            .status(200)
-            .json({ message: "dados atualizados com sucesso" });
+          const email = queryResult.dataValues.usuario.dataValues.email;
+          const idUsuario = queryResult.dataValues.usuario.dataValues.idUsuario;
+          delete queryResult.dataValues.usuario;
+          delete queryResult.dataValues.idEstabelecimento;
+
+          return res.status(200).json({
+            message: "dados atualizados com sucesso",
+            ...queryResult.dataValues,
+            email,
+            idUsuario,
+            dataTerminoPenalidade: moment(
+              queryResult.dataValues.dataTerminoPenalidade
+            )
+              .tz("America/Sao_Paulo")
+              .format("DD/MM/YYYY "),
+            dataFundacao: moment(queryResult.dataValues.dataFundacao)
+              .tz("America/Sao_Paulo")
+              .format("DD/MM/YYYY"),
+            idUsuario,
+          });
         })
         .catch((err) => {
           return res.status(500).json({ message: err.message });
