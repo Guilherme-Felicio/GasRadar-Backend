@@ -74,7 +74,7 @@ exports.getEstablishmentFuel = (req, res, next) => {
 // Adicionar um combustivel ao estabelecimento
 exports.deleteFuelOfEstablishment = (req, res, next) => {
   // #swagger.tags = ['EstabelecimentoCombustivel']
-  // #swagger.description = 'Endpoint para Excluir um combustivel de um estabelecimento. Precisa de autorização'
+  // #swagger.description = 'Endpoint para Excluir um combustivel de um estabelecimento (passe idEstabelecimentoCombustivel). Precisa de autorização'
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
     return res.status(422).json({
@@ -82,18 +82,23 @@ exports.deleteFuelOfEstablishment = (req, res, next) => {
       errors: errors.array(),
     });
   }
-  const idCombustivel = req.params.id;
+
+  const idEstabelecimentoCombustivel = req.params.id;
   const idEstabelecimento = res.locals.userData.idEstabelecimento;
 
   EstablishmentFuel.destroy({
     where: {
+      idEstabelecimento,
       idEstabelecimentoCombustivel,
-      idCombustivel,
     },
   })
     .then((fuelData) => {
+      if (!fuelData)
+        return res.status(200).json({
+          message: "Não existe combustivelEstabelecimento com esse id",
+        });
       return res.status(200).json({
-        message: "estabelecimento excluido com sucesso",
+        message: "combustivel excluido com sucesso",
       });
     })
     .catch((err) => res.status(500).json({ erro: err }));
