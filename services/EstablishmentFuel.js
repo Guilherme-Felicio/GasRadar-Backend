@@ -32,9 +32,7 @@ exports.addFuelToEstablishment = (req, res, next) => {
     .then((fuelData) => {
       return res.status(200).json({
         ...fuelData.dataValues,
-        dataAtualizacao: moment()
-          .tz("America/Sao_Paulo")
-          .format("DD/MM/YYYY HH:mm"),
+        dataAtualizacao: moment().tz("America/Sao_Paulo").format("DD/MM/YYYY"),
       });
     })
     .catch((err) => res.status(500).json({ erro: err }));
@@ -66,7 +64,7 @@ exports.getEstablishmentFuel = (req, res, next) => {
           establishmentFuel.dataAtualizacao
         )
           .tz("America/Sao_Paulo")
-          .format("DD/MM/YYYY HH:mm");
+          .format("DD/MM/YYYY");
       });
       res.status(200).json([...resp[0]]);
     })

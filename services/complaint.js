@@ -27,7 +27,7 @@ exports.getAllComplaints = (req, res, next) => {
       complaints.forEach((complaint) => {
         complaint.dataValues.dataDenuncia = moment(complaint.dataDenuncia)
           .tz("America/Sao_Paulo")
-          .format("DD/MM/YYYY HH:mm");
+          .format("DD/MM/YYYY");
       });
       return res.status(200).json(complaints);
     })
@@ -83,7 +83,7 @@ exports.createComplaint = (req, res, next) => {
               ...complaint.dataValues,
               dataDenuncia: moment(complaint.dataValues.dataDenuncia)
                 .tz("America/Sao_Paulo")
-                .format("DD/MM/YYYY HH:mm"),
+                .format("DD/MM/YYYY"),
             },
           });
         })

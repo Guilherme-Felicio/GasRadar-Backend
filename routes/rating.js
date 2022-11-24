@@ -12,7 +12,7 @@ router.post(
     body("nota").not().isEmpty().isFloat({ max: 10 }),
     body("idEstabelecimento").isInt({ min: 1 }),
   ],
-  checkConsumerAuth,
+  // checkConsumerAuth,
   ratingService.createRating
 );
 
@@ -31,7 +31,7 @@ router.get(
   "/",
   [
     query("idEstabelecimento").isInt({ min: 1 }),
-    query("idConsumidor").isInt({ min: 1 }),
+    query("idConsumidor"),
     query("pagina").isInt({ min: 1 }),
     query("quantidade").isInt({ min: 1 }),
   ],

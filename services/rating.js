@@ -28,7 +28,9 @@ exports.getAllRatings = (req, res, next) => {
       SELECT idAvaliacao, descricao, nota, dataAvaliacao, idEstabelecimento, idConsumidor 
       FROM avaliacao AS avaliacao 
       WHERE avaliacao.idEstabelecimento = :idEstabelecimento 
-      ORDER BY idConsumidor = :idConsumidor DESC, dataAvaliacao LIMIT :pagina, :quantidade `,
+      ORDER BY ${
+        idConsumidor ? `idConsumidor = :idConsumidor DESC,` : ""
+      }  dataAvaliacao LIMIT :pagina, :quantidade `,
       {
         replacements: {
           idConsumidor,
@@ -42,7 +44,7 @@ exports.getAllRatings = (req, res, next) => {
       ratings[0].forEach((rating) => {
         rating.dataAvaliacao = moment(rating.dataAvaliacao)
           .tz("America/Sao_Paulo")
-          .format("DD/MM/YYYY HH:mm");
+          .format("DD/MM/YYYY");
       });
       return res.status(200).json([...ratings[0]]);
     })
@@ -63,8 +65,10 @@ exports.createRating = (req, res, next) => {
   const descricao = req.body.descricao;
   const nota = req.body.nota;
   const idEstabelecimento = req.body.idEstabelecimento;
-  const { userData } = res.locals;
-  const idConsumidor = userData.idConsumidor;
+  const { userData } = res?.locals;
+  const idConsumidor = userData?.idConsumidor
+    ? userData?.idConsumidor
+    : req.body.idConsumidor;
 
   Rating.findAll({
     where: {
@@ -93,7 +97,7 @@ exports.createRating = (req, res, next) => {
               ...rating.dataValues,
               dataAvaliacao: moment(rating.dataValues.dataAvaliacao)
                 .tz("America/Sao_Paulo")
-                .format("DD/MM/YYYY HH:mm"),
+                .format("DD/MM/YYYY"),
             },
           });
         })
