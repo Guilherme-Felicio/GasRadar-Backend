@@ -182,8 +182,7 @@ exports.verifycode = function (req, res, next) {
       )
         .then((resp) => {
           const email = queryResult.dataValues.usuario.dataValues.email;
-          const isEmailVerificado =
-            queryResult.dataValues.usuario.dataValues.isEmailVerificado;
+          const isEmailVerificado = true;
           const idUsuario = queryResult.dataValues.usuario.dataValues.idUsuario;
           delete queryResult.dataValues.usuario;
 
