@@ -58,7 +58,6 @@ exports.sendVerificationEmail = (req, res, next) => {
     .then(() => {
       delete res.locals.userData.codigoVerificacao;
       delete res.locals.userData.senha;
-      delete res.locals.userData.idEstabelecimento;
       res
         .status(200)
         .json({ message: "Email enviado", ...res.locals.userData });

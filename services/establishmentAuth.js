@@ -74,8 +74,9 @@ exports.signup = (req, res, next) => {
           "https://www.brasilpostos.com.br/wp-content/uploads/2013/09/PostoPremium.jpg",
         dataTerminoPenalidade: moment().subtract(1, "day"),
       })
-        .then(() => {
+        .then((resp) => {
           res.locals.userData = {
+            idEstabelecimento: resp.dataValues.idEstabelecimento,
             codigoVerificacao,
             email,
             idUsuario: responseData.idUsuario,
@@ -206,11 +207,14 @@ exports.verifycode = function (req, res, next) {
           const isEmailVerificado = true;
           const email = queryResult.dataValues.usuario.dataValues.email;
           const idUsuario = queryResult.dataValues.usuario.dataValues.idUsuario;
+          const idEstabelecimento = queryResult.dataValues.idEstabelecimento;
+
           delete queryResult.dataValues.usuario;
 
           return res.status(200).json({
             message: "Codigo verificado com sucesso",
             ...queryResult.dataValues,
+            idEstabelecimento,
             isEmailVerificado,
             email,
             idUsuario,
