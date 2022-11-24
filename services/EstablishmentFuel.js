@@ -20,7 +20,7 @@ exports.addFuelToEstablishment = (req, res, next) => {
   const preco = req.body.preco;
   const idCombustivel = req.body.idCombustivel;
   const { userData } = res.locals;
-  const idEstabelecimento = userData.idEstabelecimento;
+  const { idEstabelecimento } = userData;
 
   EstablishmentFuel.create({
     idEstabelecimento,
@@ -67,6 +67,34 @@ exports.getEstablishmentFuel = (req, res, next) => {
           .format("DD/MM/YYYY");
       });
       res.status(200).json([...resp[0]]);
+    })
+    .catch((err) => res.status(500).json({ erro: err }));
+};
+
+// Adicionar um combustivel ao estabelecimento
+exports.deleteFuelOfEstablishment = (req, res, next) => {
+  // #swagger.tags = ['EstabelecimentoCombustivel']
+  // #swagger.description = 'Endpoint para Excluir um combustivel de um estabelecimento. Precisa de autorização'
+  const errors = validationResult(req);
+  if (!errors.isEmpty()) {
+    return res.status(422).json({
+      message: "Parameters validation failed",
+      errors: errors.array(),
+    });
+  }
+  const idCombustivel = req.params.id;
+  const idEstabelecimento = res.locals.userData.idEstabelecimento;
+
+  EstablishmentFuel.destroy({
+    where: {
+      idEstabelecimentoCombustivel,
+      idCombustivel,
+    },
+  })
+    .then((fuelData) => {
+      return res.status(200).json({
+        message: "estabelecimento excluido com sucesso",
+      });
     })
     .catch((err) => res.status(500).json({ erro: err }));
 };

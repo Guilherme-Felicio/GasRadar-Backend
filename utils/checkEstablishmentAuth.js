@@ -17,11 +17,11 @@ module.exports = (req, res, next) => {
     return res.status(401).json({ message: "Usuário não autenticado." });
   }
 
-  req.idUsuario = decodedToken.idUsuario;
+  const idUsuario = decodedToken.idUsuario;
 
   Establishment.findOne({
     where: {
-      idUsuario: req.idUsuario,
+      idUsuario: idUsuario,
     },
   })
     .then((establishment) => {

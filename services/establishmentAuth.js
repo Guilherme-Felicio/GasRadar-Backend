@@ -137,7 +137,8 @@ exports.login = function (req, res, next) {
         const token = jwt.sign(
           {
             idUsuario: establishmentUserData.usuario.idUsuario,
-            idConsumidor: establishmentUserData.usuario.idConsumidor,
+            idEstabelecimento:
+              establishmentUserData?.dataValues?.idEstabelecimento,
             role: "estabelecimento",
           },
           "secretsecretsecret"
@@ -145,6 +146,8 @@ exports.login = function (req, res, next) {
         return res.status(200).json({
           token,
           idUsuario: establishmentUserData.usuario.idUsuario.toString(),
+          idEstabelecimento:
+            establishmentUserData?.dataValues?.idEstabelecimento.toString(),
         });
       });
     })
