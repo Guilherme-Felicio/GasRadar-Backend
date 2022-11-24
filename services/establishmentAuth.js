@@ -208,7 +208,6 @@ exports.verifycode = function (req, res, next) {
           const email = queryResult.dataValues.usuario.dataValues.email;
           const idUsuario = queryResult.dataValues.usuario.dataValues.idUsuario;
           delete queryResult.dataValues.usuario;
-          delete queryResult.dataValues.idEstabelecimento;
 
           return res.status(200).json({
             message: "dados atualizados com sucesso",
