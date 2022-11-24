@@ -24,6 +24,8 @@ exports.signup = (req, res, next) => {
   const senha = req.body.senha;
   const cpf = req.body.cpf;
   const dataNasc = moment(req.body.dataNasc);
+  const codigoVerificacao = (Math.floor(Math.random() * 9000) + 999).toString();
+
   let responseData;
 
   if (!validateCPF(cpf)) {
@@ -38,7 +40,7 @@ exports.signup = (req, res, next) => {
         email,
         senha: senhaHashed,
         isEmailVerificado: false,
-        codigoVerificacao: Math.floor(Math.random() * 1000) + 1,
+        codigoVerificacao,
       }).then((user) => {
         // criação dos dados na tabela administrador
         responseData = { idUsuario: user?.dataValues.idUsuario };
@@ -54,6 +56,7 @@ exports.signup = (req, res, next) => {
           .then((admin) => {
             responseData = {
               ...responseData,
+              email,
               message: "Usuario admin criado!",
             };
             res.status(201).json(responseData);
@@ -124,6 +127,81 @@ exports.login = function (req, res, next) {
           idUsuario: adminUserData.usuario.idUsuario.toString(),
         });
       });
+    })
+    .catch((err) => {
+      res.status(500).json({ message: err.message });
+    });
+};
+
+exports.verifycode = function (req, res, next) {
+  // #swagger.tags = ['Estabelecimento']
+  // #swagger.description = 'Valida codigo verificação.'
+  const errors = validationResult(req);
+  if (!errors.isEmpty()) {
+    return res.status(422).json({
+      message: "Parameters validation failed",
+      errors: errors.array(),
+    });
+  }
+  const email = req.body.email;
+  const codigoVerificacao = req.body.codigoVerificacao;
+
+  // validate email and password
+
+  Admin.findOne({
+    include: [
+      {
+        model: User,
+        where: {
+          email: {
+            [Op.eq]: `${email}`,
+          },
+        },
+      },
+    ],
+  })
+    .then((queryResult) => {
+      if (!queryResult) {
+        return res.status(401).json({ message: "Email não cadastrado" });
+      }
+      if (
+        codigoVerificacao !==
+        queryResult.dataValues.usuario.dataValues.codigoVerificacao
+      )
+        return res.status(403).json({ message: "Codigo Invalido" });
+
+      User.update(
+        {
+          isEmailVerificado: true,
+        },
+        {
+          where: {
+            email,
+          },
+        }
+      )
+        .then((resp) => {
+          const email = queryResult.dataValues.usuario.dataValues.email;
+          const isEmailVerificado =
+            queryResult.dataValues.usuario.dataValues.isEmailVerificado;
+          const idUsuario = queryResult.dataValues.usuario.dataValues.idUsuario;
+          delete queryResult.dataValues.usuario;
+          delete queryResult.dataValues.idAdministrador;
+
+          return res.status(200).json({
+            message: "dados atualizados com sucesso",
+            ...queryResult.dataValues,
+            isEmailVerificado,
+            email,
+            idUsuario,
+            dataNasc: moment(queryResult.dataValues.dataNasc)
+              .tz("America/Sao_Paulo")
+              .format("DD/MM/YYYY"),
+          });
+        })
+        .catch((err) => {
+          return res.status(500).json({ message: err.message });
+        });
     })
     .catch((err) => {
       res.status(500).json({ message: err.message });

@@ -34,9 +34,7 @@ exports.signup = (req, res, next) => {
   const longitude = req.body.longitude;
   const idBandeira = req.body.idBandeira;
   const dataFundacao = req.body.dataFundacao;
-  const codigoVerificacao = (
-    Math.floor(Math.random() * 9000) + 1000
-  ).toString();
+  const codigoVerificacao = (Math.floor(Math.random() * 9000) + 999).toString();
 
   if (!validateCNPJ(cnpj)) {
     return res.status(422).json({ message: "CNPJ Inválido" });
@@ -205,6 +203,8 @@ exports.verifycode = function (req, res, next) {
         }
       )
         .then((resp) => {
+          const isEmailVerificado =
+            queryResult.dataValues.usuario.dataValues.isEmailVerificado;
           const email = queryResult.dataValues.usuario.dataValues.email;
           const idUsuario = queryResult.dataValues.usuario.dataValues.idUsuario;
           delete queryResult.dataValues.usuario;
@@ -213,6 +213,7 @@ exports.verifycode = function (req, res, next) {
           return res.status(200).json({
             message: "dados atualizados com sucesso",
             ...queryResult.dataValues,
+            isEmailVerificado,
             email,
             idUsuario,
             dataTerminoPenalidade: moment(

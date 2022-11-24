@@ -24,7 +24,8 @@ router.post(
     body("telefone").not().isEmpty().isInt({ min: 1, max: 9999999999999 }),
     body("dataNasc").trim().not().isEmpty(),
   ],
-  adminAuth.signup
+  adminAuth.signup,
+  adminAuth.login
 );
 
 router.post(
@@ -33,6 +34,16 @@ router.post(
     body("email").isEmail().withMessage("Por favor, digite um email válido"),
     body("senha"),
   ],
+  adminAuth.login
+);
+
+router.post(
+  "/verifyCode",
+  [
+    body("email").isEmail().normalizeEmail(),
+    body("codigoVerificacao").isLength({ min: 4 }),
+  ],
+  adminAuth.verifycode,
   adminAuth.login
 );
 
