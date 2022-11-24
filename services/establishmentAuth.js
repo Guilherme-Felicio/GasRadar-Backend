@@ -202,15 +202,14 @@ exports.verifycode = function (req, res, next) {
           },
         }
       )
-        .then((resp) => {
-          const isEmailVerificado =
-            queryResult.dataValues.usuario.dataValues.isEmailVerificado;
+        .then(() => {
+          const isEmailVerificado = true;
           const email = queryResult.dataValues.usuario.dataValues.email;
           const idUsuario = queryResult.dataValues.usuario.dataValues.idUsuario;
           delete queryResult.dataValues.usuario;
 
           return res.status(200).json({
-            message: "dados atualizados com sucesso",
+            message: "Codigo verificado com sucesso",
             ...queryResult.dataValues,
             isEmailVerificado,
             email,
