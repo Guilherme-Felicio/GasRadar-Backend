@@ -1,7 +1,9 @@
 const sequelize = require("../utils/database");
+const moment = require("moment-timezone");
 const { QueryTypes } = require("sequelize");
 const Establishment = require("../Models/Establishment");
 const User = require("../Models/User");
+const Flag = require("../Models/Flag");
 const jwt = require("jsonwebtoken");
 const { validationResult } = require("express-validator");
 
@@ -70,9 +72,14 @@ exports.getEstablishment = (req, res, next) => {
   // finding establishment
 
   Establishment.findOne({
-    include: {
-      model: User,
-    },
+    include: [
+      {
+        model: User,
+      },
+      {
+        model: Flag,
+      },
+    ],
     where: {
       idUsuario: reqId,
     },
@@ -86,11 +93,19 @@ exports.getEstablishment = (req, res, next) => {
       const data = {
         ...establishmentData.usuario.dataValues,
         ...establishmentData.dataValues,
+        dataTerminoPenalidade: moment(
+          establishmentData.dataValues.dataTerminoPenalidade
+        )
+          .tz("America/Sao_Paulo")
+          .format("DD/MM/YYYY "),
+        dataFundacao: moment(establishmentData.dataValues.dataFundacao)
+          .tz("America/Sao_Paulo")
+          .format("DD/MM/YYYY"),
       };
       delete data.usuario;
-      delete data.idEstabelecimento;
       delete data.senha;
-      delete data.adm;
+      delete data.idBandeira;
+      delete data.isEmailVerificado;
 
       res.status(200).json(data);
     })
