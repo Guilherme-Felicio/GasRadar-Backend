@@ -54,12 +54,12 @@ exports.signup = (req, res, next) => {
             "https://www.brasilpostos.com.br/wp-content/uploads/2013/09/PostoPremium.jpg",
         })
           .then((admin) => {
-            responseData = {
-              ...responseData,
+            res.locals.userData = {
+              codigoVerificacao,
               email,
-              message: "Usuario admin criado!",
+              idUsuario: responseData.idUsuario,
             };
-            res.status(201).json(responseData);
+            next();
           })
           .catch((err) => {
             User.destroy({

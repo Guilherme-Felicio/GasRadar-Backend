@@ -1,6 +1,7 @@
 const express = require("express");
 const { body } = require("express-validator");
 const User = require("../Models/User");
+const emailController = require("../services/sendEmails");
 const adminAuth = require("../services/adminAuth");
 
 const router = express.Router();
@@ -25,7 +26,7 @@ router.post(
     body("dataNasc").trim().not().isEmpty(),
   ],
   adminAuth.signup,
-  adminAuth.login
+  emailController.sendVerificationEmail
 );
 
 router.post(

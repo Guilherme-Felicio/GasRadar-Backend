@@ -7,10 +7,12 @@ dotenv.config();
 exports.sendVerificationEmail = (req, res, next) => {
   // #swagger.tags = ['Email']
   // #swagger.description = '<Manda email'
+  console.log(res.locals.userData.codigoVerificacao);
 
   const codigoVerificacao = res.locals.userData.codigoVerificacao.split("");
   const idUsuario = res.locals.userData.idUsuario;
   const email = res.locals.userData.email;
+
   sgMail.setApiKey(process.env.SENDGRID_API_KEY);
   const msg = {
     to: email, // Change to your recipient
