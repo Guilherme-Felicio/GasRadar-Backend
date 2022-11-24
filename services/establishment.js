@@ -105,7 +105,6 @@ exports.getEstablishment = (req, res, next) => {
       delete data.usuario;
       delete data.senha;
       delete data.idBandeira;
-      delete data.isEmailVerificado;
 
       res.status(200).json(data);
     })
