@@ -71,7 +71,6 @@ exports.getEstablishmentFuel = (req, res, next) => {
     .catch((err) => res.status(500).json({ erro: err }));
 };
 
-// Adicionar um combustivel ao estabelecimento
 exports.deleteFuelOfEstablishment = (req, res, next) => {
   // #swagger.tags = ['EstabelecimentoCombustivel']
   // #swagger.description = 'Endpoint para Excluir um combustivel de um estabelecimento (passe idEstabelecimentoCombustivel). Precisa de autorização'
@@ -99,6 +98,42 @@ exports.deleteFuelOfEstablishment = (req, res, next) => {
         });
       return res.status(200).json({
         message: "combustivel excluido com sucesso",
+      });
+    })
+    .catch((err) => res.status(500).json({ erro: err }));
+};
+
+exports.updateFuelOfEstablishment = (req, res, next) => {
+  // #swagger.tags = ['EstabelecimentoCombustivel']
+  // #swagger.description = 'Endpoint para atualizar um combustivel de um estabelecimento (passe idEstabelecimentoCombustivel). Precisa de autorização'
+  const errors = validationResult(req);
+  if (!errors.isEmpty()) {
+    return res.status(422).json({
+      message: "Parameters validation failed",
+      errors: errors.array(),
+    });
+  }
+
+  const quantidade = req.body.quantidade;
+  const preco = req.body.preco;
+  const idEstabelecimentoCombustivel = req.params.id;
+  const idEstabelecimento = res.locals.userData.idEstabelecimento;
+
+  EstablishmentFuel.update(
+    {
+      preco,
+      quantidade,
+    },
+    {
+      where: {
+        idEstabelecimento,
+        idEstabelecimentoCombustivel,
+      },
+    }
+  )
+    .then(() => {
+      return res.status(200).json({
+        message: "combustivel atualizado com sucesso",
       });
     })
     .catch((err) => res.status(500).json({ erro: err }));

@@ -21,6 +21,12 @@ router.delete(
   establishmentFuelService.deleteFuelOfEstablishment
 );
 
+router.put(
+  "/:id",
+  checkEstablishmentAuth,
+  establishmentFuelService.updateFuelOfEstablishment
+);
+
 router.get(
   "/:id",
   [body("idEstabelecimento").isInt({ min: 1 })],
