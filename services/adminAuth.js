@@ -118,6 +118,7 @@ exports.login = function (req, res, next) {
         const token = jwt.sign(
           {
             idUsuario: adminUserData.usuario.idUsuario,
+            idAdministrador: adminUserData?.dataValues?.idAdministrador,
             role: "administrador",
           },
           "secretsecretsecret"

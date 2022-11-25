@@ -1,6 +1,8 @@
 const Admin = require("../Models/Admin");
 const Establishment = require("../Models/Establishment");
 const User = require("../Models/User");
+const moment = require("moment-timezone");
+
 const { validationResult } = require("express-validator");
 
 exports.manageEstablishmentCriation = function (req, res, next) {
@@ -20,7 +22,7 @@ exports.manageEstablishmentCriation = function (req, res, next) {
 
   // validate email and password
 
-  Admin.update(
+  Establishment.update(
     { status: status.toUpperCase() },
     {
       where: {
@@ -37,6 +39,37 @@ exports.manageEstablishmentCriation = function (req, res, next) {
       return res
         .status(200)
         .json({ message: `Estabelecimento não encontrado` });
+    })
+    .catch((err) => {
+      res.status(500).json({ message: err.message });
+    });
+};
+
+exports.getAdmin = function (req, res, next) {
+  // #swagger.tags = ['Administrador']
+  // #swagger.description = busca os dados de um admin. para buscar basta mandar o token la no header'
+
+  const errors = validationResult(req);
+  if (!errors.isEmpty()) {
+    return res.status(422).json({
+      message: "Parameters validation failed",
+      errors: errors.array(),
+    });
+  }
+
+  const idUsuario = res.locals.userData.idUsuario;
+
+  // validate email and password
+
+  Admin.findOne({
+    where: {
+      idUsuario,
+    },
+  })
+    .then((queryResult) => {
+      if (queryResult) {
+        return res.status(200).json({ ...queryResult.dataValues });
+      }
     })
     .catch((err) => {
       res.status(500).json({ message: err.message });
@@ -67,6 +100,46 @@ exports.getEstabablishmentToApproveList = function (req, res, next) {
   })
     .then((queryResult) => {
       return res.status(200).json(queryResult);
+    })
+    .catch((err) => {
+      res.status(500).json({ message: err.message });
+    });
+};
+
+exports.updateAdmin = function (req, res, next) {
+  // #swagger.tags = ['Administrador']
+  // #swagger.description = 'Atualiazar admin, ja estou pegando id pelo token'
+
+  const errors = validationResult(req);
+  if (!errors.isEmpty()) {
+    return res.status(422).json({
+      message: "Parameters validation failed",
+      errors: errors.array(),
+    });
+  }
+
+  const idUsuario = res.locals.userData.idUsuario;
+  const nome = req.body.nome;
+  const telefone = req.body.telefone;
+  const dataNasc = moment(req.body.dataNasc);
+
+  // validate email and password
+
+  Admin.update(
+    { nome, telefone, dataNasc },
+    {
+      where: {
+        idUsuario,
+      },
+    }
+  )
+    .then((queryResult) => {
+      if (queryResult) {
+        return res.status(200).json({ message: `Administrador com sucesso` });
+      }
+      return res
+        .status(200)
+        .json({ message: `Estabelecimento não encontrado` });
     })
     .catch((err) => {
       res.status(500).json({ message: err.message });
