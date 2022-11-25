@@ -188,7 +188,7 @@ exports.verifycode = function (req, res, next) {
           delete queryResult.dataValues.usuario;
 
           return res.status(200).json({
-            message: "dados atualizados com sucesso",
+            message: "Codigo verificado com sucesso",
             ...queryResult.dataValues,
             isEmailVerificado,
             email,

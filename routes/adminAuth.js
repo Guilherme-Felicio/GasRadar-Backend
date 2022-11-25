@@ -44,8 +44,7 @@ router.post(
     body("email").isEmail().normalizeEmail(),
     body("codigoVerificacao").isLength({ min: 4 }),
   ],
-  adminAuth.verifycode,
-  adminAuth.login
+  adminAuth.verifycode
 );
 
 module.exports = router;
