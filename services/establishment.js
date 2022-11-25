@@ -136,6 +136,8 @@ exports.updateEstablishment = (req, res, next) => {
   const longitude = req.body.longitude;
   const idBandeira = req.body.idBandeira;
   const urlImagem = req.body.urlImagem;
+  const horarioAbertura = req.body.horarioAbertura;
+  const horarioFechamento = req.body.horarioFechamento;
 
   Establishment.update(
     {
@@ -151,6 +153,8 @@ exports.updateEstablishment = (req, res, next) => {
       idBandeira,
       urlImagem,
       numero,
+      horarioAbertura,
+      horarioEncerramento: horarioFechamento,
     },
     {
       where: {

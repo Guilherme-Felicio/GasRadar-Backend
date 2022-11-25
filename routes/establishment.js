@@ -15,6 +15,8 @@ router.put(
     body("cidade").not().isEmpty().isLength({ min: 1, max: 50 }),
     body("uf").trim().not().isEmpty().isLength({ min: 2, max: 2 }),
     body("idBandeira").trim().not().isEmpty().isLength({ min: 1 }),
+    body("horarioAbertura").isLength({ min: 1, max: 30 }),
+    body("horarioFechamento").isLength({ min: 1, max: 30 }),
     body("latitude"),
     body("longitude"),
     body("urlImagem"),
