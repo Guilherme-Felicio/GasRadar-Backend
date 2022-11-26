@@ -11,6 +11,10 @@ const Admin = sequelize.define(
       allowNull: false,
       primaryKey: true,
     },
+    cpf: {
+      type: Sequelize.STRING(11),
+      required: true,
+    },
     dataNasc: {
       type: Sequelize.DATE,
       required: true,

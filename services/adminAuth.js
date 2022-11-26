@@ -64,7 +64,7 @@ exports.signup = (req, res, next) => {
           .catch((err) => {
             User.destroy({
               where: {
-                idUsuario: responseData.usuario.idUsuario,
+                idUsuario: responseData.idUsuario,
               },
             });
             res.status(500).json({ message: err });

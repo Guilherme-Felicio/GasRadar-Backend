@@ -15,6 +15,7 @@ nome varchar(30) NOT NULL,
 telefone varchar(15) NOT NULL,
 dataNasc DATETIME NOT NULL,
 urlImagem varchar(500),
+cpf varchar(11) NOT NULL,
 FOREIGN KEY (idUsuario) REFERENCES usuario(idUsuario) ON DELETE CASCADE
 );
 
