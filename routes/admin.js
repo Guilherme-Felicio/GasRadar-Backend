@@ -16,7 +16,7 @@ router.put(
 
 router.get("/manageEstablishment", [], admin.getEstabablishmentToApproveList);
 
-router.get("/", [], checkAdminAuth, admin.getEstabablishmentToApproveList);
+router.get("/", [], checkAdminAuth, admin.getAdmin);
 
 router.put(
   "/",
