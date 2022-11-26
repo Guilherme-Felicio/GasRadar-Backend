@@ -65,17 +65,22 @@ exports.getAdmin = function (req, res, next) {
     where: {
       idUsuario,
     },
+    include: {
+      model: User,
+      attributes: { exclude: ["senha", "codigoVerificacao"] },
+    },
   })
     .then((queryResult) => {
       if (queryResult) {
-        return res
-          .status(200)
-          .json({
-            ...queryResult.dataValues,
-            dataNasc: moment(queryResult.dataValues)
-              .tz("America/Sao_Paulo")
-              .format("DD/MM/YYYY"),
-          });
+        const usuario = queryResult.dataValues.usuario.dataValues;
+        delete queryResult.dataValues.usuario;
+        return res.status(200).json({
+          ...queryResult.dataValues,
+          ...usuario,
+          dataNasc: moment(queryResult.dataValues)
+            .tz("America/Sao_Paulo")
+            .format("DD/MM/YYYY"),
+        });
       }
     })
     .catch((err) => {
