@@ -34,7 +34,6 @@ const upload = multer({
 
 router.post(
   "/consumer",
-  checkConsumerAuth,
   upload.single("image"),
   imageUploadController.uploadImage
 );
