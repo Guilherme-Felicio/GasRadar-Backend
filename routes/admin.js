@@ -10,7 +10,7 @@ const router = express.Router();
 
 router.put(
   "/manageEstablishment,",
-  [body("idUsuario").isInt({ min: 1 }), body("status").isInt({ min: 1 })],
+  [body("idUsuario").isInt({ min: 1 }), body("status").isLength({ min: 1 })],
   admin.manageEstablishmentCriation
 );
 
