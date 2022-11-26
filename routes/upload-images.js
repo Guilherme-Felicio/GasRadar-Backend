@@ -32,10 +32,6 @@ const upload = multer({
   },
 });
 
-router.post(
-  "/consumer",
-  upload.single("image"),
-  imageUploadController.uploadImage
-);
+router.post("/", upload.single("image"), imageUploadController.uploadImage);
 
 module.exports = router;
