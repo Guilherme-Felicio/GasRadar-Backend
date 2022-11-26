@@ -5,7 +5,6 @@ const { body } = require("express-validator");
 const imageUploadController = require("../services/image-upload");
 const { diskStorage } = require("multer");
 const moment = require("moment");
-const checkConsumerAuth = require("../utils/checkConsumerAuth");
 
 const upload = multer({
   limits: {
