@@ -68,7 +68,14 @@ exports.getAdmin = function (req, res, next) {
   })
     .then((queryResult) => {
       if (queryResult) {
-        return res.status(200).json({ ...queryResult.dataValues });
+        return res
+          .status(200)
+          .json({
+            ...queryResult.dataValues,
+            dataNasc: moment(queryResult.dataValues)
+              .tz("America/Sao_Paulo")
+              .format("DD/MM/YYYY"),
+          });
       }
     })
     .catch((err) => {
