@@ -71,7 +71,6 @@ exports.getAdmin = function (req, res, next) {
     },
   })
     .then((queryResult) => {
-      console.log(queryResult);
       if (queryResult) {
         const usuario = queryResult.dataValues.usuario.dataValues;
         delete queryResult.dataValues.usuario;

@@ -7,7 +7,6 @@ dotenv.config();
 exports.sendVerificationEmail = (req, res, next) => {
   // #swagger.tags = ['Email']
   // #swagger.description = '<Manda email'
-  console.log(res.locals.userData.codigoVerificacao);
 
   const codigoVerificacao = res.locals.userData.codigoVerificacao.split("");
   const idUsuario = res.locals.userData.idUsuario;
