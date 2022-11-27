@@ -2,6 +2,7 @@ const express = require("express");
 const { body } = require("express-validator");
 const User = require("../Models/User");
 const consumerAuth = require("../services/consumerAuth");
+const emailController = require("../services/sendEmails");
 const router = express.Router();
 
 // rotas de criação/login de consumidor
@@ -30,7 +31,8 @@ router.post(
     body("uf").trim().not().isEmpty().isLength({ min: 2, max: 2 }),
     body("numero").isInt(),
   ],
-  consumerAuth.signup
+  consumerAuth.signup,
+  emailController.sendVerificationEmail
 );
 
 router.post(
@@ -40,6 +42,15 @@ router.post(
     body("senha"),
   ],
   consumerAuth.login
+);
+
+router.post(
+  "/verifyCode",
+  [
+    body("email").isEmail().normalizeEmail(),
+    body("codigoVerificacao").isLength({ min: 4 }),
+  ],
+  consumerAuth.verifycode
 );
 
 module.exports = router;
