@@ -47,11 +47,9 @@ exports.getEstablishmentFuel = (req, res, next) => {
     .query(
       `SELECT *
   FROM   estabelecimentocombustivel
-  WHERE  (idCombustivel, idEstabelecimento, dataAtualizacao) IN (
-            SELECT idCombustivel, idEstabelecimento, MAX(dataAtualizacao) as dataAtualizacao
-            FROM estabelecimentocombustivel
-            WHERE idEstabelecimento = :idEstabelecimento
-            GROUP BY idCombustivel, idEstabelecimento)`,
+  INNER JOIN combustivel ON estabelecimentocombustivel.idCombustivel = combustivel.idCombustivel
+  WHERE  idEstabelecimento = :idEstabelecimento 
+  ORDER BY dataAtualizacao desc limit 1 `,
       {
         replacements: {
           idEstabelecimento,
