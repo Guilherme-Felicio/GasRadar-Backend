@@ -6,7 +6,7 @@ const moment = require("moment-timezone");
 
 exports.getConsumer = (req, res, next) => {
   // #swagger.tags = ['Consumidor']
-  // #swagger.description = 'Busca todas informações de um estabelecimento.'
+  // #swagger.description = 'Busca todas informações de um estabelecimento. passar id Consumidor'
 
   if (!Number.isInteger(Number(req.params.id))) {
     return res
@@ -23,7 +23,7 @@ exports.getConsumer = (req, res, next) => {
       model: User,
     },
     where: {
-      idUsuario: reqId,
+      idConsumidor: reqId,
     },
   })
     .then((consumerData) => {
@@ -68,6 +68,7 @@ exports.updateConsumer = (req, res, next) => {
   const telefone = req.body.telefone;
   const dataNasc = moment(req.body.dataNasc);
   const endereco = req.body.endereco;
+  const numero = req.body.numero;
   const bairro = req.body.bairro;
   const cep = req.body.cep;
   const cidade = req.body.cidade;
@@ -75,7 +76,6 @@ exports.updateConsumer = (req, res, next) => {
 
   Consumer.update(
     {
-      idConsumidor,
       nome,
       endereco,
       genero,
@@ -84,6 +84,7 @@ exports.updateConsumer = (req, res, next) => {
       cep,
       cidade,
       uf,
+      numero,
       telefone,
     },
     {

@@ -9,8 +9,9 @@ router.put(
   [
     body("nome").not().isEmpty().isLength({ max: 30 }),
     body("telefone").not().isEmpty().isInt({ min: 1, max: 9999999999999 }),
-    body("genero").trim().not().isEmpty().isLength({ min: 1, max: 15 }),
+    body("sexo").trim().not().isEmpty().isLength({ min: 1, max: 15 }),
     body("dataNasc").trim().not().isEmpty(),
+    body("numero").isInt({ min: 1 }),
     body("endereco").not().isEmpty().isLength({ min: 1, max: 50 }),
     body("bairro").not().isEmpty().isLength({ min: 1, max: 30 }),
     body("cep").trim().not().isEmpty().isLength({ min: 1, max: 8 }),
