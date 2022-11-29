@@ -37,10 +37,10 @@ router.get(
   "/",
   [
     query("latitude")
-      .isLength({ min: 1, max: 11 })
+      .isLength({ min: 1 })
       .matches(/([0-9.-]+).+?([0-9.-]+)/),
     query("longitude")
-      .isLength({ min: 1, max: 11 })
+      .isLength({ min: 1 })
       .matches(/([0-9.-]+).+?([0-9.-]+)/),
     query("distancia").isFloat({ min: 1 }),
     query("nota").optional({ checkFalsy: true }).isFloat({ max: 10 }),

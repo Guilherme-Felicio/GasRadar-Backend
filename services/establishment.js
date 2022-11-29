@@ -20,8 +20,8 @@ exports.getEstablishments = (req, res, next) => {
   }
 
   const distancia = Number(req.query.distancia);
-  const latitude = req.query.latitude;
-  const longitude = req.query.longitude;
+  const latitude = req.query.latitude.substr(0, 14);
+  const longitude = req.query.latitude.substr(0, 14);
   const idBandeira = Number(req.query.idBandeira);
   const nota = Number(req.query.nota);
 
