@@ -37,9 +37,7 @@ exports.getConsumer = (req, res, next) => {
           .format("DD/MM/YYYY"),
       };
       delete data.usuario;
-      delete data.idConsumidor;
       delete data.senha;
-      delete data.isEmailVerificado;
       delete data.codigoVerificacao;
 
       res.status(200).json(data);
