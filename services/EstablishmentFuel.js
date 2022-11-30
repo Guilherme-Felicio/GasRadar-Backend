@@ -48,8 +48,13 @@ exports.getEstablishmentFuel = (req, res, next) => {
       `SELECT *
   FROM   estabelecimentocombustivel
   INNER JOIN combustivel ON estabelecimentocombustivel.idCombustivel = combustivel.idCombustivel
-  WHERE  idEstabelecimento = :idEstabelecimento 
-  ORDER BY dataAtualizacao desc limit 1 `,
+  WHERE  (estabelecimentocombustivel.idCombustivel, estabelecimentocombustivel.idEstabelecimento, estabelecimentocombustivel.dataAtualizacao) IN (
+    SELECT estabelecimentocombustivel.idCombustivel, estabelecimentocombustivel.idEstabelecimento, MAX(estabelecimentocombustivel.dataAtualizacao) as dataAtualizacao
+    FROM estabelecimentocombustivel
+    INNER JOIN combustivel ON estabelecimentocombustivel.idCombustivel = combustivel.idCombustivel
+    WHERE idEstabelecimento = :idEstabelecimento
+    GROUP BY idCombustivel, idEstabelecimento)
+    `,
       {
         replacements: {
           idEstabelecimento,
@@ -63,7 +68,17 @@ exports.getEstablishmentFuel = (req, res, next) => {
         )
           .tz("America/Sao_Paulo")
           .format("DD/MM/YYYY");
+        establishmentFuel.bandeira = {
+          idCombustivel: establishmentFuel.idCombustivel,
+          nome: establishmentFuel.nome,
+          unidade: establishmentFuel.unidade,
+        };
+
+        delete establishmentFuel.idCombustivel;
+        delete establishmentFuel.nome;
+        delete establishmentFuel.unidade;
       });
+
       res.status(200).json([...resp[0]]);
     })
     .catch((err) => res.status(500).json({ erro: err }));
