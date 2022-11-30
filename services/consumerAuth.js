@@ -139,6 +139,7 @@ exports.login = function (req, res, next) {
         return res.status(200).json({
           token,
           idUsuario: consumerUserData.usuario.idUsuario.toString(),
+          idConsumidor: consumerUserData.idConsumidor.toString(),
         });
       });
     })
