@@ -111,6 +111,19 @@ exports.getEstabablishmentToApproveList = function (req, res, next) {
     },
   })
     .then((queryResult) => {
+      queryResult.forEach((establishment) => {
+        console.log(establishment.dataValues.dataTerminoPenalidade);
+        establishment.dataValues.dataTerminoPenalidade = moment(
+          establishment.dataValues.dataTerminoPenalidade
+        )
+          .tz("America/Sao_Paulo")
+          .format("DD/MM/YYYY");
+        establishment.dataValues.dataFundacao = moment(
+          establishment.dataValues.dataFundacao
+        )
+          .tz("America/Sao_Paulo")
+          .format("DD/MM/YYYY");
+      });
       return res.status(200).json(queryResult);
     })
     .catch((err) => {
