@@ -71,8 +71,8 @@ HAVING distancia <= :distancia`,
         delete establishment.senha;
         delete establishment.isEmailVerificado;
         delete establishment.codigoVerificacao;
+        return res.status(200).json({ estabelecimentos: establishments });
       });
-      return res.status(200).json({ estabelecimentos: establishments });
     })
     .catch((err) => res.status(500).json({ message: err }));
 };
