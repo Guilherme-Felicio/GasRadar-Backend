@@ -45,7 +45,7 @@ INNER JOIN usuario ON estabelecimento.idUsuario = usuario.idUsuario
 WHERE status = 'APROVADO'
 AND usuario.isEmailVerificado = 1
 AND dataTerminoPenalidade < :dataTerminoPenalidade
-${idBandeira ? "AND idBandeira = :idBandeira" : ""}
+AND idBandeira IN (:idBandeira)
 ${nome ? "AND nome LIKE :nome" : ""}
 AND nota >= :nota
 HAVING distancia <= :distancia`,
@@ -55,7 +55,7 @@ HAVING distancia <= :distancia`,
           latitude,
           longitude,
           nota,
-          idBandeira,
+          idBandeira: idBandeira,
           nome: `%${nome}%`,
           dataTerminoPenalidade,
         },
