@@ -41,7 +41,9 @@ exports.getEstablishments = (req, res, next) => {
           sin(radians(latitude))
       )) AS distancia
 FROM estabelecimento 
+INNER JOIN usuario ON estabelecimento.idUsuario = usuario.idUsuario
 WHERE status = 'APROVADO'
+AND usuario.isEmailVerificado = 1
 AND dataTerminoPenalidade < :dataTerminoPenalidade
 ${idBandeira ? "AND idBandeira = :idBandeira" : ""}
 ${nome ? "AND nome LIKE :nome" : ""}
@@ -66,6 +68,9 @@ HAVING distancia <= :distancia`,
           .tz("America/Sao_Paulo")
           .format("DD/MM/YYYY");
         delete establishment.dataTerminoPenalidade;
+        delete establishment.senha;
+        delete establishment.isEmailVerificado;
+        delete establishment.codigoVerificacao;
       });
       return res.status(200).json({ estabelecimentos: establishments });
     })
