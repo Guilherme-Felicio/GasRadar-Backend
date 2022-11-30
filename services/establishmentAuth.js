@@ -73,6 +73,7 @@ exports.signup = (req, res, next) => {
         urlImagem:
           "https://www.brasilpostos.com.br/wp-content/uploads/2013/09/PostoPremium.jpg",
         dataTerminoPenalidade: moment().subtract(1, "day"),
+        nota: 0,
       })
         .then((resp) => {
           res.locals.userData = {
