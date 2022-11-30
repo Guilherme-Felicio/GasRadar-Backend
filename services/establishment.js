@@ -24,6 +24,7 @@ exports.getEstablishments = (req, res, next) => {
   const longitude = req.query.longitude.substr(0, 14);
   const idBandeira = req.query.idBandeira;
   const nota = req.query.nota ? Number(req.query.nota) : 1;
+  const nome = req.query.nome;
 
   sequelize
     .query(
@@ -38,10 +39,18 @@ exports.getEstablishments = (req, res, next) => {
 FROM estabelecimento 
 WHERE status = 'APROVADO'
 ${idBandeira ? "AND idBandeira = :idBandeira" : ""}
+${nome ? "AND nome LIKE :nome" : ""}
 AND nota >= :nota
 HAVING distancia <= :distancia`,
       {
-        replacements: { distancia, latitude, longitude, nota, idBandeira },
+        replacements: {
+          distancia,
+          latitude,
+          longitude,
+          nota,
+          idBandeira,
+          nome: `%${nome}%`,
+        },
         type: QueryTypes.SELECT,
       }
     )

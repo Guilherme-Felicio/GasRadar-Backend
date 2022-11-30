@@ -45,6 +45,7 @@ router.get(
     query("distancia").isFloat({ min: 1 }),
     query("nota").optional({ checkFalsy: true }).isFloat({ max: 10 }),
     query("idBandeira").optional({ checkFalsy: true }).isInt(),
+    query("nome"),
   ],
   establishmentService.getEstablishments
 );
