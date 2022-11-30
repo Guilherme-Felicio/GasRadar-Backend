@@ -68,7 +68,7 @@ exports.getEstablishmentFuel = (req, res, next) => {
         )
           .tz("America/Sao_Paulo")
           .format("DD/MM/YYYY");
-        establishmentFuel.bandeira = {
+        establishmentFuel.combustivel = {
           idCombustivel: establishmentFuel.idCombustivel,
           nome: establishmentFuel.nome,
           unidade: establishmentFuel.unidade,
