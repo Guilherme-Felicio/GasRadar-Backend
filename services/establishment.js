@@ -19,20 +19,11 @@ exports.getEstablishments = (req, res, next) => {
     });
   }
 
-  const distancia = Number(req.query.distancia);
+  const distancia = req.query.distancia ? Number(req.query.distancia) : 10;
   const latitude = req.query.latitude.substr(0, 14);
-  const longitude = req.query.latitude.substr(0, 14);
-  const idBandeira = Number(req.query.idBandeira);
-  const nota = Number(req.query.nota);
-
-  let queryParams = "";
-  if (idBandeira && nota) {
-    queryParams = `where idBandeira = ${idBandeira} and nota >= ${nota}`;
-  } else {
-    queryParams = `where ${
-      idBandeira ? "idBandeira = " + idBandeira : "nota >= " + nota
-    }`;
-  }
+  const longitude = req.query.longitude.substr(0, 14);
+  const idBandeira = req.query.idBandeira;
+  const nota = req.query.nota ? Number(req.query.nota) : 1;
 
   sequelize
     .query(
@@ -44,11 +35,13 @@ exports.getEstablishments = (req, res, next) => {
           sin(radians(:latitude)) *
           sin(radians(latitude))
       )) AS distancia
-FROM estabelecimento ${
-        idBandeira || nota ? queryParams : ""
-      } HAVING distancia <= :distancia`,
+FROM estabelecimento 
+WHERE status = 'APROVADO'
+${idBandeira ? "AND idBandeira = :idBandeira" : ""}
+AND nota >= :nota
+HAVING distancia <= :distancia`,
       {
-        replacements: { distancia, latitude, longitude },
+        replacements: { distancia, latitude, longitude, nota, idBandeira },
         type: QueryTypes.SELECT,
       }
     )
