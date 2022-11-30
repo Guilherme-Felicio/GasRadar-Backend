@@ -54,8 +54,14 @@ HAVING distancia <= :distancia`,
         type: QueryTypes.SELECT,
       }
     )
-    .then((establishment) => {
-      return res.status(200).json({ estabelecimentos: establishment });
+    .then((establishments) => {
+      establishments.forEach((establishment) => {
+        establishment.dataFundacao = moment(establishment.dataFundacao)
+          .tz("America/Sao_Paulo")
+          .format("DD/MM/YYYY");
+        delete establishment.dataTerminoPenalidade;
+      });
+      return res.status(200).json({ estabelecimentos: establishments });
     })
     .catch((err) => res.status(500).json({ message: err }));
 };
