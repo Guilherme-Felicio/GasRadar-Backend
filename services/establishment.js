@@ -23,7 +23,7 @@ exports.getEstablishments = (req, res, next) => {
   const latitude = req.query.latitude.substr(0, 14);
   const longitude = req.query.longitude.substr(0, 14);
   const idBandeira = req.query.idBandeira;
-  const nota = req.query.nota ? Number(req.query.nota) : 1;
+  const nota = req.query.nota ? Number(req.query.nota) : 0;
   const nome = req.query.nome;
 
   sequelize
