@@ -112,7 +112,6 @@ exports.getEstabablishmentToApproveList = function (req, res, next) {
   })
     .then((queryResult) => {
       queryResult.forEach((establishment) => {
-        console.log(establishment.dataValues.dataTerminoPenalidade);
         establishment.dataValues.dataTerminoPenalidade = moment(
           establishment.dataValues.dataTerminoPenalidade
         )
