@@ -25,6 +25,10 @@ exports.getEstablishments = (req, res, next) => {
   const idBandeira = req.query.idBandeira;
   const nota = req.query.nota ? Number(req.query.nota) : 0;
   const nome = req.query.nome;
+  const dataTerminoPenalidade = moment()
+    .tz("America/Sao_Paulo")
+    .startOf("day")
+    .format("YYYY-MM-DD HH:mm:ss");
 
   sequelize
     .query(
@@ -38,6 +42,7 @@ exports.getEstablishments = (req, res, next) => {
       )) AS distancia
 FROM estabelecimento 
 WHERE status = 'APROVADO'
+AND dataTerminoPenalidade < :dataTerminoPenalidade
 ${idBandeira ? "AND idBandeira = :idBandeira" : ""}
 ${nome ? "AND nome LIKE :nome" : ""}
 AND nota >= :nota
@@ -50,6 +55,7 @@ HAVING distancia <= :distancia`,
           nota,
           idBandeira,
           nome: `%${nome}%`,
+          dataTerminoPenalidade,
         },
         type: QueryTypes.SELECT,
       }
