@@ -1,6 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const checkConsumerAuth = require("../utils/checkConsumerAuth");
+const checkAdminAuth = require("../utils/checkAdminAuth");
 const ratingService = require("../services/rating");
 const complaintService = require("../services/complaint");
 const { body, query } = require("express-validator");
@@ -24,11 +25,8 @@ router.get(
 
 router.patch(
   "/manageComplaint",
-  [
-    body("idDenuncia").isInt({ min: 1 }),
-    body("descricao").isLength({ min: 1 }),
-    body("status").isLength({ min: 1 }),
-  ],
+  [body("idDenuncia").isInt({ min: 1 }), body("status").isBoolean()],
+  checkAdminAuth,
   complaintService.manageComplaint
 );
 

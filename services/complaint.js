@@ -103,8 +103,7 @@ exports.manageComplaint = (req, res, next) => {
     });
   }
 
-  const status = req.body.status;
-  const descricao = req.body.descricao;
+  const status = req.body.status === true ? "APROVADA" : "REJEITADA";
   const idDenuncia = req.body.idDenuncia;
   const idAdministrador = req.params.idAdministrador;
   let idEstabelecimento;
@@ -114,14 +113,11 @@ exports.manageComplaint = (req, res, next) => {
       dataDenuncia: moment(),
       idAdministrador,
       status,
-      descricao,
     },
     {
       where: {
         idDenuncia,
       },
-      returning: true,
-      plain: true,
     }
   )
     .then(() => {
