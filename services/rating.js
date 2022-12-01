@@ -65,7 +65,9 @@ exports.getRating = (req, res, next) => {
     },
   })
     .then((resp) => {
-      res.status(200).json({
+      if (!resp) return res.status(200).json([]);
+
+      return res.status(200).json({
         ...resp.dataValues,
         dataAvaliacao: moment(resp.dataValues.dataAvaliacao)
           .tz("America/Sao_Paulo")
