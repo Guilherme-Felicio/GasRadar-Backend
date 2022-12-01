@@ -157,7 +157,9 @@ exports.updateRating = (req, res, next) => {
     }
   )
     .then((rating) => {
-      return res.status(200).json(rating);
+      return res
+        .status(200)
+        .json({ message: "Avaliação atualizado com sucesso" });
     })
     .catch((err) => res.status(500).json({ erro: err }));
 };
