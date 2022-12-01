@@ -25,11 +25,12 @@ exports.getAllRatings = (req, res, next) => {
   sequelize
     .query(
       `
-      SELECT idAvaliacao, descricao, nota, dataAvaliacao, idEstabelecimento, idConsumidor 
+      SELECT idAvaliacao, descricao, nota, dataAvaliacao, idEstabelecimento, consumidor.idConsumidor, consumidor.nome 
       FROM avaliacao AS avaliacao 
+      INNER JOIN consumidor ON avaliacao.idConsumidor = consumidor.idConsumidor
       WHERE avaliacao.idEstabelecimento = :idEstabelecimento 
       ORDER BY ${
-        idConsumidor ? `idConsumidor = :idConsumidor DESC,` : ""
+        idConsumidor ? `avaliacao.idConsumidor = :idConsumidor DESC,` : ""
       }  dataAvaliacao LIMIT :pagina, :quantidade `,
       {
         replacements: {
