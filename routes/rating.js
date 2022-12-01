@@ -21,7 +21,6 @@ router.patch(
   [
     body("descricao").not().isEmpty().isLength({ max: 200 }),
     body("nota").not().isEmpty().isFloat({ max: 10 }),
-    body("idAvaliacao").isInt({ min: 1 }),
   ],
   checkConsumerAuth,
   ratingService.updateRating
