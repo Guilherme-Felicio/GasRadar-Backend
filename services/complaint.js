@@ -1,5 +1,7 @@
 const Complaint = require("../Models/Complaint");
 const Establishment = require("../Models/Establishment");
+const Admin = require("../Models/Admin");
+const Consumer = require("../Models/Consumer");
 const moment = require("moment-timezone");
 const { validationResult } = require("express-validator");
 
@@ -21,7 +23,26 @@ exports.getAllComplaints = (req, res, next) => {
     order: [["dataDenuncia", "DESC"]],
     offset: (pagina - 1) * quantidade,
     limit: quantidade,
-    subQuery: false,
+    attributes: {
+      exclude: ["idConsumidor", "idEstabelecimento", "idAdministrador"],
+    },
+    include: [
+      {
+        model: Consumer,
+        as: "consumidor",
+        attributes: ["idConsumidor", "nome"],
+      },
+      {
+        model: Establishment,
+        as: "estabelecimento",
+        attributes: ["idEstabelecimento", "nome"],
+      },
+      {
+        model: Admin,
+        as: "administrador",
+        attributes: ["idAdministrador", "nome"],
+      },
+    ],
   })
     .then((complaints) => {
       complaints.forEach((complaint) => {

@@ -76,13 +76,25 @@ Consumer.hasMany(Complaint, {
   foreignKey: "idConsumidor",
 });
 
+Complaint.belongsTo(Consumer, {
+  foreignKey: "idConsumidor",
+});
+
 //  Establishment - Complaint 1:N
 Establishment.hasMany(Complaint, {
   foreignKey: "idEstabelecimento",
 });
 
+Complaint.belongsTo(Establishment, {
+  foreignKey: "idEstabelecimento",
+});
+
 //  Admin - Complaint 1:N
 Admin.hasMany(Complaint, {
+  foreignKey: "idAdministrador",
+});
+
+Complaint.belongsTo(Admin, {
   foreignKey: "idAdministrador",
 });
 
