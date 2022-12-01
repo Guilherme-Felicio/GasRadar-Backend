@@ -45,7 +45,7 @@ INNER JOIN usuario ON estabelecimento.idUsuario = usuario.idUsuario
 WHERE status = 'APROVADO'
 AND usuario.isEmailVerificado = 1
 AND dataTerminoPenalidade < :dataTerminoPenalidade
-AND idBandeira IN (:idBandeira)
+${idBandeira ? "AND idBandeira IN (:idBandeira)" : ""}
 ${nome ? "AND nome LIKE :nome" : ""}
 AND nota >= :nota
 HAVING distancia <= :distancia`,
@@ -71,8 +71,8 @@ HAVING distancia <= :distancia`,
         delete establishment.senha;
         delete establishment.isEmailVerificado;
         delete establishment.codigoVerificacao;
-        return res.status(200).json({ estabelecimentos: establishments });
       });
+      return res.status(200).json({ estabelecimentos: establishments });
     })
     .catch((err) => res.status(500).json({ message: err }));
 };
