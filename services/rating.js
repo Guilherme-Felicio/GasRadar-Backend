@@ -68,12 +68,14 @@ exports.getRating = (req, res, next) => {
     .then((resp) => {
       if (!resp) return res.status(200).json([]);
 
-      return res.status(200).json({
-        ...resp.dataValues,
-        dataAvaliacao: moment(resp.dataValues.dataAvaliacao)
-          .tz("America/Sao_Paulo")
-          .format("DD/MM/YYYY"),
-      });
+      return res.status(200).json([
+        {
+          ...resp.dataValues,
+          dataAvaliacao: moment(resp.dataValues.dataAvaliacao)
+            .tz("America/Sao_Paulo")
+            .format("DD/MM/YYYY"),
+        },
+      ]);
     })
     .catch((err) => res.status(500).json({ erro: err }));
 };
