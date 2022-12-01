@@ -51,6 +51,29 @@ exports.getAllRatings = (req, res, next) => {
     .catch((err) => res.status(500).json({ message: err }));
 };
 
+exports.getRating = (req, res, next) => {
+  // #swagger.tags = ['Avaliação']
+  // #swagger.description = 'Endpoint para obter uma avaliação de um consumidor para um estabelecimento.'
+
+  const idEstabelecimento = Number(req.query.idEstabelecimento);
+  const idConsumidor = Number(req.query.idConsumidor);
+
+  Rating.findOne({
+    where: {
+      idConsumidor,
+      idEstabelecimento,
+    },
+  })
+    .then((resp) => {
+      res.status(200).json({
+        ...resp.dataValues,
+        dataAvaliacao: moment(resp.dataValues.dataAvaliacao)
+          .tz("America/Sao_Paulo")
+          .format("DD/MM/YYYY"),
+      });
+    })
+    .catch((err) => res.status(500).json({ erro: err }));
+};
 exports.createRating = (req, res, next) => {
   // #swagger.tags = ['Avaliação']
   // #swagger.description = 'Cria uma avaliação. Precisa de autorização'

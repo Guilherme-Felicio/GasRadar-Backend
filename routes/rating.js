@@ -38,4 +38,13 @@ router.get(
   ratingService.getAllRatings
 );
 
+router.get(
+  "/getConsumerRating",
+  [
+    query("idEstabelecimento").isInt({ min: 1 }),
+    query("idConsumidor").isInt({ min: 1 }),
+  ],
+  ratingService.getRating
+);
+
 module.exports = router;
