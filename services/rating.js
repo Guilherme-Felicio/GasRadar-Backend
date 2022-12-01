@@ -144,12 +144,18 @@ exports.updateRating = (req, res, next) => {
   const nota = req.body.nota;
   const idAvaliacao = req.params.idAvaliacao;
 
-  Rating.upsert({
-    idAvaliacao,
-    descricao,
-    nota,
-    dataAvaliacao: moment(),
-  })
+  Rating.update(
+    {
+      idAvaliacao,
+      descricao,
+      nota,
+    },
+    {
+      where: {
+        idAvaliacao,
+      },
+    }
+  )
     .then((rating) => {
       return res.status(200).json(rating);
     })
