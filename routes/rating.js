@@ -17,7 +17,7 @@ router.post(
 );
 
 router.patch(
-  "/",
+  "/:idAvaliacao",
   [
     body("descricao").not().isEmpty().isLength({ max: 200 }),
     body("nota").not().isEmpty().isFloat({ max: 10 }),
