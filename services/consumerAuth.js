@@ -149,7 +149,7 @@ exports.login = function (req, res, next) {
 };
 
 exports.verifycode = function (req, res, next) {
-  // #swagger.tags = ['Estabelecimento']
+  // #swagger.tags = ['Consumidor']
   // #swagger.description = 'Valida codigo verificação.'
   const errors = validationResult(req);
   if (!errors.isEmpty()) {

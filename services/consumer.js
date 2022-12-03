@@ -59,7 +59,7 @@ exports.updateConsumer = (req, res, next) => {
   if (!Number.isInteger(Number(req.params.id))) {
     return res
       .status(422)
-      .json({ message: "Id do estabelecimento deve ser um valor inteiro." });
+      .json({ message: "Id do consumidor deve ser um valor inteiro." });
   }
 
   const idConsumidor = req.params.id;
