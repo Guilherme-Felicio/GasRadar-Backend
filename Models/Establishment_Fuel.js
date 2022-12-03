@@ -3,7 +3,7 @@ const Sequelize = require("sequelize");
 const sequelize = require("../utils/database");
 
 const EstablishmentFuel = sequelize.define(
-  "estabelecimentocombustivel",
+  "estabelecimentoCombustivel",
   {
     idEstabelecimentoCombustivel: {
       type: Sequelize.INTEGER,
