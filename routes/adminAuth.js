@@ -47,4 +47,30 @@ router.post(
   adminAuth.verifycode
 );
 
+router.post(
+  "/sendPasswordChangeEmail",
+  [body("email").isEmail().normalizeEmail()],
+  adminAuth.sendChangePasswordEmail,
+  emailController.sendVerificationEmail
+);
+
+router.post(
+  "/verifyPasswordChangeCode",
+  [
+    body("email").isEmail().normalizeEmail(),
+    body("codigoVerificacao").isLength({ min: 4 }),
+  ],
+  adminAuth.checkPasswordVerifyCode
+);
+
+router.post(
+  "/changePassword",
+  [
+    body("email").isEmail().normalizeEmail(),
+    body("codigoVerificacao").isLength({ min: 4 }),
+    body("senha").isLength({ min: 5 }),
+  ],
+  adminAuth.changePassword
+);
+
 module.exports = router;

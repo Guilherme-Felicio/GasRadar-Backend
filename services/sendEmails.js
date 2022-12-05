@@ -9,7 +9,6 @@ exports.sendVerificationEmail = (req, res, next) => {
   // #swagger.description = '<Manda email'
 
   const codigoVerificacao = res.locals.userData.codigoVerificacao.split("");
-  const idUsuario = res.locals.userData.idUsuario;
   const email = res.locals.userData.email;
 
   sgMail.setApiKey(process.env.SENDGRID_API_KEY);
