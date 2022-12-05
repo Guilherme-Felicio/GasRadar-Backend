@@ -70,8 +70,7 @@ exports.signup = (req, res, next) => {
         horarioAbertura: "08:00",
         horarioEncerramento: "22:00",
         status: "PENDENTE",
-        urlImagem:
-          "https://www.brasilpostos.com.br/wp-content/uploads/2013/09/PostoPremium.jpg",
+        urlImagem: null,
         dataTerminoPenalidade: moment().subtract(1, "day"),
         nota: 0,
       })

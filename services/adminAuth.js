@@ -50,8 +50,7 @@ exports.signup = (req, res, next) => {
           dataNasc,
           nome,
           telefone,
-          urlImagem:
-            "https://www.brasilpostos.com.br/wp-content/uploads/2013/09/PostoPremium.jpg",
+          urlImagem: null,
         })
           .then((admin) => {
             res.locals.userData = {
