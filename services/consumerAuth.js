@@ -257,7 +257,7 @@ exports.sendChangePasswordEmail = (req, res, next) => {
 };
 
 exports.checkPasswordVerifyCode = (req, res, next) => {
-  // #swagger.tags = ['Administrador']
+  // #swagger.tags = ['Consumidor']
   // #swagger.description = 'Checa o codigo de verificação da redefinição de senha .'
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
@@ -308,7 +308,7 @@ exports.checkPasswordVerifyCode = (req, res, next) => {
 };
 
 exports.changePassword = (req, res, next) => {
-  // #swagger.tags = ['Administrador']
+  // #swagger.tags = ['Consumidor']
   // #swagger.description = 'Muda a senha do admin .'
   const errors = validationResult(req);
   if (!errors.isEmpty()) {

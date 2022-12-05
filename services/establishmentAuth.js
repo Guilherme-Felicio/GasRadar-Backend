@@ -240,3 +240,132 @@ exports.verifycode = function (req, res, next) {
       res.status(500).json({ message: err.message });
     });
 };
+
+exports.sendChangePasswordEmail = (req, res, next) => {
+  // #swagger.tags = ['Estabelecimento']
+  // #swagger.description = 'Envia email de redefinição de senha.'
+  const errors = validationResult(req);
+  if (!errors.isEmpty()) {
+    return res.status(422).json({
+      message: "Parameters validation failed",
+      errors: errors.array(),
+    });
+  }
+
+  const email = req.body.email;
+  const codigoVerificacao = (Math.floor(Math.random() * 9000) + 999).toString();
+
+  User.update(
+    {
+      codigoVerificacao,
+    },
+    {
+      where: {
+        email,
+      },
+    }
+  )
+    .then(() => {
+      res.locals.userData = {
+        codigoVerificacao,
+        email,
+      };
+      next();
+    })
+    .catch((err) => {
+      return res.status(500).json({ message: err });
+    });
+};
+
+exports.checkPasswordVerifyCode = (req, res, next) => {
+  // #swagger.tags = ['Estabelecimento']
+  // #swagger.description = 'Checa o codigo de verificação da redefinição de senha .'
+  const errors = validationResult(req);
+  if (!errors.isEmpty()) {
+    return res.status(422).json({
+      message: "Parameters validation failed",
+      errors: errors.array(),
+    });
+  }
+
+  const email = req.body.email;
+  const codigoVerificacao = req.body.codigoVerificacao;
+
+  Establishment.findOne({
+    include: [
+      {
+        model: User,
+        where: {
+          email: {
+            [Op.eq]: `${email}`,
+          },
+          codigoVerificacao,
+        },
+      },
+    ],
+  })
+    .then((user) => {
+      if (user?.dataValues) {
+        user.dataValues.dataFundacao = moment(user.dataValues.dataFundacao)
+          .tz("America/Sao_Paulo")
+          .format("DD/MM/YYYY");
+
+        const userData = { ...user.dataValues.usuario.dataValues, email };
+        delete user.dataValues.usuario;
+        delete userData.senha;
+        delete userData.codigoVerificacao;
+
+        return res.status(200).json({
+          message: "Codigo verificado com sucesso",
+          ...user.dataValues,
+          ...userData,
+        });
+      } else return res.status(403).json({ message: "Codigo inválido" });
+    })
+    .catch((err) => {
+      return res.status(500).json({ message: err });
+    });
+};
+
+exports.changePassword = (req, res, next) => {
+  // #swagger.tags = ['Estabelecimento']
+  // #swagger.description = 'Muda a senha do Estabelecimento .'
+  const errors = validationResult(req);
+  if (!errors.isEmpty()) {
+    return res.status(422).json({
+      message: "Parameters validation failed",
+      errors: errors.array(),
+    });
+  }
+
+  const email = req.body.email;
+  const codigoVerificacao = req.body.codigoVerificacao;
+  const senha = req.body.senha;
+
+  bcryptjs
+    .hash(senha, 12)
+    .then((senhaHashed) => {
+      User.update(
+        {
+          senha: senhaHashed,
+        },
+        {
+          where: {
+            email,
+            codigoVerificacao,
+          },
+        }
+      )
+        .then(() => {
+          return res.status(200).json({
+            message: "Senha atualizada com sucesso",
+          });
+        })
+        .catch((err) => {
+          return res.status(500).json({ message: err });
+        });
+    })
+    .catch((err) => {
+      return res.status(500).json({ message: err });
+    });
+};
