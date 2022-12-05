@@ -11,29 +11,27 @@ const checkAdminAuth = require("../utils/checkAdminAuth");
 
 const upload = multer({
   limits: {
-    fileSize: 5000000,
+    fileSize: 500000000,
   },
   storage: diskStorage({
     destination: (req, file, cb) => {
       cb(null, "images");
     },
     filename: (req, file, cb) => {
-      console.log("logado da definição de nome" + file);
       cb(null, moment().format("YYYY-MM-DD") + "-" + file.originalname);
     },
   }),
-  fileFilter: (req, file, cb) => {
-    console.log("logado de formatoImagem" + file);
-    if (
-      file.mimetype === "image/png" ||
-      file.mimetype === "image/jpg" ||
-      file.mimetype === "image/jpeg"
-    ) {
-      cb(null, true);
-    } else {
-      cb(null, false);
-    }
-  },
+  // fileFilter: (req, file, cb) => {
+  //   if (
+  //     file.mimetype === "image/png" ||
+  //     file.mimetype === "image/jpg" ||
+  //     file.mimetype === "image/jpeg"
+  //   ) {
+  //     cb(null, true);
+  //   } else {
+  //     cb(null, false);
+  //   }
+  // },
 });
 
 router.post(
