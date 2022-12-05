@@ -217,7 +217,7 @@
     "/auth/consumer/verifyCode": {
       "post": {
         "tags": [
-          "Estabelecimento"
+          "Consumidor"
         ],
         "description": "Valida codigo verificação.",
         "parameters": [
@@ -1434,7 +1434,7 @@
         }
       }
     },
-    "/uploadImage/": {
+    "/uploadImage/consumer": {
       "post": {
         "tags": [
           "Upload de Imagens"
@@ -1444,6 +1444,61 @@
         "responses": {
           "200": {
             "description": "OK"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      }
+    },
+    "/uploadImage/establishment": {
+      "post": {
+        "tags": [
+          "Upload de Imagens"
+        ],
+        "description": "Endpoint para Subir uma imagem.",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      }
+    },
+    "/uploadImage/admin": {
+      "post": {
+        "tags": [
+          "Upload de Imagens"
+        ],
+        "description": "Endpoint para Subir uma imagem.",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "500": {
+            "description": "Internal Server Error"
           }
         }
       }
