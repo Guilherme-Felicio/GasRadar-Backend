@@ -18,7 +18,8 @@ exports.uploadImage = (req, res, next) => {
     ? res.locals.userData?.idAdministrador
     : null;
 
-  console.log(idConsumidor);
+  console.log(req.file);
+  console.log(idAdministrador);
 
   if (idEstabelecimento) {
     Establishment.update(
