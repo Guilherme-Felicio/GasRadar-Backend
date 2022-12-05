@@ -19,7 +19,6 @@ exports.uploadImage = (req, res, next) => {
     : null;
 
   console.log(req.file);
-  console.log(idAdministrador);
 
   if (idEstabelecimento) {
     Establishment.update(

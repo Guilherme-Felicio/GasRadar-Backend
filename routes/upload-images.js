@@ -18,10 +18,12 @@ const upload = multer({
       cb(null, "images");
     },
     filename: (req, file, cb) => {
+      console.log("logado da definição de nome" + file);
       cb(null, moment().format("YYYY-MM-DD") + "-" + file.originalname);
     },
   }),
   fileFilter: (req, file, cb) => {
+    console.log("logado de formatoImagem" + file);
     if (
       file.mimetype === "image/png" ||
       file.mimetype === "image/jpg" ||
