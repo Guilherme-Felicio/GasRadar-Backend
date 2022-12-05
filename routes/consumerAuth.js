@@ -60,4 +60,30 @@ router.get(
   cpfCnpjValidation.checkIfCpfExistsAndIsValid
 );
 
+router.post(
+  "/sendPasswordChangeEmail",
+  [body("email").isEmail().normalizeEmail()],
+  consumerAuth.sendChangePasswordEmail,
+  emailController.sendVerificationEmail
+);
+
+router.post(
+  "/verifyPasswordChangeCode",
+  [
+    body("email").isEmail().normalizeEmail(),
+    body("codigoVerificacao").isLength({ min: 4 }),
+  ],
+  consumerAuth.checkPasswordVerifyCode
+);
+
+router.post(
+  "/changePassword",
+  [
+    body("email").isEmail().normalizeEmail(),
+    body("codigoVerificacao").isLength({ min: 4 }),
+    body("senha").isLength({ min: 5 }),
+  ],
+  consumerAuth.changePassword
+);
+
 module.exports = router;
