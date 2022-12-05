@@ -22,7 +22,7 @@ exports.uploadImage = (req, res, next) => {
 
   if (idEstabelecimento) {
     Establishment.update(
-      { urlImage: req.file.path },
+      { urlImagem: req.file.path },
       { where: { idEstabelecimento } }
     )
       .then(() => {
@@ -32,7 +32,7 @@ exports.uploadImage = (req, res, next) => {
       })
       .catch((err) => res.status(500).json({ erro: err }));
   } else if (idConsumidor) {
-    Consumer.update({ urlImage: req.file.path }, { where: { idConsumidor } })
+    Consumer.update({ urlImagem: req.file.path }, { where: { idConsumidor } })
       .then(() => {
         return res.status(200).json({
           message: "Imagem Atualizada com sucesso!",
@@ -41,7 +41,7 @@ exports.uploadImage = (req, res, next) => {
       })
       .catch((err) => res.status(500).json({ erro: err }));
   } else if (idAdministrador) {
-    Admin.update({ urlImage: req.file.path }, { where: { idAdministrador } })
+    Admin.update({ urlImagem: req.file.path }, { where: { idAdministrador } })
       .then(() => {
         return res
           .status(200)
