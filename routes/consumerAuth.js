@@ -62,7 +62,17 @@ router.get(
 
 router.post(
   "/sendPasswordChangeEmail",
-  [body("email").isEmail().normalizeEmail()],
+  [
+    body("email")
+      .isEmail()
+      .withMessage("Por favor, digite um email válido")
+      .custom((value, { req }) => {
+        return User.findOne({ where: { email: value } }).then((userDoc) => {
+          if (!userDoc) return Promise.reject("Email Não existe!");
+        });
+      })
+      .normalizeEmail(),
+  ],
   consumerAuth.sendChangePasswordEmail,
   emailController.sendVerificationEmail
 );

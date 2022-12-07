@@ -111,3 +111,28 @@ FOREIGN KEY (idEstabelecimento) REFERENCES estabelecimento(idEstabelecimento) ON
 FOREIGN KEY (idAdministrador) REFERENCES administrador(idAdministrador) ON DELETE CASCADE
 );
 
+delimiter $
+ CREATE TRIGGER IF NOT EXISTS atualizarNota AFTER UPDATE ON avaliacao
+       FOR EACH ROW
+       BEGIN
+		   SET @numero_avaliacoes := (Select COUNT(nota) FROM avaliacao WHERE idEstabelecimento = NEW.idEstabelecimento);
+		   if(@numero_avaliacoes < 5) THEN 
+		   		SET @media_avaliacoes := (Select AVG(nota) FROM gasradar.avaliacao WHERE idEstabelecimento = NEW.idEstabelecimento);
+		   		UPDATE estabelecimento 
+		   		SET nota = @media_avaliacoes where idEstabelecimento = NEW.idEstabelecimento;
+		   END IF;
+
+       END$
+       
+        CREATE TRIGGER IF NOT EXISTS atualizarNotaAfterInsert AFTER INSERT ON avaliacao
+       FOR EACH ROW
+       BEGIN
+		   SET @numero_avaliacoes := (Select COUNT(nota) FROM avaliacao WHERE idEstabelecimento = NEW.idEstabelecimento);
+		   if(@numero_avaliacoes < 5) THEN 
+		   		SET @media_avaliacoes := (Select AVG(nota) FROM gasradar.avaliacao WHERE idEstabelecimento = NEW.idEstabelecimento);
+		   		UPDATE estabelecimento 
+		   		SET nota = @media_avaliacoes where idEstabelecimento = NEW.idEstabelecimento;
+		   END IF;
+
+       END$
+delimiter ;  
