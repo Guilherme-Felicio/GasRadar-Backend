@@ -151,10 +151,7 @@ exports.manageComplaint = (req, res, next) => {
 
           idEstabelecimento = complaint.dataValues.idEstabelecimento;
 
-          const dataTerminoPenalidade =
-            complaint.dataValues.motivo === 1
-              ? moment().add(99, "years")
-              : moment(2, "days");
+          const dataTerminoPenalidade = moment(7, "days");
 
           Establishment.update(
             { dataTerminoPenalidade },
