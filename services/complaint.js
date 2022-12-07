@@ -125,7 +125,7 @@ exports.manageComplaint = (req, res, next) => {
   }
 
   const status = req.body.status === true ? "APROVADA" : "REJEITADA";
-  const idDenuncia = req.body.idDenuncia;
+  const idDenuncia = Number(req.body.idDenuncia);
   const idAdministrador = req.params.idAdministrador;
   let idEstabelecimento;
 
@@ -151,7 +151,7 @@ exports.manageComplaint = (req, res, next) => {
 
           idEstabelecimento = complaint.dataValues.idEstabelecimento;
 
-          const dataTerminoPenalidade = moment(7, "days");
+          const dataTerminoPenalidade = moment().add(7, "days");
 
           Establishment.update(
             { dataTerminoPenalidade },
