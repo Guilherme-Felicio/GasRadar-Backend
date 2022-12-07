@@ -31,14 +31,12 @@ exports.manageEstablishmentCriation = function (req, res, next) {
     }
   )
     .then((queryResult) => {
-      if (queryResult) {
-        return res
-          .status(200)
-          .json({ message: `Estabelecimento ${status} com sucesso` });
-      }
-      return res
-        .status(200)
-        .json({ message: `Estabelecimento não encontrado` });
+      res.locals.data = {
+        idUsuario,
+        status,
+        queryResult,
+      };
+      next();
     })
     .catch((err) => {
       res.status(500).json({ message: err.message });

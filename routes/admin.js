@@ -2,6 +2,7 @@ const express = require("express");
 const { body } = require("express-validator");
 const User = require("../Models/User");
 const admin = require("../services/admin");
+const sendEmails = require("../services/sendEmails");
 const checkAdminAuth = require("../utils/checkAdminAuth");
 
 const router = express.Router();
@@ -11,7 +12,8 @@ const router = express.Router();
 router.put(
   "/manageEstablishment,",
   [body("idUsuario").isInt({ min: 1 }), body("status").isLength({ min: 1 })],
-  admin.manageEstablishmentCriation
+  admin.manageEstablishmentCriation,
+  sendEmails.sendSucessfulCreratedOfAccount
 );
 
 router.get("/manageEstablishment", [], admin.getEstabablishmentToApproveList);
